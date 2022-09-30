@@ -1,6 +1,6 @@
-﻿namespace Misce.WalletManager.DTO.DTO
+﻿namespace Misce.WalletManager.DTO.DTO.TransactionSubCategory
 {
-    public record SubCategoryDTOIn
+    public record TransactionSubCategoryCreationDTOIn
     {
         public string Name { get; init; } = null!;
         public string? Description { get; init; }

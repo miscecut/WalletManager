@@ -1,11 +1,10 @@
 ﻿using Misce.WalletManager.BL.Classes;
-using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.Model.Data;
 
 namespace Misce.WalletManager.Test.ServiceTests
 {
     [TestClass]
-    public class SubCategoryServiceTest
+    public class TransactionSubCategoryServiceTest
     {
         private WalletManagerContext _dbContext = null!;
         private Guid _misceId;
@@ -24,12 +23,14 @@ namespace Misce.WalletManager.Test.ServiceTests
         [TestMethod]
         public void TestGetSubCategories()
         {
-            var subCategoryService = new SubCategoryService(_dbContext);
+            var subCategoryService = new TransactionSubCategoryService(_dbContext);
 
             var svetlanaSubCategories = subCategoryService.GetSubCategories(_svetlanaId);
 
             Assert.AreEqual(svetlanaSubCategories.Count(), 5);
             Assert.AreEqual(svetlanaSubCategories.Where(sc => sc.Category == "Vestiti").Count(), 3);
         }
+
+
     }
 }

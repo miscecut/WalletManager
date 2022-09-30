@@ -20,7 +20,7 @@ namespace Misce.WalletManager.BL.Classes
             _walletManagerContext = walletManagerContext;
         }
 
-        #endregion#
+        #endregion
 
         #region Public Methods
 

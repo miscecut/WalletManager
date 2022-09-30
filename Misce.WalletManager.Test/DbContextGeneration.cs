@@ -195,6 +195,12 @@ namespace Misce.WalletManager.Test
                 Category = misceElectronics,
                 Name = "Elettronica"
             };
+            var misceNigerianHoes = new TransactionSubCategory
+            {
+                Id = Guid.NewGuid(),
+                Category = misceHoes,
+                Name = "Troie nigeriane"
+            };
             var svetlanaShoesSub = new TransactionSubCategory
             {
                 Id = Guid.NewGuid(),
@@ -226,7 +232,7 @@ namespace Misce.WalletManager.Test
                 Name = "Droga"
             };
 
-            dbContext.SubCategories.AddRange(new TransactionSubCategory[] { saddamRifles, saddamExplosives, saddamFoodSub, misceElectronicsSub, svetlanaDrugsSub, svetlanaHatsSub, svetlanaShoesSub, svetlanaUnderwearSub, svetlanaOnlyFansSub });
+            dbContext.SubCategories.AddRange(new TransactionSubCategory[] { saddamRifles, saddamExplosives, saddamFoodSub, misceElectronicsSub, misceNigerianHoes, svetlanaDrugsSub, svetlanaHatsSub, svetlanaShoesSub, svetlanaUnderwearSub, svetlanaOnlyFansSub });
 
             //TRANSACTIONS
 

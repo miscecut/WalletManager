@@ -46,7 +46,7 @@ namespace Misce.WalletManager.Test.ServiceTests
         {
             var transactionService = new TransactionService(_dbContext);
             var accountService = new AccountService(_dbContext);
-            var subCategoryService = new SubCategoryService(_dbContext);
+            var subCategoryService = new TransactionSubCategoryService(_dbContext);
 
             var misceAccounts = accountService.GetAccounts(_misceId);
             var saddamAccounts = accountService.GetAccounts(_saddamId);
