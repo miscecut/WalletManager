@@ -3,7 +3,7 @@
     public record AccountDTOOut
     {
         public Guid Id { get; init; }
-        public string Type { get; init; } = null!;
+        public AccountTypeDTOOut AccountType { get; init; } = null!;
         public string Name { get; init; } = null!;
         public string? Description { get; init; }
         public decimal Amount { get; init; }

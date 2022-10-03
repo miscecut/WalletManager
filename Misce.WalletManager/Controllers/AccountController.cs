@@ -14,12 +14,42 @@ namespace Misce.WalletManager.API.Controllers
         private readonly IAccountService _accountService;
         private readonly IAccountTypeService _accountTypeService;
 
-        public AccountController(
-            IAccountService accountService, 
-            IAccountTypeService accountTypeService)
+        public AccountController(IAccountService accountService, IAccountTypeService accountTypeService)
         {
             _accountService = accountService;
             _accountTypeService = accountTypeService;
+        }
+
+        [HttpGet("{id:guid}")]
+        public IActionResult GetAccount(Guid id)
+        {
+            var userGuid = GetUserGuid();
+
+            if (userGuid.HasValue)
+            {
+                var account = _accountService.GetAccount(id, userGuid.Value);
+
+                if (account != null)
+                    return Ok(account);
+                return NotFound();
+            }
+
+            //the user identity is null
+            return Unauthorized();
+        }
+
+        [HttpGet()]
+        public IActionResult GetAccounts()
+        {
+            var userGuid = GetUserGuid();
+
+            if (userGuid.HasValue)
+            {
+                var accounts = _accountService.GetAccounts(userGuid.Value);
+                return Ok(accounts);
+            }
+
+            return Unauthorized();
         }
 
         [HttpPost]
@@ -42,48 +72,14 @@ namespace Misce.WalletManager.API.Controllers
                 //the user identity is null
                 return Unauthorized();
             }
-            catch(InvalidDataException e)
+            catch (InvalidDataException e)
             {
                 return UnprocessableEntity(e.Message);
             }
             catch (Exception)
             {
-                return Problem("An internal server error occurred.");
+                return Problem("An internal server error occurred");
             }
-        }
-
-        [HttpGet()]
-        public IActionResult GetAccounts()
-        {
-            var userGuid = GetUserGuid();
-
-            if (userGuid.HasValue)
-            {
-                var accounts = _accountService.GetAccounts(userGuid.Value);
-                return Ok(accounts);
-            }
-
-            //the user identity is null
-            return Unauthorized();
-        }
-
-        [HttpGet("{id:guid}")]
-        public IActionResult GetAccount(Guid id)
-        {
-            var userGuid = GetUserGuid();
-
-            if (userGuid.HasValue)
-            {
-                var account = _accountService.GetAccount(id, userGuid.Value);
-
-                if (account != null)
-                    return Ok(account);
-
-                return NotFound();
-            }
-
-            //the user identity is null
-            return Unauthorized();
         }
 
         private Guid? GetUserGuid()

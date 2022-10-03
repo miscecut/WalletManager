@@ -38,7 +38,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             Assert.AreEqual(saddamAccounts.First().Amount, 313M);
 
             Assert.AreEqual(svetlanaAccounts.Count(), 2); //svetlana has 2 accounts
-            Assert.AreEqual(svetlanaAccounts.Where(a => a.Type == "Cash").Count(), 1); //svetlana has an account with type "Soldi"
+            Assert.AreEqual(svetlanaAccounts.Where(a => a.AccountType.Name == "Cash").Count(), 1); //svetlana has an account with type "Soldi"
 
             //METHOD WITH QUERY PARAMETERS
 
@@ -94,7 +94,7 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException), "The provided application type is not valid!")]
+        [ExpectedException(typeof(InvalidDataException), "The provided application type id is not valid")]
         public void TestFailingCreateAccount()
         {
             var accountService = new AccountService(_dbContext);
