@@ -1,13 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Misce.WalletManager.Model.Models
 {
     public class Transaction
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
         public User User { get; set; } = null!;
         [StringLength(50)]
@@ -22,7 +20,6 @@ namespace Misce.WalletManager.Model.Models
         [Required]
         public decimal Amount { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedDateTime { get; set; } = DateTime.UtcNow;
         public DateTime? LastModifiedDateTime { get; set; }
     }

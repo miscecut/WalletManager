@@ -103,7 +103,9 @@ namespace Misce.WalletManager.API.Controllers
                 {
                     var createdTransactionCategory = _transactionCategoryService.UpdateTransactionCategory(userId.Value, id, transactionCategory);
 
-                    return NoContent();
+                    if(createdTransactionCategory != null)
+                        return NoContent();
+                    return NotFound();
                 }
                 catch (InvalidDataException e)
                 {

@@ -160,7 +160,7 @@ namespace Misce.WalletManager.Test
                 Name = "Onlyfans"
             };
 
-            dbContext.Categories.AddRange(new TransactionCategory[] { saddamBombing, saddamFood, misceHoes, misceElectronics, svetlanaDresses, svetlanaDrugs, svetlanaOnlyfans });
+            dbContext.TransactionCategories.AddRange(new TransactionCategory[] { saddamBombing, saddamFood, misceHoes, misceElectronics, svetlanaDresses, svetlanaDrugs, svetlanaOnlyfans });
 
             //TRANSACTION SUBCATEGORIES
 
@@ -232,7 +232,7 @@ namespace Misce.WalletManager.Test
                 Name = "Droga"
             };
 
-            dbContext.SubCategories.AddRange(new TransactionSubCategory[] { saddamRifles, saddamExplosives, saddamFoodSub, misceElectronicsSub, misceNigerianHoes, svetlanaDrugsSub, svetlanaHatsSub, svetlanaShoesSub, svetlanaUnderwearSub, svetlanaOnlyFansSub });
+            dbContext.TransactionSubCategories.AddRange(new TransactionSubCategory[] { saddamRifles, saddamExplosives, saddamFoodSub, misceElectronicsSub, misceNigerianHoes, svetlanaDrugsSub, svetlanaHatsSub, svetlanaShoesSub, svetlanaUnderwearSub, svetlanaOnlyFansSub });
 
             //TRANSACTIONS
 

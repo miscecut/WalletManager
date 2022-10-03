@@ -26,7 +26,7 @@ namespace Misce.WalletManager.BL.Classes
 
         public IEnumerable<TransactionCategoryDTOOut> GetTransactionCategories(Guid userId)
         {
-            var categoriesQuery = from category in _walletManagerContext.Categories
+            var categoriesQuery = from category in _walletManagerContext.TransactionCategories
                                   where category.User.Id == userId
                                   select new TransactionCategoryDTOOut
                                   {
@@ -53,7 +53,7 @@ namespace Misce.WalletManager.BL.Classes
                     Description = transactionCategory.Description
                 };
 
-                _walletManagerContext.Categories.Add(transactionCategoryToCreate);
+                _walletManagerContext.TransactionCategories.Add(transactionCategoryToCreate);
                 _walletManagerContext.SaveChanges();
 
                 return new TransactionCategoryDTOOut
@@ -67,9 +67,9 @@ namespace Misce.WalletManager.BL.Classes
             throw new InvalidDataException("The user was not found");
         }
 
-        public TransactionCategoryDTOOut UpdateTransactionCategory(Guid userId, Guid transactionCategoryId, TransactionCategoryUpdateDTOIn transactionCategory)
+        public TransactionCategoryDTOOut? UpdateTransactionCategory(Guid userId, Guid transactionCategoryId, TransactionCategoryUpdateDTOIn transactionCategory)
         {
-            var transactionCategoryQuery = from tc in _walletManagerContext.Categories
+            var transactionCategoryQuery = from tc in _walletManagerContext.TransactionCategories
                                            where tc.Id == transactionCategoryId
                                            && tc.User.Id == userId
                                            select tc;
@@ -79,6 +79,7 @@ namespace Misce.WalletManager.BL.Classes
                 var transactionCategoryToUpdate = transactionCategoryQuery.First();
                 transactionCategoryToUpdate.Name = transactionCategory.Name;
                 transactionCategoryToUpdate.Description = transactionCategory.Description;
+                transactionCategoryToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                 _walletManagerContext.SaveChanges();
 
@@ -90,7 +91,7 @@ namespace Misce.WalletManager.BL.Classes
                 };
             }
 
-            throw new InvalidDataException("The requested transaction category was not found");
+            return null;
         }
 
         #endregion

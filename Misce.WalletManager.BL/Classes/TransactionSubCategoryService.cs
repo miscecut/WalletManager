@@ -6,7 +6,7 @@ using Misce.WalletManager.Model.Models;
 
 namespace Misce.WalletManager.BL.Classes
 {
-    public class TransactionSubCategoryService : ISubCategoryService
+    public class TransactionSubCategoryService : ITransactionSubCategoryService
     {
         #region Properties
 
@@ -27,7 +27,7 @@ namespace Misce.WalletManager.BL.Classes
 
         public IEnumerable<TransactionSubCategoryDTOOut> GetTransactionSubCategories(Guid userId)
         {
-            var query = from subCategory in _walletManagerContext.SubCategories
+            var query = from subCategory in _walletManagerContext.TransactionSubCategories
                         where subCategory.Category.User.Id == userId
                         select new TransactionSubCategoryDTOOut
                         {
@@ -47,12 +47,9 @@ namespace Misce.WalletManager.BL.Classes
 
         public TransactionSubCategoryDTOOut CreateTransactionSubCategory(Guid userId, TransactionSubCategoryCreationDTOIn subCategory)
         {
-            var categoryQuery = from category in _walletManagerContext.Categories
-                                where category.User.Id == userId
-                                && subCategory.CategoryId == category.Id
-                                select category;
+            var categoryQuery = GetTransactionCategoriesQuery(userId, subCategory.TransactionCategoryId);
 
-            if(categoryQuery.Any())
+            if (categoryQuery.Any())
             {
                 var category = categoryQuery.First();
 
@@ -63,7 +60,7 @@ namespace Misce.WalletManager.BL.Classes
                     Description = subCategory.Description
                 };
 
-                _walletManagerContext.SubCategories.Add(subCategoryToCreate);
+                _walletManagerContext.TransactionSubCategories.Add(subCategoryToCreate);
                 _walletManagerContext.SaveChanges();
 
                 return new TransactionSubCategoryDTOOut
@@ -83,9 +80,59 @@ namespace Misce.WalletManager.BL.Classes
             throw new InvalidDataException("The provided transaction category id is not valid");
         }
 
-        public TransactionSubCategoryDTOOut UpdateTransactionSubCategory(Guid userId, Guid transactionSubCategory, TransactionSubCategoryUpdateDTOIn subCategory)
+        public TransactionSubCategoryDTOOut? UpdateTransactionSubCategory(Guid userId, Guid transactionSubCategoryId, TransactionSubCategoryUpdateDTOIn transactionSubCategory)
         {
-            throw new NotImplementedException();
+            var subCategoryQuery = from sc in _walletManagerContext.TransactionSubCategories
+                                   where sc.Id == transactionSubCategoryId
+                                   && sc.Category.User.Id == userId
+                                   select sc;
+
+            if(subCategoryQuery.Any())
+            {
+                var categoryQuery = GetTransactionCategoriesQuery(userId, transactionSubCategory.TransactionCategoryId);
+
+                if(categoryQuery.Any())
+                {
+                    var transactionCategory = categoryQuery.First();
+
+                    var transactionSubCategoryToUpdate = subCategoryQuery.First();
+                    transactionSubCategoryToUpdate.Name = transactionSubCategory.Name;
+                    transactionSubCategoryToUpdate.Description = transactionSubCategory.Description;
+                    transactionSubCategoryToUpdate.Category = transactionCategory;
+                    transactionSubCategoryToUpdate.LastModifiedDateTime = DateTime.UtcNow;
+
+                    _walletManagerContext.SaveChanges();
+
+                    return new TransactionSubCategoryDTOOut
+                    {
+                        Id = transactionSubCategoryToUpdate.Id,
+                        Name = transactionSubCategoryToUpdate.Name,
+                        Description = transactionSubCategoryToUpdate.Description,
+                        Category = new TransactionCategoryDTOOut
+                        {
+                            Id = transactionCategory.Id,
+                            Name = transactionCategory.Name,
+                            Description = transactionCategory.Description
+                        }
+                    };
+                }
+
+                throw new InvalidDataException("The provided transaction category id was not provided or is not valid");
+            }
+
+            return null; //transaction sub category not found
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private IQueryable<TransactionCategory> GetTransactionCategoriesQuery(Guid userId, Guid categoryId)
+        {
+            return from category in _walletManagerContext.TransactionCategories
+                   where category.User.Id == userId
+                   && category.Id == categoryId
+                   select category;
         }
 
         #endregion

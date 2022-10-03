@@ -13,10 +13,10 @@ namespace Misce.WalletManager.Model.Migrations
                 name: "AccountTypes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -28,12 +28,12 @@ namespace Misce.WalletManager.Model.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Salt = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     LastLoginDateTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -45,14 +45,14 @@ namespace Misce.WalletManager.Model.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     AccountTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     InitialAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -73,21 +73,21 @@ namespace Misce.WalletManager.Model.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "TransactionCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_TransactionCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_Users_UserId",
+                        name: "FK_TransactionCategories_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -95,23 +95,23 @@ namespace Misce.WalletManager.Model.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TransactionSubCategory",
+                name: "TransactionSubCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransactionSubCategory", x => x.Id);
+                    table.PrimaryKey("PK_TransactionSubCategories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TransactionSubCategory_Categories_CategoryId",
+                        name: "FK_TransactionSubCategories_TransactionCategories_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        principalTable: "TransactionCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -120,7 +120,7 @@ namespace Misce.WalletManager.Model.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
@@ -129,7 +129,7 @@ namespace Misce.WalletManager.Model.Migrations
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SubCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getutcdate()"),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -146,9 +146,9 @@ namespace Misce.WalletManager.Model.Migrations
                         principalTable: "Accounts",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Transactions_TransactionSubCategory_SubCategoryId",
+                        name: "FK_Transactions_TransactionSubCategories_SubCategoryId",
                         column: x => x.SubCategoryId,
-                        principalTable: "TransactionSubCategory",
+                        principalTable: "TransactionSubCategories",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Transactions_Users_UserId",
@@ -169,8 +169,8 @@ namespace Misce.WalletManager.Model.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_UserId",
-                table: "Categories",
+                name: "IX_TransactionCategories_UserId",
+                table: "TransactionCategories",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -194,8 +194,8 @@ namespace Misce.WalletManager.Model.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransactionSubCategory_CategoryId",
-                table: "TransactionSubCategory",
+                name: "IX_TransactionSubCategories_CategoryId",
+                table: "TransactionSubCategories",
                 column: "CategoryId");
         }
 
@@ -208,13 +208,13 @@ namespace Misce.WalletManager.Model.Migrations
                 name: "Accounts");
 
             migrationBuilder.DropTable(
-                name: "TransactionSubCategory");
+                name: "TransactionSubCategories");
 
             migrationBuilder.DropTable(
                 name: "AccountTypes");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "TransactionCategories");
 
             migrationBuilder.DropTable(
                 name: "Users");

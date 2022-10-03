@@ -32,11 +32,9 @@ namespace Misce.WalletManager.Model.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -73,7 +71,6 @@ namespace Misce.WalletManager.Model.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -103,7 +100,6 @@ namespace Misce.WalletManager.Model.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateTime")
@@ -152,7 +148,6 @@ namespace Misce.WalletManager.Model.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -174,7 +169,7 @@ namespace Misce.WalletManager.Model.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("TransactionCategories");
                 });
 
             modelBuilder.Entity("Misce.WalletManager.Model.Models.TransactionSubCategory", b =>
@@ -187,7 +182,6 @@ namespace Misce.WalletManager.Model.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -206,7 +200,7 @@ namespace Misce.WalletManager.Model.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("TransactionSubCategory");
+                    b.ToTable("TransactionSubCategories");
                 });
 
             modelBuilder.Entity("Misce.WalletManager.Model.Models.User", b =>
@@ -216,7 +210,6 @@ namespace Misce.WalletManager.Model.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastLoginDateTime")

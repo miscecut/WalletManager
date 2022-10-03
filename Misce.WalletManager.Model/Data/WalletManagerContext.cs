@@ -11,8 +11,8 @@ namespace Misce.WalletManager.Model.Data
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<AccountType> AccountTypes { get; set; } = null!;
         public DbSet<Account> Accounts { get; set; } = null!;
-        public DbSet<TransactionCategory> Categories { get; set; } = null!;
-        public DbSet<TransactionSubCategory> SubCategories { get; set; } = null!;
+        public DbSet<TransactionCategory> TransactionCategories { get; set; } = null!;
+        public DbSet<TransactionSubCategory> TransactionSubCategories { get; set; } = null!;
         public DbSet<Transaction> Transactions { get; set; } = null!;
 
         public WalletManagerContext(DbContextOptions<WalletManagerContext> options) : base(options) { }

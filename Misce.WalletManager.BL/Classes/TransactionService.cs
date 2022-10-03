@@ -18,10 +18,10 @@ namespace Misce.WalletManager.BL.Classes
         {
             var query = from transaction in _walletManagerContext.Transactions
                         from account in _walletManagerContext.Accounts
-                        join subCategory in _walletManagerContext.SubCategories
+                        join subCategory in _walletManagerContext.TransactionSubCategories
                             on transaction.SubCategory equals subCategory into subCategories
                         from subCategorySubquery in subCategories.DefaultIfEmpty()
-                        join category in _walletManagerContext.Categories
+                        join category in _walletManagerContext.TransactionCategories
                             on subCategorySubquery.Category equals category
                         where transaction.User.Id == userId
                         && transaction.Id == transactionId
@@ -83,7 +83,7 @@ namespace Misce.WalletManager.BL.Classes
             var user = GetUser(userId);
             if(user != null)
             {
-                var subCategoryQuery = from subCategory in _walletManagerContext.SubCategories
+                var subCategoryQuery = from subCategory in _walletManagerContext.TransactionSubCategories
                                        where subCategory.Category.User.Id == userId
                                        && (!transaction.SubCategoryId.HasValue || transaction.SubCategoryId.Value == subCategory.Id)
                                        select subCategory;
