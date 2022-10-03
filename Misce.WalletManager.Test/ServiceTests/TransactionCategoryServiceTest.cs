@@ -51,7 +51,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             Assert.IsNotNull(saddamBikesId);
 
-            var createdSaddamBikes = transactionCategoryService.GetTransactionCategories(_saddamId).Where(tc => tc.Id == saddamBikesId).First();
+            var createdSaddamBikes = transactionCategoryService.GetTransactionCategories(_saddamId).Where(tc => tc.Id == saddamBikesId.Id).First();
 
             Assert.IsNotNull(createdSaddamBikes);
             Assert.IsFalse(string.IsNullOrEmpty(createdSaddamBikes.Description));

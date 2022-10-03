@@ -25,10 +25,10 @@ namespace Misce.WalletManager.Test.ServiceTests
         {
             var subCategoryService = new TransactionSubCategoryService(_dbContext);
 
-            var svetlanaSubCategories = subCategoryService.GetSubCategories(_svetlanaId);
+            var svetlanaSubCategories = subCategoryService.GetTransactionSubCategories(_svetlanaId);
 
             Assert.AreEqual(svetlanaSubCategories.Count(), 5);
-            Assert.AreEqual(svetlanaSubCategories.Where(sc => sc.Category == "Vestiti").Count(), 3);
+            Assert.AreEqual(svetlanaSubCategories.Where(sc => sc.Category.Name == "Vestiti").Count(), 3);
         }
 
 

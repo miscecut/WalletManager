@@ -4,7 +4,8 @@ namespace Misce.WalletManager.BL.Interfaces
 {
     public interface ISubCategoryService
     {
-        public IEnumerable<TransactionSubCategoryDTOOut> GetSubCategories(Guid userId);
-        public Guid CreateSubCategory(Guid userId, TransactionSubCategoryCreationDTOIn subCategory);
+        public IEnumerable<TransactionSubCategoryDTOOut> GetTransactionSubCategories(Guid userId);
+        public TransactionSubCategoryDTOOut CreateTransactionSubCategory(Guid userId, TransactionSubCategoryCreationDTOIn subCategory);
+        public TransactionSubCategoryDTOOut UpdateTransactionSubCategory(Guid userId, Guid transactionSubCategory, TransactionSubCategoryUpdateDTOIn subCategory);
     }
 }

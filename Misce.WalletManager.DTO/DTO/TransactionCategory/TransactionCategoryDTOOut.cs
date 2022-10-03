@@ -2,7 +2,7 @@
 {
     public record TransactionCategoryDTOOut
     {
-        public Guid Id;
+        public Guid Id { get; init; }
         public string Name { get; init; } = null!;
         public string? Description { get; init; }
     }

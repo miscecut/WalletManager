@@ -51,7 +51,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             var misceAccounts = accountService.GetAccounts(_misceId);
             var saddamAccounts = accountService.GetAccounts(_saddamId);
 
-            var saddamSubCategories = subCategoryService.GetSubCategories(_saddamId);
+            var saddamSubCategories = subCategoryService.GetTransactionSubCategories(_saddamId);
 
             var saddamDrugs = saddamSubCategories.Where(sc => sc.Name == "Drugs").Single();
 

@@ -38,7 +38,7 @@ namespace Misce.WalletManager.BL.Classes
             return categoriesQuery.ToList();
         }
 
-        public Guid CreateTransactionCategory(Guid userId, TransactionCategoryCreationDTOIn transactionCategory)
+        public TransactionCategoryDTOOut CreateTransactionCategory(Guid userId, TransactionCategoryCreationDTOIn transactionCategory)
         {
             var userQuery = from user in _walletManagerContext.Users
                             where user.Id == userId
@@ -56,13 +56,18 @@ namespace Misce.WalletManager.BL.Classes
                 _walletManagerContext.Categories.Add(transactionCategoryToCreate);
                 _walletManagerContext.SaveChanges();
 
-                return transactionCategoryToCreate.Id;
+                return new TransactionCategoryDTOOut
+                {
+                    Id = transactionCategoryToCreate.Id,
+                    Name = transactionCategoryToCreate.Name,
+                    Description = transactionCategoryToCreate.Description
+                };
             }
 
             throw new InvalidDataException("The user was not found");
         }
 
-        public Guid UpdateTransactionCategory(Guid userId, Guid transactionCategoryId, TransactionCategoryUpdateDTOIn transactionCategory)
+        public TransactionCategoryDTOOut UpdateTransactionCategory(Guid userId, Guid transactionCategoryId, TransactionCategoryUpdateDTOIn transactionCategory)
         {
             var transactionCategoryQuery = from tc in _walletManagerContext.Categories
                                            where tc.Id == transactionCategoryId
@@ -77,7 +82,12 @@ namespace Misce.WalletManager.BL.Classes
 
                 _walletManagerContext.SaveChanges();
 
-                return transactionCategoryToUpdate.Id;
+                return new TransactionCategoryDTOOut
+                {
+                    Id = transactionCategoryToUpdate.Id,
+                    Name = transactionCategoryToUpdate.Name,
+                    Description= transactionCategoryToUpdate.Description
+                };
             }
 
             throw new InvalidDataException("The requested transaction category was not found");
