@@ -129,7 +129,7 @@ namespace Misce.WalletManager.BL.Classes
             return new List<AccountDTOOut>(0);
         }
 
-        public Guid CreateAccount(Guid userId, AccountCreationDTOIn account)
+        public AccountDTOOut CreateAccount(Guid userId, AccountCreationDTOIn account)
         {
             var accountTypeQuery = from at in _walletManagerContext.AccountTypes
                                    where at.Id == account.AccountTypeId
@@ -139,25 +139,39 @@ namespace Misce.WalletManager.BL.Classes
 
             if (accountTypeQuery.Any() && user != null)
             {
+                var accountType = accountTypeQuery.First();
+
                 var accountToInsert = new Account
                 {
                     User = user,
                     InitialAmount = account.InitialAmount,
                     Name = account.Name,
-                    AccountType = accountTypeQuery.First(),
+                    AccountType = accountType,
                     IsActive = account.IncludeInTotal
                 };
 
                 _walletManagerContext.Add(accountToInsert);
                 _walletManagerContext.SaveChanges();
 
-                return accountToInsert.Id;
+                return new AccountDTOOut
+                {
+                    Id = accountToInsert.Id,
+                    Name = accountToInsert.Name,
+                    Description = accountToInsert.Description,
+                    Amount = accountToInsert.InitialAmount,
+                    IsIncludedInTotal = accountToInsert.IsActive,
+                    AccountType = new AccountTypeDTOOut
+                    {
+                        Id = accountType.Id,
+                        Name = accountType.Name
+                    }
+                };
             }
 
             throw new InvalidDataException("The provided application type id is not valid");
         }
 
-        public Guid UpdateAccount(Guid userId, Guid accountId, AccountUpdateDTOIn account)
+        public AccountDTOOut UpdateAccount(Guid userId, Guid accountId, AccountUpdateDTOIn account)
         {
             var accountToUpdateQuery = from acc in _walletManagerContext.Accounts
                                        where acc.Id == accountId
@@ -172,8 +186,10 @@ namespace Misce.WalletManager.BL.Classes
 
                 if(accountTypeQuery.Any())
                 {
+                    var accountType = accountTypeQuery.First();
+
                     var accountToUpdate = accountToUpdateQuery.First();
-                    accountToUpdate.AccountType = accountTypeQuery.First();
+                    accountToUpdate.AccountType = accountType;
                     accountToUpdate.Name = account.Name;
                     accountToUpdate.Description = account.Description;
                     accountToUpdate.IsActive = account.IsActive;
@@ -182,7 +198,19 @@ namespace Misce.WalletManager.BL.Classes
 
                     _walletManagerContext.SaveChanges();
 
-                    return accountToUpdate.Id;
+                    return new AccountDTOOut
+                    {
+                        Id = accountToUpdate.Id,
+                        Name = accountToUpdate.Name,
+                        Description = accountToUpdate.Description,
+                        Amount = accountToUpdate.InitialAmount,
+                        IsIncludedInTotal = accountToUpdate.IsActive,
+                        AccountType = new AccountTypeDTOOut
+                        {
+                            Id = accountType.Id,
+                            Name = accountType.Name
+                        }
+                    };
                 }
 
                 throw new InvalidDataException("The requested account type was not found");

@@ -53,7 +53,7 @@ namespace Misce.WalletManager.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAccount(AccountCreationDTOIn request)
+        public IActionResult CreateAccount(AccountCreationDTOIn account)
         {
             try
             {
@@ -61,12 +61,12 @@ namespace Misce.WalletManager.API.Controllers
 
                 if (userGuid.HasValue)
                 {
-                    var createdAccountId = _accountService.CreateAccount(userGuid.Value, request);
+                    var createdAccount = _accountService.CreateAccount(userGuid.Value, account);
 
                     return CreatedAtAction(
                             actionName: nameof(GetAccount),
-                            routeValues: new { id = createdAccountId },
-                            value: _accountService.GetAccount(createdAccountId, new Guid()));
+                            routeValues: new { id = createdAccount },
+                            value: createdAccount);
                 }
 
                 //the user identity is null
@@ -81,6 +81,12 @@ namespace Misce.WalletManager.API.Controllers
                 return Problem("An internal server error occurred");
             }
         }
+
+        //[HttpPut("{id:guid}")]
+        //public IActionResult UpdateAccount(AccountUpdateDTOIn account)
+        //{
+
+        //}
 
         private Guid? GetUserGuid()
         {

@@ -87,7 +87,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             //CREATION CHECK
 
-            var createdSvetlanaAccount = accountService.GetAccount(newAccountId, _svetlanaId);
+            var createdSvetlanaAccount = accountService.GetAccount(newAccountId.Id, _svetlanaId);
 
             Assert.IsNotNull(createdSvetlanaAccount);
             Assert.AreEqual(createdSvetlanaAccount.Name, "Buoni pasto");
@@ -134,7 +134,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             var updatedAccountId = accountService.UpdateAccount(_svetlanaId, svetlanaBankAccount.Id, updatedSvetlanaBankAccount);
 
-            svetlanaBankAccount = accountService.GetAccount(updatedAccountId, _svetlanaId);
+            svetlanaBankAccount = accountService.GetAccount(updatedAccountId.Id, _svetlanaId);
 
             Assert.IsNotNull(svetlanaBankAccount);
             Assert.AreEqual(svetlanaBankAccount.Name, "Sexxx Bank");
