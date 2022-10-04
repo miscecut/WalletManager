@@ -131,7 +131,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Name\": \"Altro\"\r\n}",
+							"raw": "{\r\n    \"Name\": \"Puttane\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -207,7 +207,108 @@
 		},
 		{
 			"name": "TransactionSubCategories",
-			"item": []
+			"item": [
+				{
+					"name": "/api/transactionsubcategories/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/transactionsubcategories/b7a45f97-c7db-413b-7412-08daa2fb6b70",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactionsubcategories",
+								"b7a45f97-c7db-413b-7412-08daa2fb6b70"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactionsubcategories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/transactionsubcategories",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactionsubcategories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactionsubcategories",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Rumene\",\r\n    \"TransactionCategoryId\": \"b4d77e34-874e-4b96-ceb5-08daa54308f9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7264/api/transactionsubcategories",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactionsubcategories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactionsubcategories/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Nigeriane\",\r\n    \"Description\": \"Vado a troie, a volte\",\r\n    \"TransactionCategoryId\": \"b4d77e34-874e-4b96-ceb5-08daa54308f9\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7264/api/transactionsubcategories/2687eba3-8e0d-4c5c-105b-08daa544a3c1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactionsubcategories",
+								"2687eba3-8e0d-4c5c-105b-08daa544a3c1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "/api/login",
@@ -216,7 +317,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"misce\",\r\n    \"password\": \"Matisse01!?\"\r\n}",
+					"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -237,6 +338,35 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/api/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7264/api/register",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7264",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {
@@ -244,7 +374,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjVjNGViMDhkLWIxZWItNDVlYS0xYzAzLTA4ZGE5YjA4MDNiOSIsImV4cCI6MTY2NDc4ODA3NywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.SR2iajgtsQtyTp2UTw_xaVivt9GkUY7BzInZ-xQjkAU",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjU2ZGQwOWI0LWRjNTgtNDc1Yy04MDBmLTkyODJlOWNmNTJjNiIsImV4cCI6MTY2NDgwNjg5MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.9gM5InZkcZe78520kmlfp9exwH0WTBOWDVVCspWm-JQ",
 				"type": "string"
 			}
 		]
