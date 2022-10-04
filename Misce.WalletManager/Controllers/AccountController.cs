@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
 using System.Security.Claims;
@@ -82,11 +83,32 @@ namespace Misce.WalletManager.API.Controllers
             }
         }
 
-        //[HttpPut("{id:guid}")]
-        //public IActionResult UpdateAccount(AccountUpdateDTOIn account)
-        //{
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateAccount(Guid id, AccountUpdateDTOIn account)
+        {
+            var userGuid = GetUserGuid();
 
-        //}
+            if (userGuid.HasValue)
+            {
+                try
+                {
+                    var createdAccount = _accountService.UpdateAccount(userGuid.Value, id, account);
+                    if (createdAccount != null)
+                        return NoContent();
+                    return NotFound();
+                }
+                catch(InvalidDataException e)
+                {
+                    return UnprocessableEntity(e.Message);
+                }
+                catch(Exception)
+                {
+                    return Problem();
+                }
+            }
+
+            return Unauthorized();
+        }
 
         private Guid? GetUserGuid()
         {
