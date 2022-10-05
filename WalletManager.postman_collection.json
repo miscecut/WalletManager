@@ -56,7 +56,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"accountTypeId\": \"5C9AE353-87C7-4948-AB90-7A096B4C47DC\",\r\n    \"initialAmount\": 10,\r\n    \"description\": \"il mio cazzo di portafoglio\",\r\n    \"name\": \"Carta di credito\"\r\n}",
+							"raw": "{\r\n    \"accountTypeId\": \"bb381693-65fc-49f2-8a16-c904c36ede5c\",\r\n    \"initialAmount\": 0,\r\n    \"name\": \"BPM\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -73,6 +73,36 @@
 							"path": [
 								"api",
 								"accounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/accounts",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accounttypeid\": \"a826f4da-35fd-4841-bb55-0a7ff713b20f\",\r\n    \"name\": \"Contanti\",\r\n    \"description\": null,\r\n    \"initialAmount\": 10.00,\r\n    \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7264/api/accounts/8ded56e5-636a-4471-a1db-42f563418295",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"accounts",
+								"8ded56e5-636a-4471-a1db-42f563418295"
 							]
 						}
 					},
@@ -311,6 +341,31 @@
 			]
 		},
 		{
+			"name": "AccountTypes",
+			"item": [
+				{
+					"name": "/api/accounttypes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/accounttypes",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"accounttypes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "/api/login",
 			"request": {
 				"method": "POST",
@@ -374,7 +429,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjU2ZGQwOWI0LWRjNTgtNDc1Yy04MDBmLTkyODJlOWNmNTJjNiIsImV4cCI6MTY2NDgwNjg5MywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.9gM5InZkcZe78520kmlfp9exwH0WTBOWDVVCspWm-JQ",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjFhZDI1NWY0LWZhMzctNDllMS04YjNmLWEyODIzYjUwMzJjYyIsImV4cCI6MTY2NDk4MzI5MCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.xZGbrNAFTuQvKkpfxbFKxhlRq1_HcNzDhZ2enpiYSTY",
 				"type": "string"
 			}
 		]

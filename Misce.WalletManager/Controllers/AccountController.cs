@@ -66,7 +66,7 @@ namespace Misce.WalletManager.API.Controllers
 
                     return CreatedAtAction(
                             actionName: nameof(GetAccount),
-                            routeValues: new { id = createdAccount },
+                            routeValues: new { id = createdAccount.Id },
                             value: createdAccount);
                 }
 

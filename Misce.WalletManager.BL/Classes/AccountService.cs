@@ -1,4 +1,5 @@
-﻿using Misce.WalletManager.BL.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO;
 using Misce.WalletManager.DTO.DTO.Account;
 using Misce.WalletManager.Model.Data;
@@ -76,7 +77,9 @@ namespace Misce.WalletManager.BL.Classes
 
         public IEnumerable<AccountDTOOut> GetAccounts(Guid userId, bool? active = null)
         {
-            var query = from a in _walletManagerContext.Accounts
+            var query = from a in _walletManagerContext.Accounts.Include(a => a.AccountType)
+                        join at in _walletManagerContext.AccountTypes
+                            on a.AccountType.Id equals at.Id
                         where a.User.Id == userId
                         select a;
 

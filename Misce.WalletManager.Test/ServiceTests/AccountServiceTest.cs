@@ -36,6 +36,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             Assert.AreEqual(saddamAccounts.Count(), 1); //saddam has 1 account
             Assert.AreEqual(saddamAccounts.Where(a => a.Name == "Banco BPM").Count(), 0); //saddam doesn't see misce's account
             Assert.AreEqual(saddamAccounts.First().Amount, 313M);
+            Assert.AreEqual(saddamAccounts.First().AccountType.Name, "Bank account");
 
             Assert.AreEqual(svetlanaAccounts.Count(), 2); //svetlana has 2 accounts
             Assert.AreEqual(svetlanaAccounts.Where(a => a.AccountType.Name == "Cash").Count(), 1); //svetlana has an account with type "Soldi"
