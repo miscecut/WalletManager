@@ -161,7 +161,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Name\": \"Puttane\"\r\n}",
+							"raw": "{\r\n    \"Name\": \"Puttaneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -197,6 +197,27 @@
 								}
 							}
 						},
+						"url": {
+							"raw": "https://localhost:7264/api/transactioncategories/87d9f56a-c468-4f08-5832-08daa2fc5628",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactioncategories",
+								"87d9f56a-c468-4f08-5832-08daa2fc5628"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactioncategories",
+					"request": {
+						"method": "DELETE",
+						"header": [],
 						"url": {
 							"raw": "https://localhost:7264/api/transactioncategories/87d9f56a-c468-4f08-5832-08daa2fc5628",
 							"protocol": "https",
@@ -366,6 +387,147 @@
 			]
 		},
 		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "/api/transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/transactions?limit=10&page=0",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "title",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "accountFromId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "accountToId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "categoryId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "subCategoryId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "dateFrom",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "dateTo",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactions/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/transactions/89a8f2d8-a07c-4481-cab2-08da97dd6570",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactions",
+								"89a8f2d8-a07c-4481-cab2-08da97dd6570"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Poke\",\r\n    \"amount\": 10.9\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7264/api/transactions",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactions/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/transactions/89a8f2d8-a07c-4481-cab2-08da97dd6570",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactions",
+								"89a8f2d8-a07c-4481-cab2-08da97dd6570"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "/api/login",
 			"request": {
 				"method": "POST",
@@ -429,7 +591,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjFhZDI1NWY0LWZhMzctNDllMS04YjNmLWEyODIzYjUwMzJjYyIsImV4cCI6MTY2NDk4MzI5MCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.xZGbrNAFTuQvKkpfxbFKxhlRq1_HcNzDhZ2enpiYSTY",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjFhZDI1NWY0LWZhMzctNDllMS04YjNmLWEyODIzYjUwMzJjYyIsImV4cCI6MTY2NTE1NTM4MiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.pD0iVpE5zdBubEcIrhCxQwsN3H91SNdDMVivTwH2sGs",
 				"type": "string"
 			}
 		]

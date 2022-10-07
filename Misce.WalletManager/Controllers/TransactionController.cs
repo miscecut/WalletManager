@@ -69,6 +69,7 @@ namespace Misce.WalletManager.API.Controllers
                 try
                 {
                     var createdTransaction = _transactionService.CreateTransaction(userId.Value, transaction);
+
                     return CreatedAtAction(
                         actionName: nameof(GetTransaction),
                         routeValues: new { id = createdTransaction.Id },
@@ -101,7 +102,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (InvalidDataException e)
                 {
-                    return UnprocessableEntity(e.Message);
+                    return NotFound(e.Message);
                 }
                 catch (Exception)
                 {

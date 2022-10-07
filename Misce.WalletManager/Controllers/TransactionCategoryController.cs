@@ -27,10 +27,10 @@ namespace Misce.WalletManager.API.Controllers
             {
                 try
                 {
-                    var transactionCategory = _transactionCategoryService.GetTransactionCategories(userId.Value);
+                    var transactionCategory = _transactionCategoryService.GetTransactionCategory(userId.Value, id);
 
-                    if(transactionCategory.Any())
-                        return Ok(transactionCategory.First());
+                    if(transactionCategory != null)
+                        return Ok(transactionCategory);
                     return NotFound();
                 }
                 catch(Exception)
@@ -81,7 +81,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch(InvalidDataException e)
                 {
-                    return UnprocessableEntity(e);
+                    return UnprocessableEntity(e.Message);
                 }
                 catch (Exception)
                 {
@@ -109,7 +109,32 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (InvalidDataException e)
                 {
-                    return UnprocessableEntity(e);
+                    return UnprocessableEntity(e.Message);
+                }
+                catch (Exception)
+                {
+                    return Problem("An internal server error occurred");
+                }
+            }
+
+            return Unauthorized();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public IActionResult DeleteTransactionCategory(Guid id)
+        {
+            var userId = GetUserGuid();
+
+            if(userId.HasValue)
+            {
+                try
+                {
+                    _transactionCategoryService.DeleteTransactionCategory(userId.Value, id);
+                    return NoContent();
+                }
+                catch (InvalidDataException e)
+                {
+                    return NotFound(e.Message);
                 }
                 catch (Exception)
                 {

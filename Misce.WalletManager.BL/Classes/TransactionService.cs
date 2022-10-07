@@ -105,6 +105,7 @@ namespace Misce.WalletManager.BL.Classes
         {
             //user check
             var user = GetUser(userId);
+
             if(user != null)
             {
                 var subCategoryQuery = from subCategory in _walletManagerContext.TransactionSubCategories
@@ -112,7 +113,7 @@ namespace Misce.WalletManager.BL.Classes
                                        && (!transaction.SubCategoryId.HasValue || transaction.SubCategoryId.Value == subCategory.Id)
                                        select subCategory;
 
-                if(subCategoryQuery.Any() || !transaction.SubCategoryId.HasValue)
+                if(!transaction.SubCategoryId.HasValue || subCategoryQuery.Any())
                 {
                     //accounts check
                     var userAccounts = from account in _walletManagerContext.Accounts
@@ -121,7 +122,7 @@ namespace Misce.WalletManager.BL.Classes
                                        && account.User.Id == userId
                                        select account;
 
-                    if(userAccounts.Any())
+                    if((transaction.FromAccountId != null || transaction.ToAccountId != null) && userAccounts.Any())
                     {
                         var transactionToCreate = new Transaction
                         {
