@@ -40,7 +40,7 @@ namespace Misce.WalletManager.BL.Classes
             return categoriesQuery.FirstOrDefault();
         }
 
-        public IEnumerable<TransactionCategoryDTOOut> GetTransactionCategories(Guid userId)
+        public IEnumerable<TransactionCategoryDTOOut> GetTransactionCategories(Guid userId, string? name = null)
         {
             var categoriesQuery = from category in _walletManagerContext.TransactionCategories
                                   where category.User.Id == userId
@@ -50,6 +50,9 @@ namespace Misce.WalletManager.BL.Classes
                                       Name = category.Name,
                                       Description = category.Description
                                   };
+
+            if (name != null)
+                categoriesQuery = categoriesQuery.Where(category => category.Name.ToUpper().Contains(name.ToUpper()));
 
             return categoriesQuery.ToList();
         }

@@ -123,7 +123,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             transactionCategoryService.DeleteTransactionCategory(_saddamId, saddamFood.Id);
 
             Assert.IsNull(transactionCategoryService.GetTransactionCategory(_saddamId, saddamFood.Id));
-            //TODO: check if the sub categories were deleted
+            Assert.IsFalse(transactionSubCategoryService.GetTransactionSubCategories(_saddamId, transactionCategoryId: saddamFood.Id).Any());
             //TODO: check if the transactions are now without sub category
         }
 

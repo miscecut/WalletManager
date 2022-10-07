@@ -25,24 +25,50 @@ namespace Misce.WalletManager.BL.Classes
 
         #region Public Methods
 
-        public IEnumerable<TransactionSubCategoryDTOOut> GetTransactionSubCategories(Guid userId)
+        public TransactionSubCategoryDTOOut? GetTransactionSubCategory(Guid userId, Guid transactionSubCategoryId)
         {
-            var query = from subCategory in _walletManagerContext.TransactionSubCategories
-                        where subCategory.Category.User.Id == userId
-                        select new TransactionSubCategoryDTOOut
-                        {
-                            Id = subCategory.Id,
-                            Name = subCategory.Name,
-                            Description = subCategory.Description,
-                            Category = new TransactionCategoryDTOOut
-                            {
-                                Id = subCategory.Category.Id,
-                                Name = subCategory.Category.Name,
-                                Description = subCategory.Category.Description
-                            }
-                        };
+            var transactionSubCategoryQuery = from transactionSubCategory in _walletManagerContext.TransactionSubCategories
+                                              where transactionSubCategory.Category.User.Id == userId
+                                              && transactionSubCategory.Id == transactionSubCategoryId
+                                              select new TransactionSubCategoryDTOOut
+                                              {
+                                                  Id = transactionSubCategory.Id,
+                                                  Name = transactionSubCategory.Name,
+                                                  Description = transactionSubCategory.Description,
+                                                  Category = new TransactionCategoryDTOOut
+                                                  {
+                                                      Id = transactionSubCategory.Category.Id,
+                                                      Name = transactionSubCategory.Category.Name,
+                                                      Description = transactionSubCategory.Category.Description
+                                                  }
+                                              };
 
-            return query.ToList();
+            return transactionSubCategoryQuery.FirstOrDefault();
+        }
+
+        public IEnumerable<TransactionSubCategoryDTOOut> GetTransactionSubCategories(Guid userId, Guid? transactionCategoryId = null, string? name = null)
+        {
+            var transactionSubCategoryQuery = from transactionSubCategory in _walletManagerContext.TransactionSubCategories
+                                              where transactionSubCategory.Category.User.Id == userId
+                                              select new TransactionSubCategoryDTOOut
+                                              {
+                                                  Id = transactionSubCategory.Id,
+                                                  Name = transactionSubCategory.Name,
+                                                  Description = transactionSubCategory.Description,
+                                                  Category = new TransactionCategoryDTOOut
+                                                  {
+                                                      Id = transactionSubCategory.Category.Id,
+                                                      Name = transactionSubCategory.Category.Name,
+                                                      Description = transactionSubCategory.Category.Description
+                                                  }
+                                              };
+
+            if (transactionCategoryId != null)
+                transactionSubCategoryQuery = transactionSubCategoryQuery.Where(transactionSubCategory => transactionSubCategory.Category.Id == transactionCategoryId);
+            if (name != null)
+                transactionSubCategoryQuery = transactionSubCategoryQuery.Where(transactionSubCategory => transactionSubCategory.Name.ToUpper().Contains(name.ToUpper()));
+
+            return transactionSubCategoryQuery.ToList();
         }
 
         public TransactionSubCategoryDTOOut CreateTransactionSubCategory(Guid userId, TransactionSubCategoryCreationDTOIn subCategory)
@@ -129,10 +155,10 @@ namespace Misce.WalletManager.BL.Classes
 
         private IQueryable<TransactionCategory> GetTransactionCategoriesQuery(Guid userId, Guid categoryId)
         {
-            return from category in _walletManagerContext.TransactionCategories
-                   where category.User.Id == userId
-                   && category.Id == categoryId
-                   select category;
+            return from transactionCategory in _walletManagerContext.TransactionCategories
+                   where transactionCategory.User.Id == userId
+                   && transactionCategory.Id == categoryId
+                   select transactionCategory;
         }
 
         #endregion
