@@ -1,6 +1,6 @@
-﻿namespace Misce.WalletManager.DTO.DTO
+﻿namespace Misce.WalletManager.DTO.DTO.Transaction
 {
-    public record TransactionDTOIn
+    public record TransactionCreationDTOIn
     {
         public string? Title { get; init; }
         public string? Description { get; init; }

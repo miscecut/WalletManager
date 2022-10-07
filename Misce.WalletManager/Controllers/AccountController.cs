@@ -32,7 +32,7 @@ namespace Misce.WalletManager.API.Controllers
 
                 if (account != null)
                     return Ok(account);
-                return NotFound();
+                return NotFound("The account with ID " + id + " was not found");
             }
 
             //the user identity is null

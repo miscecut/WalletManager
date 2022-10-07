@@ -1,4 +1,6 @@
-﻿namespace Misce.WalletManager.DTO.DTO
+﻿using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
+
+namespace Misce.WalletManager.DTO.DTO.Transaction
 {
     public record TransactionDTOOut
     {
@@ -9,7 +11,6 @@
         public string? FromAccountName { get; init; }
         public string? ToAccountName { get; init; }
         public DateTime DateTime { get; init; }
-        public string? SubCategory { get; init; }
-        public string? Category { get; init; }
+        public TransactionSubCategoryDTOOut? TransactionSubCategory { get; init; }
     }
 }

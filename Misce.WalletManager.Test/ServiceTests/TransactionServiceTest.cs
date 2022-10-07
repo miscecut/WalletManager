@@ -1,5 +1,5 @@
 ﻿using Misce.WalletManager.BL.Classes;
-using Misce.WalletManager.DTO.DTO;
+using Misce.WalletManager.DTO.DTO.Transaction;
 using Misce.WalletManager.Model.Data;
 
 namespace Misce.WalletManager.Test.ServiceTests
@@ -32,7 +32,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             Assert.AreEqual(saddamTransactions.Where(t => t.Amount == 3.5M).Count(), 2);
             Assert.AreEqual(saddamTransactions.Where(t => t.FromAccountName == "Banco Allah").Count(), 3);
             Assert.AreEqual(saddamTransactions.Where(t => t.ToAccountName == "Banco Allah").Count(), 1);
-            Assert.AreEqual(saddamTransactions.Where(t => t.SubCategory == "Food").Count(), 2);
+            Assert.AreEqual(saddamTransactions.Where(t => t.TransactionSubCategory != null && t.TransactionSubCategory.Name == "Food").Count(), 2);
 
             //WITH QUERY PARAMETERS
 
@@ -60,7 +60,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             //GAIN WITH NO SUBCATEGORY
 
-            var misceGainId = transactionService.CreateTransaction(_misceId, new TransactionDTOIn
+            var misceGainId = transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
             {
                 Amount = 50,
                 ToAccountId = misceCash.Id,
@@ -73,7 +73,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             //GAIN WITH SUBCATEGORY
 
-            var saddamGainId = transactionService.CreateTransaction(_saddamId, new TransactionDTOIn
+            var saddamGainId = transactionService.CreateTransaction(_saddamId, new TransactionCreationDTOIn
             {
                 Amount = 69.42M,
                 SubCategoryId = saddamDrugs.Id,
@@ -85,6 +85,42 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             Assert.IsNotNull(saddamGainId);
             Assert.AreEqual(transactionService.GetTransactions(_saddamId, 10, 0, subCategoryId: saddamDrugs.Id).Count(), 2);
+
+            //PAYMENT WITHOUT SUBCATEGORY AND TITLE
+
+            var miscePayment = transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            {
+                Amount = 10,
+                FromAccountId = misceCash.Id,
+                DateTime = DateTime.UtcNow,
+                Description = "Paid some money baby!!!",
+            });
+
+            Assert.IsNotNull(miscePayment);
+            Assert.AreEqual(transactionService.GetTransactions(_misceId, 10, 0, fromAccountId: misceCash.Id).Count(), 2);
+            Assert.AreEqual(miscePayment.Amount, 10);
+            Assert.IsTrue(string.IsNullOrEmpty(miscePayment.Title));
+            Assert.IsNull(miscePayment.ToAccountName);
+        }
+
+        [TestMethod]
+        public void TestDeleteTransaction()
+        {
+            var transactionService = new TransactionService(_dbContext);
+
+            var misceGPUPayments = transactionService.GetTransactions(_misceId, 10, 0, title: "gt");
+
+            Assert.AreEqual(misceGPUPayments.Count(), 1);
+
+            var misceGPUPayment = misceGPUPayments.First();
+
+            Assert.AreEqual(misceGPUPayment.Title, "GT 610");
+
+            transactionService.DeleteTransaction(_misceId, misceGPUPayment.Id);
+
+            misceGPUPayments = transactionService.GetTransactions(_misceId, 10, 0, title: "gt");
+
+            Assert.IsFalse(misceGPUPayments.Any());
         }
     }
 }

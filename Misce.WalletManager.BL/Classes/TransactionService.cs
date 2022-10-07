@@ -1,5 +1,7 @@
 ﻿using Misce.WalletManager.BL.Interfaces;
-using Misce.WalletManager.DTO.DTO;
+using Misce.WalletManager.DTO.DTO.Transaction;
+using Misce.WalletManager.DTO.DTO.TransactionCategory;
+using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
 
@@ -34,20 +36,32 @@ namespace Misce.WalletManager.BL.Classes
                             Amount = transaction.Amount,
                             FromAccountName = transaction.FromAccount == null ? null : transaction.FromAccount.Name,
                             ToAccountName = transaction.FromAccount == null ? null : transaction.ToAccount.Name,
-                            SubCategory = subCategorySubquery.Name,
-                            Category = category.Name,
-                            DateTime = transaction.DateTime
+                            DateTime = transaction.DateTime,
+                            TransactionSubCategory = transaction.SubCategory != null ? new TransactionSubCategoryDTOOut
+                            {
+                                Id = subCategorySubquery.Id,
+                                Name = subCategorySubquery.Name,
+                                Description = subCategorySubquery.Description,
+                                Category = new TransactionCategoryDTOOut
+                                {
+                                    Id = subCategorySubquery.Category.Id,
+                                    Name = subCategorySubquery.Category.Name,
+                                    Description = subCategorySubquery.Category.Description
+                                }
+                            } : null
                         };
 
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<TransactionDTOOut> GetTransactions(Guid userId, int limit, int page, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
+        public IEnumerable<TransactionDTOOut> GetTransactions(Guid userId, int limit, int page, string? title = null,Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
         {
             var query = from transaction in _walletManagerContext.Transactions
                         where transaction.User.Id == userId
                         select transaction;
 
+            if (title != null)
+                query = query.Where(t => t.Title != null && t.Title.ToUpper().Contains(title.ToUpper()));
             if (fromAccountId != null)
                 query = query.Where(t => t.FromAccount != null && t.FromAccount.Id == fromAccountId);
             if (toAccountId != null)
@@ -71,13 +85,23 @@ namespace Misce.WalletManager.BL.Classes
                     Amount = t.Amount,
                     FromAccountName = t.FromAccount == null ? null : t.FromAccount.Name,
                     ToAccountName = t.ToAccount == null ? null : t.ToAccount.Name,
-                    SubCategory = t.SubCategory == null ? null : t.SubCategory.Name,
-                    Category = t.SubCategory == null ? null : t.SubCategory.Category.Name,
-                    DateTime = t.DateTime
-                }).ToList();
+                    DateTime = t.DateTime,
+                    TransactionSubCategory = t.SubCategory != null ? new TransactionSubCategoryDTOOut
+                    {
+                        Id = t.SubCategory.Id,
+                        Name = t.SubCategory.Name,
+                        Description = t.SubCategory.Description,
+                        Category = new TransactionCategoryDTOOut
+                        {
+                            Id = t.SubCategory.Category.Id,
+                            Name = t.SubCategory.Category.Name,
+                            Description = t.SubCategory.Category.Description
+                        }
+                    } : null
+            }).ToList();
         }
     
-        public Guid CreateTransaction(Guid userId, TransactionDTOIn transaction)
+        public TransactionDTOOut CreateTransaction(Guid userId, TransactionCreationDTOIn transaction)
         {
             //user check
             var user = GetUser(userId);
@@ -114,16 +138,62 @@ namespace Misce.WalletManager.BL.Classes
                         _walletManagerContext.Transactions.Add(transactionToCreate);
                         _walletManagerContext.SaveChanges();
 
-                        return transactionToCreate.Id;
+                        return new TransactionDTOOut
+                        {
+                            Id = transactionToCreate.Id,
+                            Title = transactionToCreate.Title,
+                            Description = transactionToCreate.Description,
+                            Amount = transactionToCreate.Amount,
+                            FromAccountName = transactionToCreate.FromAccount?.Name ?? null,
+                            ToAccountName = transactionToCreate.ToAccount?.Name ?? null,
+                            DateTime = transactionToCreate.DateTime,
+                            TransactionSubCategory = transactionToCreate.SubCategory != null ? new TransactionSubCategoryDTOOut
+                            {
+                                Id = transactionToCreate.SubCategory.Id,
+                                Name = transactionToCreate.SubCategory.Name,
+                                Description = transactionToCreate.SubCategory.Description,
+                                Category = new TransactionCategoryDTOOut
+                                {
+                                    Id = transactionToCreate.SubCategory.Category.Id,
+                                    Name = transactionToCreate.SubCategory.Category.Name,
+                                    Description = transactionToCreate.SubCategory.Category.Description
+                                }
+                            } : null
+                        };
                     }
                     //account not valid or not found
-                    throw new InvalidDataException("The provided account id is not valid!");
+                    throw new InvalidDataException("The provided account id is not valid");
                 }
-                throw new InvalidDataException("The provided sub category id is not valid!");
+                throw new InvalidDataException("The provided sub category id is not valid");
             }
             //user not found
-            throw new InvalidDataException("The provided user id is not valid!");
+            throw new InvalidDataException("The provided user id is not valid");
         }
+
+        public void DeleteTransaction(Guid userId, Guid transactionId)
+        {
+            var user = GetUser(userId);
+
+            if(user != null)
+            {
+                var transactionToDelete = from transaction in _walletManagerContext.Transactions
+                                          where transaction.User.Id == user.Id
+                                          && transaction.Id == transactionId
+                                          select transaction;
+
+                if (transactionToDelete.Any())
+                {
+                    _walletManagerContext.Transactions.Remove(transactionToDelete.First());
+                    _walletManagerContext.SaveChanges();
+                }
+                else
+                    throw new InvalidDataException("The provided transaction id is not valid");
+            }
+            //user not found
+            else
+                throw new InvalidDataException("The provided user id is not valid");
+        }
+
         private User? GetUser(Guid id)
         {
             var userQuery = from u in _walletManagerContext.Users

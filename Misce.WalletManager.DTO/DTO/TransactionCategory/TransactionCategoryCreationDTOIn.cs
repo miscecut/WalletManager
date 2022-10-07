@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Misce.WalletManager.DTO.DTO.TransactionCategory
+﻿namespace Misce.WalletManager.DTO.DTO.TransactionCategory
 {
     public record TransactionCategoryCreationDTOIn
     {

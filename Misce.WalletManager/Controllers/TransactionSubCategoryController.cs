@@ -25,7 +25,7 @@ namespace Misce.WalletManager.API.Controllers
 
             if(userId.HasValue)
             {
-                var categorySubCategory = _transactionSubCategoryService.GetTransactionSubCategories(userId.Value);
+                var categorySubCategory = _transactionSubCategoryService.GetTransactionSubCategories(userId.Value).Where(tc => tc.Id == id);
 
                 if (categorySubCategory.Any())
                     return Ok(categorySubCategory.First());
