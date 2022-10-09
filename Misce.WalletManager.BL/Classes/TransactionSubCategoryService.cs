@@ -1,4 +1,5 @@
-﻿using Misce.WalletManager.BL.Interfaces;
+﻿using Misce.WalletManager.BL.Exceptions;
+using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using Misce.WalletManager.Model.Data;
@@ -102,11 +103,11 @@ namespace Misce.WalletManager.BL.Classes
                     }
                 };
             }
-
-            throw new InvalidDataException("The provided transaction category id is not valid");
+            else
+                throw new IncorrectDataException("The provided transaction category id is not valid");
         }
 
-        public TransactionSubCategoryDTOOut? UpdateTransactionSubCategory(Guid userId, Guid transactionSubCategoryId, TransactionSubCategoryUpdateDTOIn transactionSubCategory)
+        public TransactionSubCategoryDTOOut UpdateTransactionSubCategory(Guid userId, Guid transactionSubCategoryId, TransactionSubCategoryUpdateDTOIn transactionSubCategory)
         {
             var subCategoryQuery = from sc in _walletManagerContext.TransactionSubCategories
                                    where sc.Id == transactionSubCategoryId

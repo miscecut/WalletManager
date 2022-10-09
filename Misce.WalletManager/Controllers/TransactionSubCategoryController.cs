@@ -25,10 +25,10 @@ namespace Misce.WalletManager.API.Controllers
 
             if(userId.HasValue)
             {
-                var categorySubCategory = _transactionSubCategoryService.GetTransactionSubCategories(userId.Value).Where(tc => tc.Id == id);
+                var categorySubCategory = _transactionSubCategoryService.GetTransactionSubCategory(userId.Value, id);
 
-                if (categorySubCategory.Any())
-                    return Ok(categorySubCategory.First());
+                if (categorySubCategory != null)
+                    return Ok(categorySubCategory);
                 return NotFound();
             }
 
@@ -98,6 +98,31 @@ namespace Misce.WalletManager.API.Controllers
                     return UnprocessableEntity(e.Message);
                 }
                 catch(Exception)
+                {
+                    return Problem();
+                }
+            }
+
+            return Unauthorized();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public IActionResult DeleteTransactionSubCategory(Guid id)
+        {
+            var userId = GetUserGuid();
+
+            if(userId.HasValue)
+            {
+                try
+                {
+                    _transactionSubCategoryService.DeleteTransactionSubCategory(userId.Value, id);
+                    return NoContent();
+                }
+                catch (InvalidDataException e)
+                {
+                    return NotFound(e.Message);
+                }
+                catch (Exception)
                 {
                     return Problem();
                 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using System.Security.Claims;
@@ -79,9 +80,13 @@ namespace Misce.WalletManager.API.Controllers
                         routeValues: new { id = createdTransactionCategory.Id },
                         value: createdTransactionCategory);
                 }
-                catch(InvalidDataException e)
+                catch(IncorrectDataException e)
                 {
                     return UnprocessableEntity(e.Message);
+                }
+                catch(UserNotFoundException)
+                {
+                    return Unauthorized();
                 }
                 catch (Exception)
                 {
@@ -102,14 +107,15 @@ namespace Misce.WalletManager.API.Controllers
                 try
                 {
                     var createdTransactionCategory = _transactionCategoryService.UpdateTransactionCategory(userId.Value, id, transactionCategory);
-
-                    if(createdTransactionCategory != null)
-                        return NoContent();
-                    return NotFound();
+                    return NoContent();
                 }
-                catch (InvalidDataException e)
+                catch (IncorrectDataException e)
                 {
                     return UnprocessableEntity(e.Message);
+                }
+                catch (ElementNotFoundException)
+                {
+                    return NotFound();
                 }
                 catch (Exception)
                 {

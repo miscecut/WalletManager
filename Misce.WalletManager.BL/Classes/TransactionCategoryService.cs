@@ -1,4 +1,5 @@
-﻿using Misce.WalletManager.BL.Interfaces;
+﻿using Misce.WalletManager.BL.Exceptions;
+using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
@@ -64,7 +65,7 @@ namespace Misce.WalletManager.BL.Classes
             var validationResults = ValidateTransactionCategoryInput(transactionCategory);
 
             if (validationResults.Any())
-                throw new InvalidDataException(string.Join(",", validationResults.Select(vr => vr.ErrorMessage)));
+                throw new IncorrectDataException(string.Join(",", validationResults.Select(vr => vr.ErrorMessage)));
 
             //check if the user exists
 
@@ -98,8 +99,8 @@ namespace Misce.WalletManager.BL.Classes
                     Description = transactionCategoryToCreate.Description
                 };
             }
-
-            throw new InvalidDataException("The user was not found");
+            else
+                throw new UserNotFoundException();
         }
 
         public TransactionCategoryDTOOut UpdateTransactionCategory(Guid userId, Guid transactionCategoryId, TransactionCategoryUpdateDTOIn transactionCategory)
@@ -109,7 +110,7 @@ namespace Misce.WalletManager.BL.Classes
             var validationResults = ValidateTransactionCategoryInput(transactionCategory);
 
             if (validationResults.Any())
-                throw new InvalidDataException(string.Join(",", validationResults.Select(vr => vr.ErrorMessage)));
+                throw new IncorrectDataException(string.Join(",", validationResults.Select(vr => vr.ErrorMessage)));
 
             // check if the transaction category the user wants to update exists
 
@@ -140,8 +141,8 @@ namespace Misce.WalletManager.BL.Classes
                     Description= transactionCategoryToUpdate.Description
                 };
             }
-
-            throw new InvalidDataException("The provided transaction category id was not found");
+            else
+                throw new ElementNotFoundException();
         }
 
         public void DeleteTransactionCategory(Guid userId, Guid transactionCategoryId)
@@ -179,7 +180,7 @@ namespace Misce.WalletManager.BL.Classes
                 _walletManagerContext.SaveChanges();
             }
             else
-                throw new InvalidDataException("The provided transaction category id was not found");
+                throw new ElementNotFoundException();
         }
 
         #endregion

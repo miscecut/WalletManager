@@ -1,4 +1,5 @@
 ﻿using Misce.WalletManager.BL.Classes;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.Model.Data;
 
@@ -37,7 +38,7 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException), "The transaction category name has to be provided")]
+        [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingCreateTransactionCategory()
         {
             var transactionCategoryService = new TransactionCategoryService(_dbContext);
@@ -72,7 +73,7 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException), "The transaction category description is too long")]
+        [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingUpdateTransactionCategory()
         {
             var transactionCategoryService = new TransactionCategoryService(_dbContext);
@@ -128,7 +129,7 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidDataException), "The provided transaction category id was not found")]
+        [ExpectedException(typeof(ElementNotFoundException))]
         public void TestFailingDeleteTransactionCategory()
         {
             var transactionCategoryService = new TransactionCategoryService(_dbContext);
