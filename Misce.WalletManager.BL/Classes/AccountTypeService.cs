@@ -1,5 +1,5 @@
 ﻿using Misce.WalletManager.BL.Interfaces;
-using Misce.WalletManager.DTO.DTO;
+using Misce.WalletManager.DTO.DTO.AccountType;
 using Misce.WalletManager.Model.Data;
 
 namespace Misce.WalletManager.BL.Classes
@@ -15,12 +15,6 @@ namespace Misce.WalletManager.BL.Classes
 
         public IEnumerable<AccountTypeDTOOut> GetAccountTypes()
         {
-            /*
-            SELECT
-            at.Id,
-            at.Name
-            FROM AccountType at
-            */
             var query = from accountType in _walletManagerContext.AccountTypes
                         select new AccountTypeDTOOut
                         {

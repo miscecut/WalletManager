@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Classes.Utils;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
@@ -22,22 +23,15 @@ namespace Misce.WalletManager.API.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetTransactionCategory(Guid id)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userId.HasValue)
+            if (userId.HasValue)
             {
-                try
-                {
-                    var transactionCategory = _transactionCategoryService.GetTransactionCategory(userId.Value, id);
+                var transactionCategory = _transactionCategoryService.GetTransactionCategory(userId.Value, id);
 
-                    if(transactionCategory != null)
-                        return Ok(transactionCategory);
-                    return NotFound();
-                }
-                catch(Exception)
-                {
-                    return Problem("An internal server error occurred");
-                }
+                if (transactionCategory != null)
+                    return Ok(transactionCategory);
+                return NotFound();
             }
 
             return Unauthorized();
@@ -46,19 +40,12 @@ namespace Misce.WalletManager.API.Controllers
         [HttpGet]
         public IActionResult GetTransactionCategories()
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
-                try
-                {
-                    var transactionCategories = _transactionCategoryService.GetTransactionCategories(userId.Value);
-                    return Ok(transactionCategories);
-                }
-                catch (Exception)
-                {
-                    return Problem("An internal server error occurred");
-                }
+                var transactionCategories = _transactionCategoryService.GetTransactionCategories(userId.Value);
+                return Ok(transactionCategories);
             }
 
             return Unauthorized();
@@ -67,9 +54,9 @@ namespace Misce.WalletManager.API.Controllers
         [HttpPost]
         public IActionResult CreateTransactionCategory(TransactionCategoryCreationDTOIn transactionCategory)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userId.HasValue)
+            if (userId.HasValue)
             {
                 try
                 {
@@ -100,7 +87,7 @@ namespace Misce.WalletManager.API.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult UpdateTransactionCategory(Guid id, TransactionCategoryUpdateDTOIn transactionCategory)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
@@ -129,7 +116,7 @@ namespace Misce.WalletManager.API.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteTransactionCategory(Guid id)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if(userId.HasValue)
             {
@@ -138,9 +125,9 @@ namespace Misce.WalletManager.API.Controllers
                     _transactionCategoryService.DeleteTransactionCategory(userId.Value, id);
                     return NoContent();
                 }
-                catch (InvalidDataException e)
+                catch (ElementNotFoundException)
                 {
-                    return NotFound(e.Message);
+                    return NotFound();
                 }
                 catch (Exception)
                 {
@@ -149,22 +136,6 @@ namespace Misce.WalletManager.API.Controllers
             }
 
             return Unauthorized();
-        }
-
-        private Guid? GetUserGuid()
-        {
-            //retrieve user's claims (needs login)
-            var userIdentity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (userIdentity != null)
-            {
-                var guidString = userIdentity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? String.Empty;
-                if (string.IsNullOrEmpty(guidString))
-                    return null;
-                return Guid.Parse(guidString);
-            }
-
-            return null;
         }
     }
 }

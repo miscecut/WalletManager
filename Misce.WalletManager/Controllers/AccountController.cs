@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Misce.WalletManager.BL.Classes.Utils;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
 using System.Security.Claims;
@@ -24,15 +25,15 @@ namespace Misce.WalletManager.API.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetAccount(Guid id)
         {
-            var userGuid = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if (userGuid.HasValue)
+            if (userId.HasValue)
             {
-                var account = _accountService.GetAccount(id, userGuid.Value);
+                var account = _accountService.GetAccount(id, userId.Value);
 
                 if (account != null)
                     return Ok(account);
-                return NotFound("The account with ID " + id + " was not found");
+                return NotFound();
             }
 
             //the user identity is null
@@ -42,11 +43,11 @@ namespace Misce.WalletManager.API.Controllers
         [HttpGet()]
         public IActionResult GetAccounts()
         {
-            var userGuid = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if (userGuid.HasValue)
+            if (userId.HasValue)
             {
-                var accounts = _accountService.GetAccounts(userGuid.Value);
+                var accounts = _accountService.GetAccounts(userId.Value);
                 return Ok(accounts);
             }
 
@@ -58,11 +59,11 @@ namespace Misce.WalletManager.API.Controllers
         {
             try
             {
-                var userGuid = GetUserGuid();
+                var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-                if (userGuid.HasValue)
+                if (userId.HasValue)
                 {
-                    var createdAccount = _accountService.CreateAccount(userGuid.Value, account);
+                    var createdAccount = _accountService.CreateAccount(userId.Value, account);
 
                     return CreatedAtAction(
                             actionName: nameof(GetAccount),
@@ -70,10 +71,9 @@ namespace Misce.WalletManager.API.Controllers
                             value: createdAccount);
                 }
 
-                //the user identity is null
                 return Unauthorized();
             }
-            catch (InvalidDataException e)
+            catch (IncorrectDataException e)
             {
                 return UnprocessableEntity(e.Message);
             }
@@ -86,22 +86,24 @@ namespace Misce.WalletManager.API.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult UpdateAccount(Guid id, AccountUpdateDTOIn account)
         {
-            var userGuid = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if (userGuid.HasValue)
+            if (userId.HasValue)
             {
                 try
                 {
-                    var createdAccount = _accountService.UpdateAccount(userGuid.Value, id, account);
-                    if (createdAccount != null)
-                        return NoContent();
-                    return NotFound();
+                    var createdAccount = _accountService.UpdateAccount(userId.Value, id, account);
+                    return NoContent();
                 }
-                catch(InvalidDataException e)
+                catch(IncorrectDataException e)
                 {
                     return UnprocessableEntity(e.Message);
                 }
-                catch(Exception)
+                catch (ElementNotFoundException)
+                {
+                    return NotFound();
+                }
+                catch (Exception)
                 {
                     return Problem();
                 }
@@ -110,20 +112,29 @@ namespace Misce.WalletManager.API.Controllers
             return Unauthorized();
         }
 
-        private Guid? GetUserGuid()
+        [HttpDelete("{id:guid}")]
+        public IActionResult DeleteAccount(Guid id)
         {
-            //retrieve user's claims (needs login)
-            var userIdentity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userIdentity != null)
+            if (userId.HasValue)
             {
-                var guidString = userIdentity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? String.Empty;
-                if (string.IsNullOrEmpty(guidString))
-                    return null;
-                return Guid.Parse(guidString);
+                try
+                {
+                    _accountService.DeleteAccount(userId.Value, id);
+                    return NoContent();
+                }
+                catch (ElementNotFoundException)
+                {
+                    return NotFound();
+                }
+                catch (Exception)
+                {
+                    return Problem();
+                }
             }
 
-            return null;
+            return Unauthorized();
         }
     }
 }

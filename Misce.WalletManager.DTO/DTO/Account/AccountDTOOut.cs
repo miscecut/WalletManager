@@ -1,4 +1,6 @@
-﻿namespace Misce.WalletManager.DTO.DTO.Account
+﻿using Misce.WalletManager.DTO.DTO.AccountType;
+
+namespace Misce.WalletManager.DTO.DTO.Account
 {
     public record AccountDTOOut
     {
@@ -6,7 +8,8 @@
         public AccountTypeDTOOut AccountType { get; init; } = null!;
         public string Name { get; init; } = null!;
         public string? Description { get; init; }
-        public decimal Amount { get; init; }
-        public bool IsIncludedInTotal { get; init; }
+        public decimal InitialAmount { get; init; }
+        public decimal ActualAmount { get; init; }
+        public bool IsActive { get; init; }
     }
 }

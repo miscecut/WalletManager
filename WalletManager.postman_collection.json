@@ -79,7 +79,7 @@
 					"response": []
 				},
 				{
-					"name": "/api/accounts",
+					"name": "/api/accounts/{id}",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -92,6 +92,27 @@
 								}
 							}
 						},
+						"url": {
+							"raw": "https://localhost:7264/api/accounts/8ded56e5-636a-4471-a1db-42f563418295",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"accounts",
+								"8ded56e5-636a-4471-a1db-42f563418295"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/accounts/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [],
 						"url": {
 							"raw": "https://localhost:7264/api/accounts/8ded56e5-636a-4471-a1db-42f563418295",
 							"protocol": "https",
@@ -214,7 +235,7 @@
 					"response": []
 				},
 				{
-					"name": "/api/transactioncategories",
+					"name": "/api/transactioncategories/{id}",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -343,6 +364,27 @@
 								}
 							}
 						},
+						"url": {
+							"raw": "https://localhost:7264/api/transactionsubcategories/2687eba3-8e0d-4c5c-105b-08daa544a3c1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactionsubcategories",
+								"2687eba3-8e0d-4c5c-105b-08daa544a3c1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactionsubcategories/{id]",
+					"request": {
+						"method": "DELETE",
+						"header": [],
 						"url": {
 							"raw": "https://localhost:7264/api/transactionsubcategories/2687eba3-8e0d-4c5c-105b-08daa544a3c1",
 							"protocol": "https",

@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
-using Misce.WalletManager.DTO.DTO;
 using Misce.WalletManager.DTO.DTO.Account;
+using Misce.WalletManager.DTO.DTO.AccountType;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
+using System.Security.Principal;
 
 namespace Misce.WalletManager.BL.Classes
 {
@@ -37,6 +39,7 @@ namespace Misce.WalletManager.BL.Classes
             {
                 var account = query.First();
 
+                //actual gains = summation(amount of the transaction with the account as account to)
                 var toAccountAmountQuery = from t in _walletManagerContext.Transactions
                                            where t.ToAccount != null
                                            && t.ToAccount.Id == id
@@ -46,6 +49,7 @@ namespace Misce.WalletManager.BL.Classes
                     .Select(t => t.Amount)
                     .Sum();
 
+                //actual costs = summation(amount of the transaction with the account as account from)
                 var FromAccountAmountQuery = from t in _walletManagerContext.Transactions
                                              where t.FromAccount != null
                                              && t.FromAccount.Id == id
@@ -61,8 +65,9 @@ namespace Misce.WalletManager.BL.Classes
                 {
                     Id = account.Id,
                     Name = account.Name,
-                    Amount = actualAccountAmount,
-                    IsIncludedInTotal = account.IsActive,
+                    InitialAmount = account.InitialAmount,
+                    ActualAmount = actualAccountAmount,
+                    IsActive = account.IsActive,
                     Description = account.Description,
                     AccountType = new AccountTypeDTOOut
                     {
@@ -75,7 +80,7 @@ namespace Misce.WalletManager.BL.Classes
             return null;
         }
 
-        public IEnumerable<AccountDTOOut> GetAccounts(Guid userId, bool? active = null)
+        public IEnumerable<AccountDTOOut> GetAccounts(Guid userId, Guid? accountTypeId = null, bool? active = null)
         {
             var query = from a in _walletManagerContext.Accounts.Include(a => a.AccountType)
                         join at in _walletManagerContext.AccountTypes
@@ -119,8 +124,9 @@ namespace Misce.WalletManager.BL.Classes
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    Amount = a.InitialAmount + moneyInMap[a.Id] - moneyOutMap[a.Id],
-                    IsIncludedInTotal = a.IsActive,
+                    InitialAmount = a.InitialAmount,
+                    ActualAmount = a.InitialAmount + moneyInMap[a.Id] - moneyOutMap[a.Id],
+                    IsActive = a.IsActive,
                     AccountType = new AccountTypeDTOOut
                     {
                         Id = a.AccountType.Id,
@@ -134,35 +140,47 @@ namespace Misce.WalletManager.BL.Classes
 
         public AccountDTOOut CreateAccount(Guid userId, AccountCreationDTOIn account)
         {
+            //account creation data validation
+            var validationResults = Utils.Utils.ValidateDTO(account);
+            if (!string.IsNullOrEmpty(validationResults))
+                throw new IncorrectDataException(validationResults);
+
+            //check if the account type exists
             var accountTypeQuery = from at in _walletManagerContext.AccountTypes
                                    where at.Id == account.AccountTypeId
                                    select at;
 
+            //check if the user exists
             var user = GetUser(userId);
 
             if (accountTypeQuery.Any() && user != null)
             {
                 var accountType = accountTypeQuery.First();
 
+                //create the account
                 var accountToInsert = new Account
                 {
                     User = user,
                     InitialAmount = account.InitialAmount,
                     Name = account.Name,
                     AccountType = accountType,
-                    IsActive = account.IncludeInTotal
+                    IsActive = account.IsActive
                 };
 
                 _walletManagerContext.Add(accountToInsert);
+
+                //commit changes in the db
                 _walletManagerContext.SaveChanges();
 
+                //return the created account data
                 return new AccountDTOOut
                 {
                     Id = accountToInsert.Id,
                     Name = accountToInsert.Name,
                     Description = accountToInsert.Description,
-                    Amount = accountToInsert.InitialAmount,
-                    IsIncludedInTotal = accountToInsert.IsActive,
+                    InitialAmount = accountToInsert.InitialAmount,
+                    ActualAmount = accountToInsert.InitialAmount,
+                    IsActive = accountToInsert.IsActive,
                     AccountType = new AccountTypeDTOOut
                     {
                         Id = accountType.Id,
@@ -170,12 +188,18 @@ namespace Misce.WalletManager.BL.Classes
                     }
                 };
             }
-
-            throw new InvalidDataException("The provided application type id is not valid");
+            else
+                throw new IncorrectDataException("The account type ID " + account.AccountTypeId + " was not found");
         }
 
         public AccountDTOOut UpdateAccount(Guid userId, Guid accountId, AccountUpdateDTOIn account)
         {
+            //account update data validation
+            var validationResults = Utils.Utils.ValidateDTO(account);
+            if (!string.IsNullOrEmpty(validationResults))
+                throw new IncorrectDataException(validationResults);
+
+            //check if the user owns the account
             var accountToUpdateQuery = from acc in _walletManagerContext.Accounts
                                        where acc.Id == accountId
                                        && acc.User.Id == userId
@@ -183,6 +207,7 @@ namespace Misce.WalletManager.BL.Classes
 
             if(accountToUpdateQuery.Any())
             {
+                //check if the provided account type exists
                 var accountTypeQuery = from accountType in _walletManagerContext.AccountTypes
                                        where accountType.Id == account.AccountTypeId
                                        select accountType;
@@ -191,6 +216,7 @@ namespace Misce.WalletManager.BL.Classes
                 {
                     var accountType = accountTypeQuery.First();
 
+                    //update the account
                     var accountToUpdate = accountToUpdateQuery.First();
                     accountToUpdate.AccountType = accountType;
                     accountToUpdate.Name = account.Name;
@@ -199,27 +225,45 @@ namespace Misce.WalletManager.BL.Classes
                     accountToUpdate.InitialAmount = account.InitialAmount;
                     accountToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
+                    //commit changes in the db
                     _walletManagerContext.SaveChanges();
 
-                    return new AccountDTOOut
-                    {
-                        Id = accountToUpdate.Id,
-                        Name = accountToUpdate.Name,
-                        Description = accountToUpdate.Description,
-                        Amount = accountToUpdate.InitialAmount,
-                        IsIncludedInTotal = accountToUpdate.IsActive,
-                        AccountType = new AccountTypeDTOOut
-                        {
-                            Id = accountType.Id,
-                            Name = accountType.Name
-                        }
-                    };
+                    //return the updated account data
+                    return GetAccount(accountId, userId);
                 }
-
-                throw new InvalidDataException("The requested account type was not found");
+                else
+                    throw new IncorrectDataException("The account type ID " + account.AccountTypeId + " was not found");
             }
+            else
+                throw new ElementNotFoundException();
+        }
 
-            throw new InvalidDataException("The requested account was not found");
+        public void DeleteAccount(Guid userId, Guid accountId)
+        {
+            var accountQuery = from account in _walletManagerContext.Accounts
+                               where account.Id == accountId
+                               && account.User.Id == userId
+                               select account;
+
+            if (accountQuery.Any())
+            {
+                //before deleting the account, every transaction from or to it has to be deleted
+                var accountTransactionsQuery = from transaction in _walletManagerContext.Transactions
+                                               where (transaction.FromAccount != null && transaction.FromAccount.Id == accountId)
+                                               || (transaction.ToAccount != null && transaction.ToAccount.Id == accountId)
+                                               select transaction;
+
+                foreach(var transaction in accountTransactionsQuery.ToList())
+                    _walletManagerContext.Transactions.Remove(transaction);
+
+                //finally, delete the account too
+                _walletManagerContext.Accounts.Remove(accountQuery.First());
+
+                //commit changes in the db
+                _walletManagerContext.SaveChanges();
+            }
+            else
+                throw new ElementNotFoundException();
         }
 
         #endregion

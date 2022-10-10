@@ -7,6 +7,6 @@ namespace Misce.WalletManager.DTO.DTO.TransactionSubCategory
         public Guid Id { get; init; }
         public string Name { get; init; } = null!;
         public string? Description { get; init; }
-        public TransactionCategoryDTOOut Category { get; init; } = null!;
+        public TransactionCategoryDTOOut TransactionCategory { get; init; } = null!;
     }
 }

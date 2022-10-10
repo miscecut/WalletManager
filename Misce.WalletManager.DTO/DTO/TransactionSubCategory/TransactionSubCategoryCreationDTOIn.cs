@@ -9,7 +9,7 @@ namespace Misce.WalletManager.DTO.DTO.TransactionSubCategory
         public string Name { get; init; } = null!;
         [MaxLength(500, ErrorMessage = "The transaction subcategory description is too long")]
         public string? Description { get; init; }
-        [Required(ErrorMessage = "The transaction category id has to be provided")]
+        [Required(ErrorMessage = "The transaction category ID has to be provided")]
         public Guid TransactionCategoryId { get; init; }
     }
 }

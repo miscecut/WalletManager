@@ -1,4 +1,4 @@
-﻿using Misce.WalletManager.DTO.DTO;
+﻿using Misce.WalletManager.DTO.DTO.AccountType;
 
 namespace Misce.WalletManager.BL.Interfaces
 {

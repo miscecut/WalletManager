@@ -42,7 +42,7 @@ namespace Misce.WalletManager.BL.Classes
                                 Id = subCategorySubquery.Id,
                                 Name = subCategorySubquery.Name,
                                 Description = subCategorySubquery.Description,
-                                Category = new TransactionCategoryDTOOut
+                                TransactionCategory = new TransactionCategoryDTOOut
                                 {
                                     Id = subCategorySubquery.Category.Id,
                                     Name = subCategorySubquery.Category.Name,
@@ -91,7 +91,7 @@ namespace Misce.WalletManager.BL.Classes
                         Id = t.SubCategory.Id,
                         Name = t.SubCategory.Name,
                         Description = t.SubCategory.Description,
-                        Category = new TransactionCategoryDTOOut
+                        TransactionCategory = new TransactionCategoryDTOOut
                         {
                             Id = t.SubCategory.Category.Id,
                             Name = t.SubCategory.Category.Name,
@@ -153,7 +153,7 @@ namespace Misce.WalletManager.BL.Classes
                                 Id = transactionToCreate.SubCategory.Id,
                                 Name = transactionToCreate.SubCategory.Name,
                                 Description = transactionToCreate.SubCategory.Description,
-                                Category = new TransactionCategoryDTOOut
+                                TransactionCategory = new TransactionCategoryDTOOut
                                 {
                                     Id = transactionToCreate.SubCategory.Category.Id,
                                     Name = transactionToCreate.SubCategory.Category.Name,

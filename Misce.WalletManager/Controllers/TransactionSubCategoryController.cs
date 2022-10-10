@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Classes.Utils;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using System.Security.Claims;
@@ -21,9 +23,9 @@ namespace Misce.WalletManager.API.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetTransactionSubCategory(Guid id)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userId.HasValue)
+            if (userId.HasValue)
             {
                 var categorySubCategory = _transactionSubCategoryService.GetTransactionSubCategory(userId.Value, id);
 
@@ -38,7 +40,7 @@ namespace Misce.WalletManager.API.Controllers
         [HttpGet]
         public IActionResult GetTransactionSubCategories()
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
@@ -52,7 +54,7 @@ namespace Misce.WalletManager.API.Controllers
         [HttpPost]
         public IActionResult CreateTransactionSubCategory(TransactionSubCategoryCreationDTOIn transactionSubCategory)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
@@ -65,7 +67,7 @@ namespace Misce.WalletManager.API.Controllers
                             routeValues: new { id = createdTransactionSubCategory.Id },
                             value: createdTransactionSubCategory);
                 }
-                catch(InvalidDataException e)
+                catch(IncorrectDataException e)
                 {
                     return UnprocessableEntity(e.Message);
                 }
@@ -81,25 +83,26 @@ namespace Misce.WalletManager.API.Controllers
         [HttpPut("{id:guid}")]
         public IActionResult UpdateTransactionSubCategory(Guid id, TransactionSubCategoryUpdateDTOIn transactionSubCategory)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
                 try
                 {
-                    var updateResult = _transactionSubCategoryService.UpdateTransactionSubCategory(userId.Value, id, transactionSubCategory);
-
-                    if(updateResult != null)
-                        return NoContent();
-                    return NotFound();
+                    _transactionSubCategoryService.UpdateTransactionSubCategory(userId.Value, id, transactionSubCategory);
+                    return NoContent();
                 }
-                catch(InvalidDataException e)
+                catch(IncorrectDataException e)
                 {
                     return UnprocessableEntity(e.Message);
                 }
-                catch(Exception)
+                catch (ElementNotFoundException)
                 {
-                    return Problem();
+                    return NotFound();
+                }
+                catch (Exception)
+                {
+                    return Problem("An internal server error occurred");
                 }
             }
 
@@ -109,42 +112,26 @@ namespace Misce.WalletManager.API.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteTransactionSubCategory(Guid id)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userId.HasValue)
+            if (userId.HasValue)
             {
                 try
                 {
                     _transactionSubCategoryService.DeleteTransactionSubCategory(userId.Value, id);
                     return NoContent();
                 }
-                catch (InvalidDataException e)
+                catch (ElementNotFoundException)
                 {
-                    return NotFound(e.Message);
+                    return NotFound();
                 }
                 catch (Exception)
                 {
-                    return Problem();
+                    return Problem("An internal server error occurred");
                 }
             }
 
             return Unauthorized();
-        }
-
-        private Guid? GetUserGuid()
-        {
-            //retrieve user's claims (needs login)
-            var userIdentity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (userIdentity != null)
-            {
-                var guidString = userIdentity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? String.Empty;
-                if (string.IsNullOrEmpty(guidString))
-                    return null;
-                return Guid.Parse(guidString);
-            }
-
-            return null;
         }
     }
 }
