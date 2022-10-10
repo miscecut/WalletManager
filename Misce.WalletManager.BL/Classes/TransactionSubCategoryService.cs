@@ -72,19 +72,27 @@ namespace Misce.WalletManager.BL.Classes
             return transactionSubCategoryQuery.ToList();
         }
 
-        public TransactionSubCategoryDTOOut CreateTransactionSubCategory(Guid userId, TransactionSubCategoryCreationDTOIn subCategory)
+        public TransactionSubCategoryDTOOut CreateTransactionSubCategory(Guid userId, TransactionSubCategoryCreationDTOIn transactionSubCategory)
         {
-            var categoryQuery = GetTransactionCategoriesQuery(userId, subCategory.TransactionCategoryId);
+            // transaction category creation data validation
 
-            if (categoryQuery.Any())
+            var validationResults = Utils.Utils.ValidateDTO(transactionSubCategory);
+            if (!string.IsNullOrEmpty(validationResults))
+                throw new IncorrectDataException(validationResults);
+
+            // check if the transaction category, to put the sub cateogry under, exists
+
+            var transactionCategoryQuery = GetTransactionCategoriesQuery(userId, transactionSubCategory.TransactionCategoryId);
+
+            if (transactionCategoryQuery.Any())
             {
-                var category = categoryQuery.First();
+                var category = transactionCategoryQuery.First();
 
                 var subCategoryToCreate = new TransactionSubCategory
                 {
                     Category = category,
-                    Name = subCategory.Name,
-                    Description = subCategory.Description
+                    Name = transactionSubCategory.Name,
+                    Description = transactionSubCategory.Description
                 };
 
                 _walletManagerContext.TransactionSubCategories.Add(subCategoryToCreate);
@@ -104,7 +112,7 @@ namespace Misce.WalletManager.BL.Classes
                 };
             }
             else
-                throw new IncorrectDataException("The provided transaction category id is not valid");
+                throw new IncorrectDataException("The transaction category ID " + transactionSubCategory.TransactionCategoryId + " was not found");
         }
 
         public TransactionSubCategoryDTOOut UpdateTransactionSubCategory(Guid userId, Guid transactionSubCategoryId, TransactionSubCategoryUpdateDTOIn transactionSubCategory)
@@ -118,7 +126,7 @@ namespace Misce.WalletManager.BL.Classes
             {
                 var categoryQuery = GetTransactionCategoriesQuery(userId, transactionSubCategory.TransactionCategoryId);
 
-                if(categoryQuery.Any())
+                if (categoryQuery.Any())
                 {
                     var transactionCategory = categoryQuery.First();
 
@@ -143,11 +151,16 @@ namespace Misce.WalletManager.BL.Classes
                         }
                     };
                 }
-
-                throw new InvalidDataException("The provided transaction category id was not provided or is not valid");
+                else
+                    throw new IncorrectDataException("");
             }
+            else
+                throw new ElementNotFoundException();
+        }
 
-            return null; //transaction sub category not found
+        public void DeleteTransactionSubCategory(Guid userId, Guid transactionSubCategoryId)
+        {
+
         }
 
         #endregion

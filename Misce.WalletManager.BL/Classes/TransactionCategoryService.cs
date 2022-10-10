@@ -3,7 +3,6 @@ using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace Misce.WalletManager.BL.Classes
 {
@@ -62,10 +61,9 @@ namespace Misce.WalletManager.BL.Classes
         {
             //transaction category creation data validation
 
-            var validationResults = ValidateTransactionCategoryInput(transactionCategory);
-
-            if (validationResults.Any())
-                throw new IncorrectDataException(string.Join(",", validationResults.Select(vr => vr.ErrorMessage)));
+            var validationResults = Utils.Utils.ValidateDTO(transactionCategory);
+            if (!string.IsNullOrEmpty(validationResults))
+                throw new IncorrectDataException(validationResults);
 
             //check if the user exists
 
@@ -107,10 +105,9 @@ namespace Misce.WalletManager.BL.Classes
         {
             // Transaction category update data validation
 
-            var validationResults = ValidateTransactionCategoryInput(transactionCategory);
-
-            if (validationResults.Any())
-                throw new IncorrectDataException(string.Join(",", validationResults.Select(vr => vr.ErrorMessage)));
+            var validationResults = Utils.Utils.ValidateDTO(transactionCategory);
+            if (!string.IsNullOrEmpty(validationResults))
+                throw new IncorrectDataException(validationResults);
 
             // check if the transaction category the user wants to update exists
 
@@ -181,18 +178,6 @@ namespace Misce.WalletManager.BL.Classes
             }
             else
                 throw new ElementNotFoundException();
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private List<ValidationResult> ValidateTransactionCategoryInput(object transactionCategory)
-        {
-            var validationContext = new ValidationContext(transactionCategory);
-            var validationResults = new List<ValidationResult>();
-            Validator.TryValidateObject(transactionCategory, validationContext, validationResults, true);
-            return validationResults;
         }
 
         #endregion
