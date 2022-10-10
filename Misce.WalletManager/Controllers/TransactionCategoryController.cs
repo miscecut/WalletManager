@@ -13,12 +13,22 @@ namespace Misce.WalletManager.API.Controllers
     [Route("/api/transactioncategories")]
     public class TransactionCategoryController : ControllerBase
     {
+        #region Properties
+
         private readonly ITransactionCategoryService _transactionCategoryService;
+
+        #endregion
+
+        #region CTORs
 
         public TransactionCategoryController(ITransactionCategoryService transactionCategoryService)
         {
             _transactionCategoryService = transactionCategoryService;
         }
+
+        #endregion
+
+        #region Get Methods
 
         [HttpGet("{id:guid}")]
         public IActionResult GetTransactionCategory(Guid id)
@@ -50,6 +60,10 @@ namespace Misce.WalletManager.API.Controllers
 
             return Unauthorized();
         }
+
+        #endregion
+
+        #region Post Methods
 
         [HttpPost]
         public IActionResult CreateTransactionCategory(TransactionCategoryCreationDTOIn transactionCategory)
@@ -84,6 +98,10 @@ namespace Misce.WalletManager.API.Controllers
             return Unauthorized();
         }
 
+        #endregion
+
+        #region Put Methods
+
         [HttpPut("{id:guid}")]
         public IActionResult UpdateTransactionCategory(Guid id, TransactionCategoryUpdateDTOIn transactionCategory)
         {
@@ -113,6 +131,10 @@ namespace Misce.WalletManager.API.Controllers
             return Unauthorized();
         }
 
+        #endregion
+
+        #region Delete Methods
+
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteTransactionCategory(Guid id)
         {
@@ -137,5 +159,7 @@ namespace Misce.WalletManager.API.Controllers
 
             return Unauthorized();
         }
+
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
-using Misce.WalletManager.DTO.DTO;
+using Misce.WalletManager.DTO.DTO.User;
 
 namespace Misce.WalletManager.API.Controllers
 {
@@ -8,32 +9,45 @@ namespace Misce.WalletManager.API.Controllers
     [Route("/api/register")]
     public class RegisterController : ControllerBase
     {
+        #region Properties
+
         private readonly IUserService _userService;
+
+        #endregion
+
+        #region CTORs
 
         public RegisterController(IUserService userService)
         {
             _userService = userService;
         }
 
+        #endregion
+
+        #region Post Methods
+
         [HttpPost]
-        public IActionResult Register(UserLoginDTOIn request)
+        public IActionResult Register(UserSignInDTOIn signInRequest)
         {
-            var username = request.Username;
-            var password = request.Password;
-
-            if (string.IsNullOrEmpty(username))
-                return UnprocessableEntity("The username was not provided.");
-            if (string.IsNullOrEmpty(password))
-                return UnprocessableEntity("The password was not provided.");
-            if (password.Length < 8)
-                return UnprocessableEntity("The password is too short.");
-
-            if (_userService.IsUsernameAlreadyTaken(username))
-                return Conflict("The username " + username + " is not available.");
-
-            var createdUser = _userService.RegisterUser(request);
-
-            return Ok(); //TODO: change in Created()
+            try
+            {
+                var createdUser = _userService.RegisterUser(signInRequest);
+                return Ok(); //TODO: change in Created()
+            }
+            catch (UsernameNotAvailableException)
+            {
+                return Conflict("The username " + signInRequest.Username + " is not available");
+            }
+            catch (IncorrectDataException e)
+            {
+                return UnprocessableEntity(e.Message);
+            }
+            catch (Exception)
+            {
+                return Problem("An internal server error occurred");
+            }
         }
+
+        #endregion
     }
 }

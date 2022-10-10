@@ -1,5 +1,6 @@
-﻿using Misce.WalletManager.BL.Interfaces;
-using Misce.WalletManager.DTO.DTO;
+﻿using Misce.WalletManager.BL.Exceptions;
+using Misce.WalletManager.BL.Interfaces;
+using Misce.WalletManager.DTO.DTO.User;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
 using System.Security.Cryptography;
@@ -8,12 +9,22 @@ namespace Misce.WalletManager.BL.Classes
 {
     public class UserService : IUserService
     {
+        #region Properties
+
         private WalletManagerContext _walletManagerContext;
+
+        #endregion
+
+        #region CTORs
 
         public UserService(WalletManagerContext walletManagerContext)
         {
             _walletManagerContext = walletManagerContext;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public UserDTOOut? Authenticate(UserLoginDTOIn userLogin)
         {
@@ -44,36 +55,47 @@ namespace Misce.WalletManager.BL.Classes
             return null;
         }
 
-        public bool IsUsernameAlreadyTaken(string username)
+        public UserDTOOut RegisterUser(UserSignInDTOIn user)
         {
-            var query = from u in _walletManagerContext.Users
-                        where u.Username == username
-                        select u.Username;
+            //user registration data validation
+            var validationResults = Utils.Utils.ValidateDTO(user);
+            if (!string.IsNullOrEmpty(validationResults))
+                throw new IncorrectDataException(validationResults);
 
-            return query.Any();
-        }
+            //check if the username is available
+            var usersWithSameUsernameQuery = from u in _walletManagerContext.Users
+                                             where u.Username == user.Username
+                                             select u;
 
-        public UserDTOOut RegisterUser(UserLoginDTOIn user)
-        {
-            //TODO: check username presence here
+            if (usersWithSameUsernameQuery.Any())
+                throw new UsernameNotAvailableException();
+
+            //generate salt and hash the password
             var saltAndHashedPassword = GenerateSaltedHash(64, user.Password);
 
+            //create the user
             var createdUser = new User
             {
                 Username = user.Username,
                 Password = saltAndHashedPassword.Hash,
                 Salt = saltAndHashedPassword.Salt
             };
-
             _walletManagerContext.Users.Add(createdUser);
+
+            //commit changes int he db
             _walletManagerContext.SaveChanges();
 
+            //return the created user data
             return new UserDTOOut
             {
                 Username = createdUser.Username,
                 Id = createdUser.Id
             };
         }
+
+        #endregion
+
+        #region Private Methods
 
         private HashSalt GenerateSaltedHash(int size, string password)
         {
@@ -89,10 +111,16 @@ namespace Misce.WalletManager.BL.Classes
             return hashSalt;
         }
 
+        #endregion
+
+        #region Private Classes
+
         private record HashSalt
         {
             public string Hash { get; init; } = null!;
             public string Salt { get; init; } = null!;
         }
+
+        #endregion
     }
 }

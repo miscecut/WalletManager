@@ -2,7 +2,7 @@
 
 namespace Misce.WalletManager.DTO.DTO.Transaction
 {
-    public record TransactionCreationDTOIn
+    public record TransactionUpdateDTOIn
     {
         [MaxLength(50, ErrorMessage = "The transaction title is too long")]
         public string? Title { get; init; }

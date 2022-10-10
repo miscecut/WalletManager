@@ -1,11 +1,10 @@
-﻿using Misce.WalletManager.DTO.DTO;
+﻿using Misce.WalletManager.DTO.DTO.User;
 
 namespace Misce.WalletManager.BL.Interfaces
 {
     public interface IUserService
     {
-        public bool IsUsernameAlreadyTaken(string username);
-        public UserDTOOut RegisterUser(UserLoginDTOIn user);
+        public UserDTOOut RegisterUser(UserSignInDTOIn user);
         public UserDTOOut Authenticate(UserLoginDTOIn userLogin);
     }
 }

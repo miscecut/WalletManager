@@ -1,4 +1,5 @@
-﻿using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
+﻿using Misce.WalletManager.DTO.DTO.Account;
+using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 
 namespace Misce.WalletManager.DTO.DTO.Transaction
 {
@@ -8,9 +9,9 @@ namespace Misce.WalletManager.DTO.DTO.Transaction
         public string? Title { get; init; }
         public string? Description { get; init; }
         public decimal Amount { get; init; }
-        public string? FromAccountName { get; init; }
-        public string? ToAccountName { get; init; }
         public DateTime DateTime { get; init; }
+        public AccountReducedDTOOut? FromAccount { get; init; }
+        public AccountReducedDTOOut? ToAccount { get; init; }
         public TransactionSubCategoryDTOOut? TransactionSubCategory { get; init; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Misce.WalletManager.DTO.DTO
+﻿namespace Misce.WalletManager.DTO.DTO.User
 {
     public record UserDTOOut
     {

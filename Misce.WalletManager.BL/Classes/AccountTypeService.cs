@@ -6,12 +6,22 @@ namespace Misce.WalletManager.BL.Classes
 {
     public class AccountTypeService : IAccountTypeService
     {
+        #region Properties
+
         private WalletManagerContext _walletManagerContext;
+
+        #endregion
+
+        #region CTORs
 
         public AccountTypeService(WalletManagerContext walletManagerContext)
         {
             _walletManagerContext = walletManagerContext;
         }
+
+        #endregion
+
+        #region Public Methods
 
         public IEnumerable<AccountTypeDTOOut> GetAccountTypes()
         {
@@ -24,5 +34,7 @@ namespace Misce.WalletManager.BL.Classes
 
             return query.ToList();
         }
+
+        #endregion
     }
 }

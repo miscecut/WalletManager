@@ -5,7 +5,6 @@ using Misce.WalletManager.DTO.DTO.Account;
 using Misce.WalletManager.DTO.DTO.AccountType;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
-using System.Security.Principal;
 
 namespace Misce.WalletManager.BL.Classes
 {

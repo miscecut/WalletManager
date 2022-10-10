@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Misce.WalletManager.BL.Interfaces;
-using Misce.WalletManager.DTO.DTO;
+using Misce.WalletManager.DTO.DTO.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

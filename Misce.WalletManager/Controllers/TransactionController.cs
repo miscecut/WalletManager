@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Classes.Utils;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Transaction;
 using System.Security.Claims;
@@ -30,9 +32,9 @@ namespace Misce.WalletManager.API.Controllers
             DateTime? dateFrom = null,
             DateTime? dateTo = null)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userId.HasValue)
+            if (userId.HasValue)
             {
                 var transactions = _transactionService.GetTransactions(userId.Value, limit.GetValueOrDefault(), page.GetValueOrDefault(), title, accountFromId, accountToId, categoryId, subCategoryId, dateFrom, dateTo);
                 //Response.Headers.Add("Next page", );
@@ -45,7 +47,7 @@ namespace Misce.WalletManager.API.Controllers
         [HttpGet("{id:guid}")]
         public IActionResult GetTransaction(Guid id)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
@@ -53,7 +55,7 @@ namespace Misce.WalletManager.API.Controllers
 
                 if (transaction != null)
                     return Ok(transaction);
-                return NotFound("The transaction with ID " + id + " was not found");
+                return NotFound();
             }
 
             return Unauthorized();
@@ -62,9 +64,9 @@ namespace Misce.WalletManager.API.Controllers
         [HttpPost]
         public IActionResult CreateTransaction(TransactionCreationDTOIn transaction)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userId.HasValue)
+            if (userId.HasValue)
             {
                 try
                 {
@@ -75,9 +77,38 @@ namespace Misce.WalletManager.API.Controllers
                         routeValues: new { id = createdTransaction.Id },
                         value: createdTransaction);
                 }
-                catch (InvalidDataException e)
+                catch (IncorrectDataException e)
                 {
                     return UnprocessableEntity(e.Message);
+                }
+                catch (Exception)
+                {
+                    return Problem("An internal server error occurred");
+                }
+            }
+
+            return Unauthorized();
+        }
+
+        [HttpPut("{id:guid}")]
+        public IActionResult UpdateTransaction(Guid id, TransactionUpdateDTOIn transaction)
+        {
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (userId != null)
+            {
+                try
+                {
+                    _transactionService.UpdateTransaction(userId.Value, id, transaction);
+                    return NoContent();
+                }
+                catch (IncorrectDataException e)
+                {
+                    return UnprocessableEntity(e.Message);
+                }
+                catch (ElementNotFoundException)
+                {
+                    return NotFound();
                 }
                 catch (Exception)
                 {
@@ -91,18 +122,18 @@ namespace Misce.WalletManager.API.Controllers
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteTransaction(Guid id)
         {
-            var userId = GetUserGuid();
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
-            if(userId != null)
+            if (userId != null)
             {
                 try
                 {
                     _transactionService.DeleteTransaction(userId.Value, id);
                     return NoContent();
                 }
-                catch (InvalidDataException e)
+                catch (ElementNotFoundException)
                 {
-                    return NotFound(e.Message);
+                    return NotFound();
                 }
                 catch (Exception)
                 {
@@ -111,22 +142,6 @@ namespace Misce.WalletManager.API.Controllers
             }
 
             return Unauthorized();
-        }
-
-        private Guid? GetUserGuid()
-        {
-            //retrieve user's claims (needs login)
-            var userIdentity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (userIdentity != null)
-            {
-                var guidString = userIdentity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? String.Empty;
-                if (string.IsNullOrEmpty(guidString))
-                    return null;
-                return Guid.Parse(guidString);
-            }
-
-            return null;
         }
     }
 }
