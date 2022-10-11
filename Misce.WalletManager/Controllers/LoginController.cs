@@ -14,14 +14,24 @@ namespace Misce.WalletManager.API.Controllers
     [Route("/api/login")]
     public class LoginController : ControllerBase
     {
+        #region Properties
+
         private readonly IUserService _userService;
         private IConfiguration _config;
+
+        #endregion
+
+        #region CTORs
 
         public LoginController(IUserService userService, IConfiguration config)
         {
             _userService = userService;
             _config = config;
         }
+
+        #endregion
+
+        #region Post Methods
 
         [HttpPost]
         public IActionResult Login([FromBody] UserLoginDTOIn userLogin)
@@ -34,8 +44,12 @@ namespace Misce.WalletManager.API.Controllers
                 return Ok(token);
             }
 
-            return Unauthorized("Le credenziali sono errate.");
+            return Unauthorized();
         }
+
+        #endregion
+
+        #region Private Methods
 
         private string GenerateToken(UserDTOOut user)
         {
@@ -56,5 +70,7 @@ namespace Misce.WalletManager.API.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        #endregion
     }
 }

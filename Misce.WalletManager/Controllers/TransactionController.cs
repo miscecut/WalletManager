@@ -13,12 +13,22 @@ namespace Misce.WalletManager.API.Controllers
     [Route("/api/transactions")]
     public class TransactionController : ControllerBase
     {
+        #region Properties
+
         private readonly ITransactionService _transactionService;
+
+        #endregion
+
+        #region CTORs
 
         public TransactionController(ITransactionService transactionService)
         {
             _transactionService = transactionService;
         }
+
+        #endregion
+
+        #region Get Methods
 
         [HttpGet]
         public IActionResult GetTransactions(
@@ -61,6 +71,10 @@ namespace Misce.WalletManager.API.Controllers
             return Unauthorized();
         }
 
+        #endregion
+
+        #region Post Methods
+
         [HttpPost]
         public IActionResult CreateTransaction(TransactionCreationDTOIn transaction)
         {
@@ -89,6 +103,10 @@ namespace Misce.WalletManager.API.Controllers
 
             return Unauthorized();
         }
+
+        #endregion
+
+        #region Put Methods
 
         [HttpPut("{id:guid}")]
         public IActionResult UpdateTransaction(Guid id, TransactionUpdateDTOIn transaction)
@@ -119,6 +137,10 @@ namespace Misce.WalletManager.API.Controllers
             return Unauthorized();
         }
 
+        #endregion
+
+        #region Delete Methods
+
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteTransaction(Guid id)
         {
@@ -143,5 +165,7 @@ namespace Misce.WalletManager.API.Controllers
 
             return Unauthorized();
         }
+
+        #endregion
     }
 }

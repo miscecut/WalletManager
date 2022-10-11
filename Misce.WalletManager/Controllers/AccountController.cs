@@ -13,14 +13,24 @@ namespace Misce.WalletManager.API.Controllers
     [Route("/api/accounts")]
     public class AccountController : ControllerBase
     {
+        #region Properties
+
         private readonly IAccountService _accountService;
         private readonly IAccountTypeService _accountTypeService;
+
+        #endregion
+
+        #region CTORs
 
         public AccountController(IAccountService accountService, IAccountTypeService accountTypeService)
         {
             _accountService = accountService;
             _accountTypeService = accountTypeService;
         }
+
+        #endregion
+
+        #region Get Methods
 
         [HttpGet("{id:guid}")]
         public IActionResult GetAccount(Guid id)
@@ -54,6 +64,10 @@ namespace Misce.WalletManager.API.Controllers
             return Unauthorized();
         }
 
+        #endregion
+
+        #region Post Methods
+
         [HttpPost]
         public IActionResult CreateAccount(AccountCreationDTOIn account)
         {
@@ -82,6 +96,10 @@ namespace Misce.WalletManager.API.Controllers
                 return Problem("An internal server error occurred");
             }
         }
+
+        #endregion
+
+        #region Put Methods
 
         [HttpPut("{id:guid}")]
         public IActionResult UpdateAccount(Guid id, AccountUpdateDTOIn account)
@@ -112,6 +130,10 @@ namespace Misce.WalletManager.API.Controllers
             return Unauthorized();
         }
 
+        #endregion
+
+        #region Delete Methods
+
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteAccount(Guid id)
         {
@@ -136,5 +158,7 @@ namespace Misce.WalletManager.API.Controllers
 
             return Unauthorized();
         }
+
+        #endregion
     }
 }

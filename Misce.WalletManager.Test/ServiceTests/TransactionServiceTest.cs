@@ -42,6 +42,39 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
+        public void TestUpdateTransaction()
+        {
+            //initialize the services
+            var transactionService = new TransactionService(_dbContext);
+
+            //get saddam's c4 purchase transaction
+            var saddamC4Puchase = transactionService.GetTransactions(_saddamId, 100, 0).Where(t => t.Title == "C4 for Twin Towers").First();
+            Assert.IsNotNull(saddamC4Puchase);
+
+            //update the transaction with a new title, description and amount
+            var transactionToUpdate = new TransactionUpdateDTOIn
+            {
+                Title = "C4",
+                FromAccountId = saddamC4Puchase.FromAccount?.Id ?? null,
+                ToAccountId = saddamC4Puchase.ToAccount?.Id ?? null,
+                Description = "I forgot the description",
+                DateTime = saddamC4Puchase.DateTime,
+                Amount = 100.45M,
+                SubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
+            };
+            transactionService.UpdateTransaction(_saddamId, saddamC4Puchase.Id, transactionToUpdate);
+
+            //verify the updated fields
+            var updatedSaddamC4 = transactionService.GetTransaction(_saddamId, saddamC4Puchase.Id);
+            Assert.IsNotNull(updatedSaddamC4);
+            Assert.AreEqual(updatedSaddamC4.Amount, 100.45M);
+            Assert.AreEqual(updatedSaddamC4.Title, "C4");
+            Assert.AreEqual(updatedSaddamC4.Description, "I forgot the description");
+            Assert.IsNotNull(updatedSaddamC4.FromAccount);
+            Assert.IsNull(updatedSaddamC4.ToAccount);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingCreateTransaction1()
         {
@@ -149,6 +182,17 @@ namespace Misce.WalletManager.Test.ServiceTests
             Assert.AreEqual(miscePayment.Amount, 10);
             Assert.IsTrue(string.IsNullOrEmpty(miscePayment.Title));
             Assert.IsNull(miscePayment.ToAccount);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ElementNotFoundException))]
+        public void TestFailingDeleteTransaction()
+        {
+            //initialize the services
+            var transactionService = new TransactionService(_dbContext);
+
+            //try to delete a random transaction, this will fail
+            transactionService.DeleteTransaction(_misceId, Guid.NewGuid());
         }
 
         [TestMethod]

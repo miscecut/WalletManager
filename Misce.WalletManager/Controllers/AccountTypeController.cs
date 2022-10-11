@@ -9,17 +9,29 @@ namespace Misce.WalletManager.API.Controllers
     [Route("/api/accounttypes")]
     public class AccountTypeController : ControllerBase
     {
+        #region Properties
+
         private readonly IAccountTypeService _accountTypeService;
+
+        #endregion
+
+        #region CTORs
 
         public AccountTypeController(IAccountTypeService accountTypeService)
         {
             _accountTypeService = accountTypeService;
         }
 
+        #endregion
+
+        #region Get methods
+
         [HttpGet]
         public IActionResult GetAccountTypes()
         {
             return Ok(_accountTypeService.GetAccountTypes());
         }
+
+        #endregion
     }
 }

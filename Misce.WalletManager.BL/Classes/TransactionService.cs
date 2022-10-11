@@ -284,6 +284,7 @@ namespace Misce.WalletManager.BL.Classes
 
         public void DeleteTransaction(Guid userId, Guid transactionId)
         {
+            //check if the transaction exists and it's owned by the user
             var transactionToDelete = from transaction in _walletManagerContext.Transactions
                                       where transaction.User.Id == userId
                                       && transaction.Id == transactionId
