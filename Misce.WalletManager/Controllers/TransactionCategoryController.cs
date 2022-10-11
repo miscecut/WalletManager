@@ -48,13 +48,13 @@ namespace Misce.WalletManager.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTransactionCategories()
+        public IActionResult GetTransactionCategories(string? name = null, bool? isExpenseType = null)
         {
             var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
-                var transactionCategories = _transactionCategoryService.GetTransactionCategories(userId.Value);
+                var transactionCategories = _transactionCategoryService.GetTransactionCategories(userId.Value, name, isExpenseType);
                 return Ok(transactionCategories);
             }
 

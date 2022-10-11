@@ -51,13 +51,13 @@ namespace Misce.WalletManager.API.Controllers
         }
 
         [HttpGet()]
-        public IActionResult GetAccounts()
+        public IActionResult GetAccounts(Guid? accountTypeId = null, bool? active = null)
         {
             var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
 
             if (userId.HasValue)
             {
-                var accounts = _accountService.GetAccounts(userId.Value);
+                var accounts = _accountService.GetAccounts(userId.Value, accountTypeId, active);
                 return Ok(accounts);
             }
 
