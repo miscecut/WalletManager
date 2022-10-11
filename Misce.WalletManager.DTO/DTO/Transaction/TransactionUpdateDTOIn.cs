@@ -17,6 +17,7 @@ namespace Misce.WalletManager.DTO.DTO.Transaction
         public Guid? FromAccountId { get; init; }
         [AtLeastOneAccount]
         public Guid? ToAccountId { get; init; }
+        [NoCategoryIfTransfer]
         public Guid? SubCategoryId { get; init; }
     }
 }

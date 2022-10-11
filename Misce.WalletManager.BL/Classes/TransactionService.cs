@@ -79,7 +79,8 @@ namespace Misce.WalletManager.BL.Classes
                                 {
                                     Id = subCategorySubquery.Category.Id,
                                     Name = subCategorySubquery.Category.Name,
-                                    Description = subCategorySubquery.Category.Description
+                                    Description = subCategorySubquery.Category.Description,
+                                    IsExpenseType = subCategorySubquery.Category.IsExpenseCategory
                                 }
                             } : null
                         };
@@ -150,7 +151,8 @@ namespace Misce.WalletManager.BL.Classes
                         {
                             Id = t.SubCategory.Category.Id,
                             Name = t.SubCategory.Category.Name,
-                            Description = t.SubCategory.Category.Description
+                            Description = t.SubCategory.Category.Description,
+                            IsExpenseType = t.SubCategory.Category.IsExpenseCategory
                         }
                     } : null
             }).ToList();
@@ -171,10 +173,10 @@ namespace Misce.WalletManager.BL.Classes
                 //check if the eventual transaction subcategory exists and it's owned by the user
                 var subCategoryQuery = from subCategory in _walletManagerContext.TransactionSubCategories
                                        where subCategory.Category.User.Id == userId
-                                       && (!transaction.SubCategoryId.HasValue || transaction.SubCategoryId.Value == subCategory.Id)
+                                       && (!transaction.TransactionSubCategoryId.HasValue || transaction.TransactionSubCategoryId.Value == subCategory.Id)
                                        select subCategory;
 
-                if(!transaction.SubCategoryId.HasValue || subCategoryQuery.Any())
+                if(!transaction.TransactionSubCategoryId.HasValue || subCategoryQuery.Any())
                 {
                     //accounts check
                     var userAccountsQuery = from account in _walletManagerContext.Accounts
@@ -199,7 +201,7 @@ namespace Misce.WalletManager.BL.Classes
                             FromAccount = userAccountsQuery.Where(a => a.Id == transaction.FromAccountId.GetValueOrDefault()).FirstOrDefault(),
                             ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault(),
                             User = user,
-                            DateTime = transaction.DateTime,
+                            DateTime = transaction.DateTime.ToUniversalTime(),
                             SubCategory = subCategoryQuery.FirstOrDefault()
                         };
                         _walletManagerContext.Transactions.Add(transactionToCreate);
@@ -212,13 +214,13 @@ namespace Misce.WalletManager.BL.Classes
                         if (createdTransaction != null)
                             return createdTransaction;
                         else
-                            throw new Exception("An internal server error occurred");
+                            throw new Exception();
                     }
                     else
                         throw new IncorrectDataException("The account ID was not found");
                 }
                 else
-                    throw new IncorrectDataException("The transaction subcategory ID " + transaction.SubCategoryId + " was not found");
+                    throw new IncorrectDataException("The transaction subcategory ID " + transaction.TransactionSubCategoryId + " was not found");
             }
             else
                 throw new UserNotFoundException();
@@ -269,7 +271,7 @@ namespace Misce.WalletManager.BL.Classes
                         transactionToUpdate.Title = transaction.Title;
                         transactionToUpdate.Description = transaction.Description;
                         transactionToUpdate.Amount = transaction.Amount;
-                        transactionToUpdate.DateTime = transaction.DateTime;
+                        transactionToUpdate.DateTime = transaction.DateTime.ToUniversalTime();
                         transactionToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                         //commit changes in the db
@@ -280,7 +282,7 @@ namespace Misce.WalletManager.BL.Classes
                         if (updatedTransaction != null)
                             return updatedTransaction;
                         else
-                            throw new Exception("An internal server error occurred");
+                            throw new Exception();
                     }
                     else
                         throw new IncorrectDataException("The account ID was not found");

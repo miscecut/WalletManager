@@ -125,7 +125,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
             var accountService = new AccountService(_dbContext);
 
-            //get the misce's cash account
+            //get misce's cash account
             var misceCash = accountService.GetAccounts(_misceId).Where(a => a.Name == "Contanti").First();
             Assert.IsNotNull(misceCash);
 
@@ -140,7 +140,38 @@ namespace Misce.WalletManager.Test.ServiceTests
                 FromAccountId = misceCash.Id,
                 DateTime = DateTime.UtcNow,
                 Title = "Spesa alimentare",
-                SubCategoryId = svetlanaUnderwear.Id
+                TransactionSubCategoryId = svetlanaUnderwear.Id
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestFailingCreateTransaction3()
+        {
+            //initialize the services
+            var transactionService = new TransactionService(_dbContext);
+            var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
+            var accountService = new AccountService(_dbContext);
+
+            //get misce's cash account and bank account
+            var misceCash = accountService.GetAccounts(_misceId).Where(a => a.Name == "Contanti").First();
+            Assert.IsNotNull(misceCash);
+            var misceBankAccount = accountService.GetAccounts(_misceId).Where(a => a.Name == "Banco BPM").First();
+            Assert.IsNotNull(misceBankAccount);
+
+            //get misce's troie nigeriane transaction subcategory
+            var misceTroieNigeriane = transactionSubCategoryService.GetTransactionSubCategories(_misceId, name: "Troie nigeriane").First();
+            Assert.IsNotNull(misceTroieNigeriane);
+
+            //try to create the transfer transaction under a sub category
+            transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            {
+                Amount = 90,
+                DateTime = DateTime.UtcNow,
+                FromAccountId = misceCash.Id,
+                ToAccountId = misceBankAccount.Id,
+                Title = "Ritiro contanti",
+                TransactionSubCategoryId = misceTroieNigeriane.Id
             });
         }
 
@@ -182,7 +213,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             var saddamGainId = transactionService.CreateTransaction(_saddamId, new TransactionCreationDTOIn
             {
                 Amount = 69.42M,
-                SubCategoryId = saddamDrugs.Id,
+                TransactionSubCategoryId = saddamDrugs.Id,
                 ToAccountId = saddamBankAccount.Id,
                 DateTime = DateTime.UtcNow,
                 Title = "Weed",

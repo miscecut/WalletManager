@@ -2,6 +2,7 @@
 
 namespace Misce.WalletManager.DTO.DTO.Transaction.CustomValidationRules
 {
+    //this attribute is used in the transaction validation to verify that the transaction has an account from which is from or an account which brings money to
     public class AtLeastOneAccount : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

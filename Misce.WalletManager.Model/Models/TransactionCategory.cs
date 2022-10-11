@@ -7,6 +7,8 @@ namespace Misce.WalletManager.Model.Models
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
+        public bool IsExpenseCategory { get; set; }
+        [Required]
         public User User { get; set; } = null!;
         [Required]
         [StringLength(50)]

@@ -40,7 +40,8 @@ namespace Misce.WalletManager.BL.Classes
                                                   {
                                                       Id = transactionSubCategory.Category.Id,
                                                       Name = transactionSubCategory.Category.Name,
-                                                      Description = transactionSubCategory.Category.Description
+                                                      Description = transactionSubCategory.Category.Description,
+                                                      IsExpenseType = transactionSubCategory.Category.IsExpenseCategory
                                                   }
                                               };
 
@@ -60,7 +61,8 @@ namespace Misce.WalletManager.BL.Classes
                                                   {
                                                       Id = transactionSubCategory.Category.Id,
                                                       Name = transactionSubCategory.Category.Name,
-                                                      Description = transactionSubCategory.Category.Description
+                                                      Description = transactionSubCategory.Category.Description,
+                                                      IsExpenseType = transactionSubCategory.Category.IsExpenseCategory
                                                   }
                                               };
 
@@ -99,18 +101,8 @@ namespace Misce.WalletManager.BL.Classes
                 _walletManagerContext.SaveChanges();
 
                 //return the created transaction subcategory data
-                return new TransactionSubCategoryDTOOut
-                {
-                    Id = transactionSubCategoryToCreate.Id,
-                    Name = transactionSubCategoryToCreate.Name,
-                    Description = transactionSubCategoryToCreate.Description,
-                    TransactionCategory = new TransactionCategoryDTOOut
-                    {
-                        Id = transactionSubCategoryToCreate.Category.Id,
-                        Name = transactionSubCategoryToCreate.Category.Name,
-                        Description = transactionSubCategoryToCreate.Category.Description
-                    }
-                };
+                var createdTransactionSubCategory = GetTransactionSubCategory(userId, transactionSubCategoryToCreate.Id);
+                return createdTransactionSubCategory == null ? throw new Exception() : createdTransactionSubCategory;
             }
             else
                 throw new IncorrectDataException("The transaction category ID " + transactionSubCategory.TransactionCategoryId + " was not found");
@@ -147,18 +139,9 @@ namespace Misce.WalletManager.BL.Classes
                     //commit changes in the db
                     _walletManagerContext.SaveChanges();
 
-                    return new TransactionSubCategoryDTOOut
-                    {
-                        Id = transactionSubCategoryToUpdate.Id,
-                        Name = transactionSubCategoryToUpdate.Name,
-                        Description = transactionSubCategoryToUpdate.Description,
-                        TransactionCategory = new TransactionCategoryDTOOut
-                        {
-                            Id = transactionCategory.Id,
-                            Name = transactionCategory.Name,
-                            Description = transactionCategory.Description
-                        }
-                    };
+                    //return the updated transaction subcategory data
+                    var updatedTransactionSubCategory = GetTransactionSubCategory(userId, transactionSubCategoryToUpdate.Id);
+                    return updatedTransactionSubCategory == null ? throw new Exception() : updatedTransactionSubCategory;
                 }
                 else
                     throw new IncorrectDataException("The transaction category ID " + transactionSubCategory.TransactionCategoryId + " was not found");

@@ -5,13 +5,13 @@ VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.API", "Misce.WalletManager\Misce.WalletManager.API.csproj", "{BBB17439-11BD-486C-AFA6-B6A2616FEEE1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.Model", "Misce.WalletManager.Model\Misce.WalletManager.Model.csproj", "{79B379A8-1D3B-427B-9AFF-F4EF2817830F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.DAL", "Misce.WalletManager.Model\Misce.WalletManager.DAL.csproj", "{79B379A8-1D3B-427B-9AFF-F4EF2817830F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.BL", "Misce.WalletManager.BL\Misce.WalletManager.BL.csproj", "{6F8874EC-15C0-4037-A50C-3C19EB9FD2B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.DTO", "Misce.WalletManager.DTO\Misce.WalletManager.DTO.csproj", "{E4C2A8E9-C578-497D-9966-BD61CFD004B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Misce.WalletManager.Test", "Misce.WalletManager.Test\Misce.WalletManager.Test.csproj", "{7E0C8A65-A5DF-4413-B5F0-61500EEDE5EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.Test", "Misce.WalletManager.Test\Misce.WalletManager.Test.csproj", "{7E0C8A65-A5DF-4413-B5F0-61500EEDE5EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

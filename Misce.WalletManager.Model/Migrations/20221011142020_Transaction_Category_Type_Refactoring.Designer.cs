@@ -9,11 +9,11 @@ using Misce.WalletManager.Model.Data;
 
 #nullable disable
 
-namespace Misce.WalletManager.Model.Migrations
+namespace Misce.WalletManager.DAL.Migrations
 {
     [DbContext(typeof(WalletManagerContext))]
-    [Migration("20221003135813_Init")]
-    partial class Init
+    [Migration("20221011142020_Transaction_Category_Type_Refactoring")]
+    partial class Transaction_Category_Type_Refactoring
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -155,6 +155,9 @@ namespace Misce.WalletManager.Model.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsExpenseCategory")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
                         .HasColumnType("datetime2");

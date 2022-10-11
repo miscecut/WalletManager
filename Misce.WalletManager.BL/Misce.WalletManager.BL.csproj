@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Misce.WalletManager.DTO\Misce.WalletManager.DTO.csproj" />
-    <ProjectReference Include="..\Misce.WalletManager.Model\Misce.WalletManager.Model.csproj" />
+    <ProjectReference Include="..\Misce.WalletManager.Model\Misce.WalletManager.DAL.csproj" />
   </ItemGroup>
 
 </Project>

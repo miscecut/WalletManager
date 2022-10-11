@@ -34,13 +34,14 @@ namespace Misce.WalletManager.BL.Classes
                                   {
                                       Id = category.Id,
                                       Name = category.Name,
-                                      Description = category.Description
+                                      Description = category.Description,
+                                      IsExpenseType = category.IsExpenseCategory
                                   };
 
             return categoriesQuery.FirstOrDefault();
         }
 
-        public IEnumerable<TransactionCategoryDTOOut> GetTransactionCategories(Guid userId, string? name = null)
+        public IEnumerable<TransactionCategoryDTOOut> GetTransactionCategories(Guid userId, string? name = null, bool? isExpenseType = null)
         {
             var categoriesQuery = from category in _walletManagerContext.TransactionCategories
                                   where category.User.Id == userId
@@ -48,7 +49,8 @@ namespace Misce.WalletManager.BL.Classes
                                   {
                                       Id = category.Id,
                                       Name = category.Name,
-                                      Description = category.Description
+                                      Description = category.Description,
+                                      IsExpenseType = category.IsExpenseCategory
                                   };
 
             if (name != null)
@@ -76,7 +78,8 @@ namespace Misce.WalletManager.BL.Classes
                 {
                     User = userQuery.First(),
                     Name = transactionCategory.Name,
-                    Description = transactionCategory.Description
+                    Description = transactionCategory.Description,
+                    IsExpenseCategory = transactionCategory.IsExpenseType
                 };
                 _walletManagerContext.TransactionCategories.Add(transactionCategoryToCreate);
 
@@ -84,12 +87,8 @@ namespace Misce.WalletManager.BL.Classes
                 _walletManagerContext.SaveChanges();
 
                 //return the created transaction category data
-                return new TransactionCategoryDTOOut
-                {
-                    Id = transactionCategoryToCreate.Id,
-                    Name = transactionCategoryToCreate.Name,
-                    Description = transactionCategoryToCreate.Description
-                };
+                var createdTransactionCategory = GetTransactionCategory(userId, transactionCategoryToCreate.Id);
+                return createdTransactionCategory == null ? throw new Exception() : createdTransactionCategory;
             }
             else
                 throw new UserNotFoundException();
@@ -114,18 +113,15 @@ namespace Misce.WalletManager.BL.Classes
                 var transactionCategoryToUpdate = transactionCategoryQuery.First();
                 transactionCategoryToUpdate.Name = transactionCategory.Name;
                 transactionCategoryToUpdate.Description = transactionCategory.Description;
+                transactionCategoryToUpdate.IsExpenseCategory = transactionCategory.IsExpenseType;
                 transactionCategoryToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                 //commit changes in the db
                 _walletManagerContext.SaveChanges();
 
-                //return the updated transaction category
-                return new TransactionCategoryDTOOut
-                {
-                    Id = transactionCategoryToUpdate.Id,
-                    Name = transactionCategoryToUpdate.Name,
-                    Description= transactionCategoryToUpdate.Description
-                };
+                //return the updated transaction category data
+                var updatedTransactionCategory = GetTransactionCategory(userId, transactionCategoryId);
+                return updatedTransactionCategory == null ? throw new Exception() : updatedTransactionCategory;
             }
             else
                 throw new ElementNotFoundException();
