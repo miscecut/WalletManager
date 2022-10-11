@@ -42,6 +42,31 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestFailingUpdateTransaction()
+        {
+            //initialize the services
+            var transactionService = new TransactionService(_dbContext);
+
+            //get saddam's c4 purchase transaction
+            var saddamC4Puchase = transactionService.GetTransactions(_saddamId, 100, 0).Where(t => t.Title == "C4 for Twin Towers").First();
+            Assert.IsNotNull(saddamC4Puchase);
+
+            //try to update the transaction with a new title, description and amount, but removing the account from
+            var transactionToUpdate = new TransactionUpdateDTOIn
+            {
+                Title = "C4",
+                FromAccountId = null,
+                ToAccountId = saddamC4Puchase.ToAccount?.Id ?? null,
+                Description = "I forgot the description",
+                DateTime = saddamC4Puchase.DateTime,
+                Amount = 100.45M,
+                SubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
+            };
+            transactionService.UpdateTransaction(_saddamId, saddamC4Puchase.Id, transactionToUpdate);
+        }
+
+        [TestMethod]
         public void TestUpdateTransaction()
         {
             //initialize the services

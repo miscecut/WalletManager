@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Misce.WalletManager.DTO.DTO.Transaction.CustomValidationRules;
+using System.ComponentModel.DataAnnotations;
 
 namespace Misce.WalletManager.DTO.DTO.Transaction
 {
@@ -14,6 +15,7 @@ namespace Misce.WalletManager.DTO.DTO.Transaction
         [Required(ErrorMessage = "The transaction datetime has to be provided")]
         public DateTime DateTime { get; init; }
         public Guid? FromAccountId { get; init; }
+        [AtLeastOneAccount]
         public Guid? ToAccountId { get; init; }
         public Guid? SubCategoryId { get; init; }
     }

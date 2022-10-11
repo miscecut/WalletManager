@@ -177,13 +177,18 @@ namespace Misce.WalletManager.BL.Classes
                 if(!transaction.SubCategoryId.HasValue || subCategoryQuery.Any())
                 {
                     //accounts check
-                    var userAccounts = from account in _walletManagerContext.Accounts
-                                       where (!transaction.FromAccountId.HasValue || transaction.FromAccountId == account.Id)
-                                       && (!transaction.ToAccountId.HasValue || transaction.ToAccountId == account.Id)
-                                       && account.User.Id == userId
-                                       select account;
+                    var userAccountsQuery = from account in _walletManagerContext.Accounts
+                                            where account.User.Id == userId
+                                            select account;
 
-                    if((transaction.FromAccountId != null || transaction.ToAccountId != null) && userAccounts.Any())
+                    //get the user's account ids
+                    var userAccountIds = userAccountsQuery.Select(a => a.Id);
+                    //check if the account the transaction is from is owned by the user and exists
+                    var fromAccountIdIsValid = !transaction.FromAccountId.HasValue || userAccountIds.Contains(transaction.FromAccountId.Value);
+                    //check if the account the transaction is to is owned by the user and exists
+                    var toAccountIdIsValid = !transaction.ToAccountId.HasValue || userAccountIds.Contains(transaction.ToAccountId.Value);
+
+                    if (fromAccountIdIsValid && toAccountIdIsValid)
                     {
                         //create the transaction
                         var transactionToCreate = new Transaction
@@ -191,8 +196,8 @@ namespace Misce.WalletManager.BL.Classes
                             Title = transaction.Title,
                             Description = transaction.Description,
                             Amount = transaction.Amount,
-                            FromAccount = userAccounts.Where(a => a.Id == transaction.FromAccountId.GetValueOrDefault()).FirstOrDefault(),
-                            ToAccount = userAccounts.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault(),
+                            FromAccount = userAccountsQuery.Where(a => a.Id == transaction.FromAccountId.GetValueOrDefault()).FirstOrDefault(),
+                            ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault(),
                             User = user,
                             DateTime = transaction.DateTime,
                             SubCategory = subCategoryQuery.FirstOrDefault()
@@ -243,19 +248,24 @@ namespace Misce.WalletManager.BL.Classes
                 if (!transaction.SubCategoryId.HasValue || subCategoryQuery.Any())
                 {
                     //accounts check
-                    var userAccounts = from account in _walletManagerContext.Accounts
-                                       where (!transaction.FromAccountId.HasValue || transaction.FromAccountId == account.Id)
-                                       && (!transaction.ToAccountId.HasValue || transaction.ToAccountId == account.Id)
-                                       && account.User.Id == userId
-                                       select account;
+                    var userAccountsQuery = from account in _walletManagerContext.Accounts
+                                            where account.User.Id == userId
+                                            select account;
 
-                    if ((transaction.FromAccountId != null || transaction.ToAccountId != null) && userAccounts.Any())
+                    //get the user's account ids
+                    var userAccountIds = userAccountsQuery.Select(a => a.Id);
+                    //check if the account the transaction is from is owned by the user and exists
+                    var fromAccountIdIsValid = !transaction.FromAccountId.HasValue || userAccountIds.Contains(transaction.FromAccountId.Value);
+                    //check if the account the transaction is to is owned by the user and exists
+                    var toAccountIdIsValid = !transaction.ToAccountId.HasValue || userAccountIds.Contains(transaction.ToAccountId.Value);
+
+                    if (fromAccountIdIsValid && toAccountIdIsValid)
                     {
                         //update the transaction
                         var transactionToUpdate = transactionToUpdateQuery.First();
                         transactionToUpdate.SubCategory = transaction.SubCategoryId.HasValue ? subCategoryQuery.First() : null;
-                        transactionToUpdate.FromAccount = userAccounts.Where(a => a.Id == transaction.FromAccountId.GetValueOrDefault()).FirstOrDefault();
-                        transactionToUpdate.ToAccount = userAccounts.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault();
+                        transactionToUpdate.FromAccount = userAccountsQuery.Where(a => a.Id == transaction.FromAccountId.GetValueOrDefault()).FirstOrDefault();
+                        transactionToUpdate.ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault();
                         transactionToUpdate.Title = transaction.Title;
                         transactionToUpdate.Description = transaction.Description;
                         transactionToUpdate.Amount = transaction.Amount;
