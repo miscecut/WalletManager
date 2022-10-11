@@ -24,7 +24,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
         [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
-        public void TestFailingSignIn()
+        public void TestFailingSignIn1()
         {
             //initialize the services
             var userService = new UserService(_dbContext);
@@ -33,7 +33,23 @@ namespace Misce.WalletManager.Test.ServiceTests
             var newUser = new UserSignInDTOIn
             {
                 Username = "gigidag",
-                Password = "wella1!"
+                Password = "Wella1!"
+            };
+            userService.RegisterUser(newUser);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestFailingSignIn2()
+        {
+            //initialize the services
+            var userService = new UserService(_dbContext);
+
+            //try to create the new user with a password without a number
+            var newUser = new UserSignInDTOIn
+            {
+                Username = "gigidag",
+                Password = "wellaAAAAAAAAAAAAAAA"
             };
             userService.RegisterUser(newUser);
         }
@@ -49,18 +65,18 @@ namespace Misce.WalletManager.Test.ServiceTests
             var newUser = new UserSignInDTOIn
             {
                 Username = "gigidag",
-                Password = "wellAAAAAAAAAAA1!"
+                Password = "Maritte0!?"
             };
             userService.RegisterUser(newUser);
 
             //verify that the new user can now log in
-            Assert.IsNotNull(userService.Authenticate(new UserLoginDTOIn { Username = "gigidag", Password = "wellAAAAAAAAAAA1!" }));
+            Assert.IsNotNull(userService.Authenticate(new UserLoginDTOIn { Username = "gigidag", Password = "Maritte0!?" }));
 
             //try to create the new user with an already taken username
             newUser = new UserSignInDTOIn
             {
                 Username = "gigidag",
-                Password = "sdvlisw_esyivHGYUKF"
+                Password = "sdvlisw_esyivHGYU2KF"
             };
             userService.RegisterUser(newUser);
         }
