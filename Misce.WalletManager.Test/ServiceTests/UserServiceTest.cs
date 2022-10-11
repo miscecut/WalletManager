@@ -33,7 +33,8 @@ namespace Misce.WalletManager.Test.ServiceTests
             var newUser = new UserSignInDTOIn
             {
                 Username = "gigidag",
-                Password = "Wella1!"
+                Password = "Wella1!",
+                ConfirmPassword = "Wella1!"
             };
             userService.RegisterUser(newUser);
         }
@@ -49,7 +50,25 @@ namespace Misce.WalletManager.Test.ServiceTests
             var newUser = new UserSignInDTOIn
             {
                 Username = "gigidag",
-                Password = "wellaAAAAAAAAAAAAAAA"
+                Password = "wellaAAAAAAAAAAAAAAA",
+                ConfirmPassword = "wellaAAAAAAAAAAAAAAA"
+            };
+            userService.RegisterUser(newUser);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestFailingSignIn3()
+        {
+            //initialize the services
+            var userService = new UserService(_dbContext);
+
+            //try to create the new user with a mismatch in the password confirmation
+            var newUser = new UserSignInDTOIn
+            {
+                Username = "gigidag",
+                Password = "007Gaben",
+                ConfirmPassword = "007Gabenz"
             };
             userService.RegisterUser(newUser);
         }
@@ -65,7 +84,8 @@ namespace Misce.WalletManager.Test.ServiceTests
             var newUser = new UserSignInDTOIn
             {
                 Username = "gigidag",
-                Password = "Maritte0!?"
+                Password = "Maritte0!?",
+                ConfirmPassword = "Maritte0!?"
             };
             userService.RegisterUser(newUser);
 
@@ -76,7 +96,8 @@ namespace Misce.WalletManager.Test.ServiceTests
             newUser = new UserSignInDTOIn
             {
                 Username = "gigidag",
-                Password = "sdvlisw_esyivHGYU2KF"
+                Password = "sdvlisw_esyivHGYU2KF",
+                ConfirmPassword = "sdvlisw_esyivHGYU2KF"
             };
             userService.RegisterUser(newUser);
         }
