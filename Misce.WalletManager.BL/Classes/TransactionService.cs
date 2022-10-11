@@ -192,6 +192,18 @@ namespace Misce.WalletManager.BL.Classes
 
                     if (fromAccountIdIsValid && toAccountIdIsValid)
                     {
+                        var transactionSubCategory = subCategoryQuery.FirstOrDefault();
+
+                        //transaction category type check, if the subcategory is under an expense category, the transaction must be an expense
+                        if (transaction.TransactionSubCategoryId.HasValue && transactionSubCategory != null)
+                        {
+                            var isTransactionCategoryExpenseType = transactionSubCategory.Category.IsExpenseCategory;
+                            if (transaction.ToAccountId.HasValue && !transaction.FromAccountId.HasValue && isTransactionCategoryExpenseType)
+                                throw new IncorrectDataException("An expense transaction must be created under an expense transaction subcategory");
+                            if (!transaction.ToAccountId.HasValue && transaction.FromAccountId.HasValue && !isTransactionCategoryExpenseType)
+                                throw new IncorrectDataException("A profit transaction must be created under a profit transaction subcategory");
+                        }
+
                         //create the transaction
                         var transactionToCreate = new Transaction
                         {
@@ -202,7 +214,7 @@ namespace Misce.WalletManager.BL.Classes
                             ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault(),
                             User = user,
                             DateTime = transaction.DateTime.ToUniversalTime(),
-                            SubCategory = subCategoryQuery.FirstOrDefault()
+                            SubCategory = transactionSubCategory
                         };
                         _walletManagerContext.Transactions.Add(transactionToCreate);
 
@@ -263,6 +275,18 @@ namespace Misce.WalletManager.BL.Classes
 
                     if (fromAccountIdIsValid && toAccountIdIsValid)
                     {
+                        var transactionSubCategory = subCategoryQuery.FirstOrDefault();
+
+                        //transaction category type check, if the subcategory is under an expense category, the transaction must be an expense
+                        if (transactionSubCategory != null)
+                        {
+                            var isTransactionCategoryExpenseType = transactionSubCategory.Category.IsExpenseCategory;
+                            if (transaction.ToAccountId.HasValue && !transaction.FromAccountId.HasValue && isTransactionCategoryExpenseType)
+                                throw new IncorrectDataException("An expense transaction must be created under an expense transaction subcategory");
+                            if (!transaction.ToAccountId.HasValue && transaction.FromAccountId.HasValue && !isTransactionCategoryExpenseType)
+                                throw new IncorrectDataException("A profit transaction must be created under a profit transaction subcategory");
+                        }
+
                         //update the transaction
                         var transactionToUpdate = transactionToUpdateQuery.First();
                         transactionToUpdate.SubCategory = transaction.SubCategoryId.HasValue ? subCategoryQuery.First() : null;

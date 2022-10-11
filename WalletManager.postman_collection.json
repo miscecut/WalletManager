@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6d2e21ef-26ee-46c4-825d-2c86ce223793",
+		"_postman_id": "a2358209-a504-4cf5-a31b-64832575a279",
 		"name": "WalletManager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -44,6 +44,18 @@
 							"path": [
 								"api",
 								"accounts"
+							],
+							"query": [
+								{
+									"key": "accountTypeId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "active",
+									"value": "True",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -170,6 +182,18 @@
 							"path": [
 								"api",
 								"transactioncategories"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "lalal",
+									"disabled": true
+								},
+								{
+									"key": "isExpenseType",
+									"value": "True",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -307,7 +331,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/transactionsubcategories",
+							"raw": "https://localhost:7264/api/transactionsubcategories?transactionCategoryId&name",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -316,6 +340,16 @@
 							"path": [
 								"api",
 								"transactionsubcategories"
+							],
+							"query": [
+								{
+									"key": "transactionCategoryId",
+									"value": null
+								},
+								{
+									"key": "name",
+									"value": null
+								}
 							]
 						}
 					},
@@ -432,6 +466,27 @@
 			"name": "Transactions",
 			"item": [
 				{
+					"name": "/api/transactions/{id}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/transactions/89a8f2d8-a07c-4481-cab2-08da97dd6570",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactions",
+								"89a8f2d8-a07c-4481-cab2-08da97dd6570"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/api/transactions",
 					"request": {
 						"method": "GET",
@@ -497,27 +552,6 @@
 					"response": []
 				},
 				{
-					"name": "/api/transactions/{id}",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://localhost:7264/api/transactions/89a8f2d8-a07c-4481-cab2-08da97dd6570",
-							"protocol": "https",
-							"host": [
-								"localhost"
-							],
-							"port": "7264",
-							"path": [
-								"api",
-								"transactions",
-								"89a8f2d8-a07c-4481-cab2-08da97dd6570"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "/api/transactions",
 					"request": {
 						"method": "POST",
@@ -541,6 +575,27 @@
 							"path": [
 								"api",
 								"transactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/transactions/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/transactions/89a8f2d8-a07c-4481-cab2-08da97dd6570",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"transactions",
+								"89a8f2d8-a07c-4481-cab2-08da97dd6570"
 							]
 						}
 					},

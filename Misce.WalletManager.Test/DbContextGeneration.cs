@@ -114,50 +114,58 @@ namespace Misce.WalletManager.Test
             {
                 Id = Guid.NewGuid(),
                 User = saddam69,
-                Name = "Bombs"
+                Name = "Bombs",
+                IsExpenseCategory = true
             };
             var saddamFood = new TransactionCategory
             {
                 Id = Guid.NewGuid(),
                 User = saddam69,
                 Name = "Food",
-                Description = "I need to eat!"
+                Description = "I need to eat!",
+                IsExpenseCategory = true
             };
             var saddamDrugs = new TransactionCategory
             {
                 Id = Guid.NewGuid(),
                 User = saddam69,
-                Name = "Drugs"
+                Name = "Drugs",
+                IsExpenseCategory = false
             };
             var misceHoes = new TransactionCategory
             {
                 Id = Guid.NewGuid(),
                 User = miscecut,
-                Name = "Troie"
+                Name = "Troie",
+                IsExpenseCategory = true
             };
             var misceElectronics = new TransactionCategory
             {
                 Id = Guid.NewGuid(),
                 User = miscecut,
-                Name = "Elettronica"
+                Name = "Elettronica",
+                IsExpenseCategory = true
             };
             var svetlanaDresses = new TransactionCategory
             {
                 Id = Guid.NewGuid(),
                 User = svetlanal,
-                Name = "Vestiti"
+                Name = "Vestiti",
+                IsExpenseCategory = true
             };
             var svetlanaDrugs = new TransactionCategory
             {
                 Id = Guid.NewGuid(),
                 User = svetlanal,
-                Name = "Droga"
+                Name = "Droga",
+                IsExpenseCategory = true
             };
             var svetlanaOnlyfans = new TransactionCategory
             {
                 Id = Guid.NewGuid(),
                 User = svetlanal,
-                Name = "Onlyfans"
+                Name = "Onlyfans",
+                IsExpenseCategory = false
             };
 
             dbContext.TransactionCategories.AddRange(new TransactionCategory[] { saddamBombing, saddamFood, misceHoes, misceElectronics, svetlanaDresses, svetlanaDrugs, svetlanaOnlyfans });

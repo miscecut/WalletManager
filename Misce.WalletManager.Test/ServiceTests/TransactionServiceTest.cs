@@ -176,24 +176,54 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestFailingCreateTransaction4()
+        {
+            //initialize the services
+            var transactionService = new TransactionService(_dbContext);
+            var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
+            var accountService = new AccountService(_dbContext);
+
+            //get misce's cash account
+            var misceCash = accountService.GetAccounts(_misceId).Where(a => a.Name == "Contanti").First();
+            Assert.IsNotNull(misceCash);
+
+            //get misce's elettronica transaction subcategory
+            var misceElettronica = transactionSubCategoryService.GetTransactionSubCategories(_misceId).Where(sc => sc.Name == "Elettronica").Single();
+
+            //try to create a profit transaction under an expense category
+            transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            {
+                Amount = 50,
+                ToAccountId= misceCash.Id,
+                DateTime = DateTime.UtcNow,
+                Title = "Paghetta!",
+                Description = "yeeee soldi",
+                TransactionSubCategoryId = misceElettronica.Id 
+            });
+        }
+
+        [TestMethod]
         public void TestCreateTransaction()
         {
             //initialize the services
             var transactionService = new TransactionService(_dbContext);
             var accountService = new AccountService(_dbContext);
-            var subCategoryService = new TransactionSubCategoryService(_dbContext);
+            var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
 
             //get the users' accounts
             var misceAccounts = accountService.GetAccounts(_misceId);
             var saddamAccounts = accountService.GetAccounts(_saddamId);
+            var svetlanaAccounts = accountService.GetAccounts(_svetlanaId);
 
             //get saddam's transaction subcategories
-            var saddamSubCategories = subCategoryService.GetTransactionSubCategories(_saddamId);
-            var saddamDrugs = saddamSubCategories.Where(sc => sc.Name == "Drugs").Single();
+            var saddamDrugs = transactionSubCategoryService.GetTransactionSubCategories(_saddamId).Where(sc => sc.Name == "Drugs").Single();
+            var svetlanaOnlyFans = transactionSubCategoryService.GetTransactionSubCategories(_svetlanaId).Where(sc => sc.Name == "Onlyfans").Single();
 
             //get users' specific accounts
             var misceCash = misceAccounts.Where(a => a.Name == "Contanti").Single();
             var saddamBankAccount = saddamAccounts.Where(a => a.Name == "Banco Allah").Single();
+            var svetlanaBankAccount = svetlanaAccounts.Where(a => a.Name == "Sex Bank").Single();
 
             //GAIN WITH NO SUBCATEGORY
 
@@ -210,18 +240,17 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             //GAIN WITH SUBCATEGORY
 
-            var saddamGainId = transactionService.CreateTransaction(_saddamId, new TransactionCreationDTOIn
+            var svetlanaGainId = transactionService.CreateTransaction(_svetlanaId, new TransactionCreationDTOIn
             {
                 Amount = 69.42M,
-                TransactionSubCategoryId = saddamDrugs.Id,
-                ToAccountId = saddamBankAccount.Id,
+                TransactionSubCategoryId = svetlanaOnlyFans.Id,
+                ToAccountId = svetlanaBankAccount.Id,
                 DateTime = DateTime.UtcNow,
-                Title = "Weed",
-                Description = "Got some money baby",
+                Title = "Live",
             });
 
-            Assert.IsNotNull(saddamGainId);
-            Assert.AreEqual(transactionService.GetTransactions(_saddamId, 10, 0, subCategoryId: saddamDrugs.Id).Count(), 2);
+            Assert.IsNotNull(svetlanaGainId);
+            Assert.AreEqual(transactionService.GetTransactions(_svetlanaId, 10, 0, subCategoryId: svetlanaOnlyFans.Id).Count(), 1);
 
             //PAYMENT WITHOUT SUBCATEGORY AND TITLE
 
