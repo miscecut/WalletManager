@@ -144,8 +144,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //account creation data validation
             var validationResults = Utils.Utils.ValidateDTO(account);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             //check if the account type exists
             var accountTypeQuery = from at in _walletManagerContext.AccountTypes
@@ -199,8 +199,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //account update data validation
             var validationResults = Utils.Utils.ValidateDTO(account);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             //check if the user owns the account
             var accountToUpdateQuery = from acc in _walletManagerContext.Accounts

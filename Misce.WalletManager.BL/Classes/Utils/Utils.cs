@@ -1,19 +1,31 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Misce.WalletManager.BL.Classes.ErrorMessages;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Misce.WalletManager.BL.Classes.Utils
 {
     public class Utils
     {
-        // TODO: inserire qui i limiti delle stringhe e renderli statici e pubblici
-
-        //this method returns a string with all the errors in the provided DTO
-        public static string ValidateDTO(object dto)
+        public static IEnumerable<ValidationResult> ValidateDTO(object dto)
         {
             var validationContext = new ValidationContext(dto);
             var validationResults = new List<ValidationResult>();
             Validator.TryValidateObject(dto, validationContext, validationResults, true);
-            return string.Join(",", validationResults.Select(vr => vr.ErrorMessage));
+            return validationResults;
+        }
+
+        //this method returns a json with all the errors in the provided validation result list
+        public static string SerializeErrors(IEnumerable<ValidationResult> validationResults)
+        {
+            var errorsList = new List<Error>();
+
+            foreach (var validationResult in validationResults)
+                errorsList.Add(new Error(string.Join(";", validationResult.MemberNames), validationResult.ErrorMessage == null ? "" : validationResult.ErrorMessage));
+
+            var errorContainer = new ErrorContainer(errorsList);
+
+            return JsonSerializer.Serialize(errorContainer);
         }
 
         //this method extracts the user id from the claims in the http context

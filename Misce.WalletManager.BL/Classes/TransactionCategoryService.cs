@@ -3,6 +3,7 @@ using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
+using System.Security.Principal;
 
 namespace Misce.WalletManager.BL.Classes
 {
@@ -65,8 +66,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //transaction category creation data validation
             var validationResults = Utils.Utils.ValidateDTO(transactionCategory);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             //check if the user exists
             var userQuery = from user in _walletManagerContext.Users
@@ -98,12 +99,12 @@ namespace Misce.WalletManager.BL.Classes
 
         public TransactionCategoryDTOOut UpdateTransactionCategory(Guid userId, Guid transactionCategoryId, TransactionCategoryUpdateDTOIn transactionCategory)
         {
-            // Transaction category update data validation
+            //transaction category update data validation
             var validationResults = Utils.Utils.ValidateDTO(transactionCategory);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
-            // check if the transaction category the user wants to update exists
+            //check if the transaction category the user wants to update exists
             var transactionCategoryQuery = from tc in _walletManagerContext.TransactionCategories
                                            where tc.Id == transactionCategoryId
                                            && tc.User.Id == userId

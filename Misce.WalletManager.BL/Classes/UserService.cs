@@ -59,8 +59,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //user registration data validation
             var validationResults = Utils.Utils.ValidateDTO(user);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             //check if the username is available
             var usersWithSameUsernameQuery = from u in _walletManagerContext.Users

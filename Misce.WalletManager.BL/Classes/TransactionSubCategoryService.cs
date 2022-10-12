@@ -78,8 +78,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //transaction category creation data validation
             var validationResults = Utils.Utils.ValidateDTO(transactionSubCategory);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             //check if the transaction category, to put the sub cateogry under, exists
             var transactionCategoryQuery = GetTransactionCategoriesQuery(userId, transactionSubCategory.TransactionCategoryId);
@@ -112,8 +112,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //transaction category creation data validation
             var validationResults = Utils.Utils.ValidateDTO(transactionSubCategory);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             // check if the transaction sub category to update exists
             var subCategoryQuery = from sc in _walletManagerContext.TransactionSubCategories

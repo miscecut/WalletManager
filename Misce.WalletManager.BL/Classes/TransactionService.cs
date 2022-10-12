@@ -163,8 +163,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //transaction creation data validation
             var validationResults = Utils.Utils.ValidateDTO(transaction);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             //user check
             var user = GetUser(userId);
@@ -243,8 +243,8 @@ namespace Misce.WalletManager.BL.Classes
         {
             //transaction update data validation
             var validationResults = Utils.Utils.ValidateDTO(transaction);
-            if (!string.IsNullOrEmpty(validationResults))
-                throw new IncorrectDataException(validationResults);
+            if (validationResults.Any())
+                throw new IncorrectDataException(Utils.Utils.SerializeErrors(validationResults));
 
             //check if the transaction exists and it's owned by the user
             var transactionToUpdateQuery = from t in _walletManagerContext.Transactions
