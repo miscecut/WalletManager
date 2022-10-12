@@ -55,6 +55,8 @@ namespace Misce.WalletManager.BL.Classes
 
             if (name != null)
                 categoriesQuery = categoriesQuery.Where(category => category.Name.ToUpper().Contains(name.ToUpper()));
+            if (isExpenseType != null)
+                categoriesQuery = categoriesQuery.Where(category => category.IsExpenseType == isExpenseType);
 
             return categoriesQuery.ToList();
         }

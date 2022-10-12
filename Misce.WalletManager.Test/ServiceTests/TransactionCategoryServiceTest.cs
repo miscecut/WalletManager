@@ -1,7 +1,6 @@
 ﻿using Misce.WalletManager.BL.Classes;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
-using Misce.WalletManager.Model.Data;
 
 namespace Misce.WalletManager.Test.ServiceTests
 {
@@ -28,6 +27,11 @@ namespace Misce.WalletManager.Test.ServiceTests
             var misceTransactionCategories = transactionCateogryService.GetTransactionCategories(misceId);
             Assert.AreEqual(misceTransactionCategories.Count(), 2);
             Assert.AreEqual(misceTransactionCategories.Where(tc => tc.Name == "Elettronica").Count(), 1);
+
+            //with expense type query parameter, saddam has 2 expense transaction categories
+            var saddamExpenseTransactionCartegories = transactionCateogryService.GetTransactionCategories(saddamId, isExpenseType: true);
+            Assert.AreEqual(saddamExpenseTransactionCartegories.Count(), 2);
+            Assert.IsFalse(saddamExpenseTransactionCartegories.Where(tc => tc.Name == "Drugs").Any());
         }
 
         [TestMethod]

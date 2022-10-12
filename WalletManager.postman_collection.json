@@ -48,12 +48,12 @@
 							"query": [
 								{
 									"key": "accountTypeId",
-									"value": null,
+									"value": "f9beb15f-b556-4dc9-908e-05f9264a3703",
 									"disabled": true
 								},
 								{
 									"key": "active",
-									"value": "True",
+									"value": "true",
 									"disabled": true
 								}
 							]
@@ -186,12 +186,12 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "lalal",
+									"value": "stip",
 									"disabled": true
 								},
 								{
 									"key": "isExpenseType",
-									"value": "True",
+									"value": "false",
 									"disabled": true
 								}
 							]
@@ -206,7 +206,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Name\": \"Puttaneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Stipendio\",\r\n    \"isExpenseType\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -331,7 +331,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/transactionsubcategories?transactionCategoryId&name",
+							"raw": "https://localhost:7264/api/transactionsubcategories",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -344,11 +344,13 @@
 							"query": [
 								{
 									"key": "transactionCategoryId",
-									"value": null
+									"value": "d4a2b376-9e01-4d18-bec5-76602bfbd38f",
+									"disabled": true
 								},
 								{
 									"key": "name",
-									"value": null
+									"value": "nig",
+									"disabled": true
 								}
 							]
 						}
@@ -362,7 +364,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"Name\": \"Rumene\",\r\n    \"TransactionCategoryId\": \"b4d77e34-874e-4b96-ceb5-08daa54308f9\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Stipendio DecHit\",\r\n    \"transactionCategoryId\": \"57cd5b41-cbb1-4105-a470-cd32fd5b8269\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -688,7 +690,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM1OTNlYjcwLTNlZWItNDcyNi04MDZiLTE3YWZmOTcwYmQzOCIsImV4cCI6MTY2NTU3MDAwNCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.IT08Mr53x71-vLv695y9Gzc_RZ120ryDu2Ckw1-azXs",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM1OTNlYjcwLTNlZWItNDcyNi04MDZiLTE3YWZmOTcwYmQzOCIsImV4cCI6MTY2NTU4MDc2MSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.kY61N5uaq-lgjV3q2vuJe98UhFNSqu4Tfa3-FSCmjjc",
 				"type": "string"
 			}
 		]
