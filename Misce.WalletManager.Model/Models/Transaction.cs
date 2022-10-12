@@ -7,16 +7,16 @@ namespace Misce.WalletManager.Model.Models
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
-        public User User { get; set; } = null!;
+        public virtual User User { get; set; } = null!;
         [StringLength(50)]
         public string? Title { get; set; }
         [StringLength(500)]
         public string? Description { get; set; }
-        public Account? FromAccount { get; set; }
-        public Account? ToAccount { get; set; }
+        public virtual Account? FromAccount { get; set; }
+        public virtual Account? ToAccount { get; set; }
         [Required]
         public DateTime DateTime { get; set; }
-        public TransactionSubCategory? SubCategory { get; set; }
+        public virtual TransactionSubCategory? SubCategory { get; set; }
         [Required]
         public decimal Amount { get; set; }
         [Required]

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a2358209-a504-4cf5-a31b-64832575a279",
+		"_postman_id": "0f8e078b-b439-4383-ba37-9d9a6507deea",
 		"name": "WalletManager",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -14,7 +14,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/accounts/89a8f2d8-a07c-4481-cab2-08da97dd6570",
+							"raw": "https://localhost:7264/api/accounts/a98cd911-0941-4591-83f4-6b4af4eafd89",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -23,7 +23,7 @@
 							"path": [
 								"api",
 								"accounts",
-								"89a8f2d8-a07c-4481-cab2-08da97dd6570"
+								"a98cd911-0941-4591-83f4-6b4af4eafd89"
 							]
 						}
 					},
@@ -68,7 +68,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"accountTypeId\": \"bb381693-65fc-49f2-8a16-c904c36ede5c\",\r\n    \"initialAmount\": 0,\r\n    \"name\": \"BPM\"\r\n}",
+							"raw": "{\r\n    \"accountTypeId\": \"f9beb15f-b556-4dc9-908e-05f9264a3703\",\r\n    \"initialAmount\": 100,\r\n    \"name\": \"Banca Popolare di Cremona\",\r\n    \"isActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -97,7 +97,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"accounttypeid\": \"a826f4da-35fd-4841-bb55-0a7ff713b20f\",\r\n    \"name\": \"Contanti\",\r\n    \"description\": null,\r\n    \"initialAmount\": 10.00,\r\n    \"isActive\": true\r\n}",
+							"raw": "{\r\n    \"accountTypeId\": \"695e5f8f-0446-4134-bc84-a9d99cf386a5\",\r\n    \"initialAmount\": 50.25,\r\n    \"name\": \"Contanti\",\r\n    \"description\": \"Il mio portafoglio\",\r\n    \"isActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -105,7 +105,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://localhost:7264/api/accounts/8ded56e5-636a-4471-a1db-42f563418295",
+							"raw": "https://localhost:7264/api/accounts/aab5ed7b-5065-4d9b-9f16-145facf5f499",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -114,7 +114,7 @@
 							"path": [
 								"api",
 								"accounts",
-								"8ded56e5-636a-4471-a1db-42f563418295"
+								"aab5ed7b-5065-4d9b-9f16-145facf5f499"
 							]
 						}
 					},
@@ -126,7 +126,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/accounts/8ded56e5-636a-4471-a1db-42f563418295",
+							"raw": "https://localhost:7264/api/accounts/bd7f23e1-6566-4be0-9882-ac00b6012f28",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -135,7 +135,7 @@
 							"path": [
 								"api",
 								"accounts",
-								"8ded56e5-636a-4471-a1db-42f563418295"
+								"bd7f23e1-6566-4be0-9882-ac00b6012f28"
 							]
 						}
 					},
@@ -660,7 +660,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\"\r\n}",
+					"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\",\r\n    \"confirmPassword\": \"Matisse01!?\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -688,7 +688,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjFhZDI1NWY0LWZhMzctNDllMS04YjNmLWEyODIzYjUwMzJjYyIsImV4cCI6MTY2NTE1NTM4MiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.pD0iVpE5zdBubEcIrhCxQwsN3H91SNdDMVivTwH2sGs",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM1OTNlYjcwLTNlZWItNDcyNi04MDZiLTE3YWZmOTcwYmQzOCIsImV4cCI6MTY2NTU3MDAwNCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.IT08Mr53x71-vLv695y9Gzc_RZ120ryDu2Ckw1-azXs",
 				"type": "string"
 			}
 		]

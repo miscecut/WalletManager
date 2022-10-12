@@ -7,28 +7,20 @@ namespace Misce.WalletManager.Test.ServiceTests
     [TestClass]
     public class TransactionSubCategoryServiceTest
     {
-        private WalletManagerContext _dbContext = null!;
-        private Guid _misceId;
-        private Guid _saddamId;
-        private Guid _svetlanaId;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _misceId = Guid.NewGuid();
-            _saddamId = Guid.NewGuid();
-            _svetlanaId = Guid.NewGuid();
-            _dbContext = DbContextGeneration.GenerateDb("TEST_SUBCATEGORY_SERVICE", _saddamId, _misceId, _svetlanaId);
-        }
-
         [TestMethod]
         public void TestGetSubCategories()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SUBCATEGORY_SERVICE_1", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var subCategoryService = new TransactionSubCategoryService(_dbContext);
+            var subCategoryService = new TransactionSubCategoryService(dbContext);
 
             //verify that svetlana has 5 transaction subcategories, 3 of which under the vestiti transaction category
-            var svetlanaSubCategories = subCategoryService.GetTransactionSubCategories(_svetlanaId);
+            var svetlanaSubCategories = subCategoryService.GetTransactionSubCategories(svetlanaId);
             Assert.AreEqual(svetlanaSubCategories.Count(), 5);
             Assert.AreEqual(svetlanaSubCategories.Where(sc => sc.TransactionCategory.Name == "Vestiti").Count(), 3);
         }
@@ -36,12 +28,18 @@ namespace Misce.WalletManager.Test.ServiceTests
         [TestMethod]
         public void TestCreateSubCategory()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SUBCATEGORY_SERVICE_2", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var subCategoryService = new TransactionSubCategoryService(_dbContext);
-            var categoryService = new TransactionCategoryService(_dbContext);
+            var subCategoryService = new TransactionSubCategoryService(dbContext);
+            var categoryService = new TransactionCategoryService(dbContext);
 
             //get misce's elettronica transaction category
-            var misceCategories = categoryService.GetTransactionCategories(_misceId);
+            var misceCategories = categoryService.GetTransactionCategories(misceId);
             var misceElectronics = misceCategories.Where(tc => tc.Name == "Elettronica").First();
 
             //create the new pc transaction sub category under the elettronica category
@@ -52,26 +50,32 @@ namespace Misce.WalletManager.Test.ServiceTests
             };
 
             //verify that the transaction subcategory was correctly created
-            var createdMiscePc = subCategoryService.CreateTransactionSubCategory(_misceId, miscePc);
+            var createdMiscePc = subCategoryService.CreateTransactionSubCategory(misceId, miscePc);
             Assert.IsNotNull(createdMiscePc);
             Assert.AreEqual(createdMiscePc.Name, "PC");
 
             //verify that misce has now 3 transaction subcategories
-            var misceSubCategories = subCategoryService.GetTransactionSubCategories(_misceId);
+            var misceSubCategories = subCategoryService.GetTransactionSubCategories(misceId);
             Assert.AreEqual(misceSubCategories.Count(), 3);
         }
 
         [TestMethod]
         public void TestUpdateSubCategory()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SUBCATEGORY_SERVICE_3", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var subCategoryService = new TransactionSubCategoryService(_dbContext);
-            var categoryService = new TransactionCategoryService(_dbContext);
+            var subCategoryService = new TransactionSubCategoryService(dbContext);
+            var categoryService = new TransactionCategoryService(dbContext);
 
             //get misce's electtronica transaction subcategory
-            var misceCategories = categoryService.GetTransactionCategories(_misceId);
+            var misceCategories = categoryService.GetTransactionCategories(misceId);
             var misceElectronics = misceCategories.Where(tc => tc.Name == "Elettronica").First();
-            var misceElectronicsSub = subCategoryService.GetTransactionSubCategories(_misceId).Where(tsc => tsc.Name == "Elettronica").First();
+            var misceElectronicsSub = subCategoryService.GetTransactionSubCategories(misceId).Where(tsc => tsc.Name == "Elettronica").First();
 
             //and update it with a new name
             var misceElectronicsUpdate = new TransactionSubCategoryUpdateDTOIn
@@ -79,9 +83,9 @@ namespace Misce.WalletManager.Test.ServiceTests
                 TransactionCategoryId = misceElectronics.Id,
                 Name = "Elettrodomestici"
             };
-            subCategoryService.UpdateTransactionSubCategory(_misceId, misceElectronicsSub.Id, misceElectronicsUpdate);
+            subCategoryService.UpdateTransactionSubCategory(misceId, misceElectronicsSub.Id, misceElectronicsUpdate);
 
-            var misceSubCategories = subCategoryService.GetTransactionSubCategories(_misceId);
+            var misceSubCategories = subCategoryService.GetTransactionSubCategories(misceId);
             var updatedMisceElectronicsSub = misceSubCategories.Where(tsc => tsc.Id == misceElectronicsSub.Id).First();
 
             Assert.AreEqual(updatedMisceElectronicsSub.Name, "Elettrodomestici");
@@ -92,21 +96,27 @@ namespace Misce.WalletManager.Test.ServiceTests
         [TestMethod]
         public void TestDeleteSubCategory()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SUBCATEGORY_SERVICE_4", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var subCategoryService = new TransactionSubCategoryService(_dbContext);
+            var subCategoryService = new TransactionSubCategoryService(dbContext);
 
             //get saddam's explosives transaction subcategory, under the bombs transaction category
-            var saddamExplosives = subCategoryService.GetTransactionSubCategories(_saddamId).Where(tsc => tsc.Name == "Explosives").First();
+            var saddamExplosives = subCategoryService.GetTransactionSubCategories(saddamId).Where(tsc => tsc.Name == "Explosives").First();
             Assert.IsNotNull(saddamExplosives);
 
             //and delete it
-            subCategoryService.DeleteTransactionSubCategory(_saddamId, saddamExplosives.Id);
+            subCategoryService.DeleteTransactionSubCategory(saddamId, saddamExplosives.Id);
 
             //verify that the transaction subcategory was deleted
-            Assert.IsNull(subCategoryService.GetTransactionSubCategory(_saddamId, saddamExplosives.Id));
+            Assert.IsNull(subCategoryService.GetTransactionSubCategory(saddamId, saddamExplosives.Id));
 
             //verify that saddam now has only 1 transaction subcategory under the bombs category
-            Assert.AreEqual(subCategoryService.GetTransactionSubCategories(_saddamId, saddamExplosives.TransactionCategory.Id).Count(), 1);
+            Assert.AreEqual(subCategoryService.GetTransactionSubCategories(saddamId, saddamExplosives.TransactionCategory.Id).Count(), 1);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Misce.WalletManager.BL.Classes
 
             if (query.Any())
             {
-                var account = query.First();
+                var account = query.Include(a => a.AccountType).First();
 
                 //actual gains = summation(amount of the transaction with the account as account to)
                 var toAccountAmountQuery = from t in _walletManagerContext.Transactions
@@ -89,6 +89,8 @@ namespace Misce.WalletManager.BL.Classes
 
             if (active != null)
                 query = query.Where(a => a.IsActive == active);
+            if(accountTypeId != null)
+                query = query.Where(a => a.AccountType.Id == accountTypeId);
 
             if (query.Any())
             {
@@ -126,6 +128,7 @@ namespace Misce.WalletManager.BL.Classes
                     InitialAmount = a.InitialAmount,
                     ActualAmount = a.InitialAmount + moneyInMap[a.Id] - moneyOutMap[a.Id],
                     IsActive = a.IsActive,
+                    Description = a.Description,
                     AccountType = new AccountTypeDTOOut
                     {
                         Id = a.AccountType.Id,
@@ -163,7 +166,8 @@ namespace Misce.WalletManager.BL.Classes
                     InitialAmount = account.InitialAmount,
                     Name = account.Name,
                     AccountType = accountType,
-                    IsActive = account.IsActive
+                    IsActive = account.IsActive,
+                    Description = account.Description
                 };
 
                 _walletManagerContext.Add(accountToInsert);

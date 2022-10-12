@@ -47,7 +47,17 @@ namespace Misce.WalletManager.API.Controllers
             if (userId.HasValue)
             {
                 var transactions = _transactionService.GetTransactions(userId.Value, limit.GetValueOrDefault(), page.GetValueOrDefault(), title, accountFromId, accountToId, categoryId, subCategoryId, dateFrom, dateTo);
-                //Response.Headers.Add("Next page", );
+
+                var request = HttpContext.Request;
+                var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase.ToUriComponent()}{request.Path.Value}{request.QueryString}";
+
+                //add next page header if limit was reached
+                if (transactions.Count() == limit)
+                    Response.Headers.Add("X-Next-Page", baseUrl.Replace($"page={page}", $"page={page + 1}"));
+                //add previous page header if page is not the first (0)
+                if(page > 0)
+                    Response.Headers.Add("X-Previous-Page", baseUrl.Replace($"page={page}", $"page={page - 1}"));
+
                 return Ok(transactions);
             }
 

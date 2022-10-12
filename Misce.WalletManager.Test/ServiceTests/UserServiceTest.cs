@@ -8,26 +8,18 @@ namespace Misce.WalletManager.Test.ServiceTests
     [TestClass]
     public class UserServiceTest
     {
-        private WalletManagerContext _dbContext = null!;
-        private Guid _misceId;
-        private Guid _saddamId;
-        private Guid _svetlanaId;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _misceId = Guid.NewGuid();
-            _saddamId = Guid.NewGuid();
-            _svetlanaId = Guid.NewGuid();
-            _dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE", _saddamId, _misceId, _svetlanaId);
-        }
-
         [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingSignIn1()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_1", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var userService = new UserService(_dbContext);
+            var userService = new UserService(dbContext);
 
             //try to create the new user with a too short password
             var newUser = new UserSignInDTOIn
@@ -43,8 +35,14 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingSignIn2()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_2", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var userService = new UserService(_dbContext);
+            var userService = new UserService(dbContext);
 
             //try to create the new user with a password without a number
             var newUser = new UserSignInDTOIn
@@ -60,8 +58,14 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingSignIn3()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_3", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var userService = new UserService(_dbContext);
+            var userService = new UserService(dbContext);
 
             //try to create the new user with a mismatch in the password confirmation
             var newUser = new UserSignInDTOIn
@@ -77,8 +81,14 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(UsernameNotAvailableException))]
         public void TestSignIn()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_4", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var userService = new UserService(_dbContext);
+            var userService = new UserService(dbContext);
 
             //create the new user
             var newUser = new UserSignInDTOIn

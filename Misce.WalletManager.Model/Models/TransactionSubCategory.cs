@@ -7,7 +7,7 @@ namespace Misce.WalletManager.Model.Models
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public TransactionCategory Category { get; set; } = null!;
+        public virtual TransactionCategory Category { get; set; } = null!;
         [Required]
         [StringLength(50)]
         public string Name { get; set; } = null!;

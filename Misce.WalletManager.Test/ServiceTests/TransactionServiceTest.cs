@@ -8,28 +8,20 @@ namespace Misce.WalletManager.Test.ServiceTests
     [TestClass]
     public class TransactionServiceTest
     {
-        private WalletManagerContext _dbContext = null!;
-        private Guid _misceId;
-        private Guid _saddamId;
-        private Guid _svetlanaId;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _misceId = Guid.NewGuid();
-            _saddamId = Guid.NewGuid();
-            _svetlanaId = Guid.NewGuid();
-            _dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE", _saddamId, _misceId, _svetlanaId);
-        }
-
         [TestMethod]
         public void TestGetTransactions()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_1", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
 
             //saddam has 4 transactions
-            var saddamTransactions = transactionService.GetTransactions(_saddamId, 100, 0);
+            var saddamTransactions = transactionService.GetTransactions(saddamId, 100, 0);
             Assert.AreEqual(saddamTransactions.Count(), 4);
             Assert.AreEqual(saddamTransactions.Where(t => t.Amount == 3.5M).Count(), 2);
             Assert.AreEqual(saddamTransactions.Where(t => t.FromAccount != null && t.FromAccount.Name == "Banco Allah").Count(), 3);
@@ -37,7 +29,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             Assert.AreEqual(saddamTransactions.Where(t => t.TransactionSubCategory != null && t.TransactionSubCategory.Name == "Food").Count(), 2);
 
             //saddam has only 3 transactions before the 3rd of february
-            var saddamTransactionsOnThe23 = transactionService.GetTransactions(_saddamId, 10, 0, toDateTime: new DateTime(2022, 2, 23, 23, 59, 59));
+            var saddamTransactionsOnThe23 = transactionService.GetTransactions(saddamId, 10, 0, toDateTime: new DateTime(2022, 2, 23, 23, 59, 59));
             Assert.AreEqual(saddamTransactionsOnThe23.Count(), 3);
         }
 
@@ -45,11 +37,17 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingUpdateTransaction()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_2", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
 
             //get saddam's c4 purchase transaction
-            var saddamC4Puchase = transactionService.GetTransactions(_saddamId, 100, 0).Where(t => t.Title == "C4 for Twin Towers").First();
+            var saddamC4Puchase = transactionService.GetTransactions(saddamId, 100, 0).Where(t => t.Title == "C4 for Twin Towers").First();
             Assert.IsNotNull(saddamC4Puchase);
 
             //try to update the transaction with a new title, description and amount, but removing the account from
@@ -63,17 +61,23 @@ namespace Misce.WalletManager.Test.ServiceTests
                 Amount = 100.45M,
                 SubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
             };
-            transactionService.UpdateTransaction(_saddamId, saddamC4Puchase.Id, transactionToUpdate);
+            transactionService.UpdateTransaction(saddamId, saddamC4Puchase.Id, transactionToUpdate);
         }
 
         [TestMethod]
         public void TestUpdateTransaction()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_3", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
 
             //get saddam's c4 purchase transaction
-            var saddamC4Puchase = transactionService.GetTransactions(_saddamId, 100, 0).Where(t => t.Title == "C4 for Twin Towers").First();
+            var saddamC4Puchase = transactionService.GetTransactions(saddamId, 100, 0).Where(t => t.Title == "C4 for Twin Towers").First();
             Assert.IsNotNull(saddamC4Puchase);
 
             //update the transaction with a new title, description and amount
@@ -87,10 +91,10 @@ namespace Misce.WalletManager.Test.ServiceTests
                 Amount = 100.45M,
                 SubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
             };
-            transactionService.UpdateTransaction(_saddamId, saddamC4Puchase.Id, transactionToUpdate);
+            transactionService.UpdateTransaction(saddamId, saddamC4Puchase.Id, transactionToUpdate);
 
             //verify the updated fields
-            var updatedSaddamC4 = transactionService.GetTransaction(_saddamId, saddamC4Puchase.Id);
+            var updatedSaddamC4 = transactionService.GetTransaction(saddamId, saddamC4Puchase.Id);
             Assert.IsNotNull(updatedSaddamC4);
             Assert.AreEqual(updatedSaddamC4.Amount, 100.45M);
             Assert.AreEqual(updatedSaddamC4.Title, "C4");
@@ -103,11 +107,17 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingCreateTransaction1()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_4", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
 
             //try to create the transaction under no accounts
-            transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            transactionService.CreateTransaction(misceId, new TransactionCreationDTOIn
             {
                 Amount = 50,
                 DateTime = DateTime.UtcNow,
@@ -120,21 +130,27 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingCreateTransaction2()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_5", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
-            var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
-            var accountService = new AccountService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
+            var transactionSubCategoryService = new TransactionSubCategoryService(dbContext);
+            var accountService = new AccountService(dbContext);
 
             //get misce's cash account
-            var misceCash = accountService.GetAccounts(_misceId).Where(a => a.Name == "Contanti").First();
+            var misceCash = accountService.GetAccounts(misceId).Where(a => a.Name == "Contanti").First();
             Assert.IsNotNull(misceCash);
 
             //get svetlana's intimo transaction subcategory
-            var svetlanaUnderwear = transactionSubCategoryService.GetTransactionSubCategories(_svetlanaId).Where(tsc => tsc.Name == "Intimo").First();
+            var svetlanaUnderwear = transactionSubCategoryService.GetTransactionSubCategories(svetlanaId).Where(tsc => tsc.Name == "Intimo").First();
             Assert.IsNotNull(svetlanaUnderwear);
 
             //try to create the transaction under a not owned transaction subcategory
-            transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            transactionService.CreateTransaction(misceId, new TransactionCreationDTOIn
             {
                 Amount = 43.23M,
                 FromAccountId = misceCash.Id,
@@ -148,23 +164,29 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingCreateTransaction3()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_6", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
-            var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
-            var accountService = new AccountService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
+            var transactionSubCategoryService = new TransactionSubCategoryService(dbContext);
+            var accountService = new AccountService(dbContext);
 
             //get misce's cash account and bank account
-            var misceCash = accountService.GetAccounts(_misceId).Where(a => a.Name == "Contanti").First();
+            var misceCash = accountService.GetAccounts(misceId).Where(a => a.Name == "Contanti").First();
             Assert.IsNotNull(misceCash);
-            var misceBankAccount = accountService.GetAccounts(_misceId).Where(a => a.Name == "Banco BPM").First();
+            var misceBankAccount = accountService.GetAccounts(misceId).Where(a => a.Name == "Banco BPM").First();
             Assert.IsNotNull(misceBankAccount);
 
             //get misce's troie nigeriane transaction subcategory
-            var misceTroieNigeriane = transactionSubCategoryService.GetTransactionSubCategories(_misceId, name: "Troie nigeriane").First();
+            var misceTroieNigeriane = transactionSubCategoryService.GetTransactionSubCategories(misceId, name: "Troie nigeriane").First();
             Assert.IsNotNull(misceTroieNigeriane);
 
             //try to create the transfer transaction under a sub category
-            transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            transactionService.CreateTransaction(misceId, new TransactionCreationDTOIn
             {
                 Amount = 90,
                 DateTime = DateTime.UtcNow,
@@ -179,20 +201,26 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingCreateTransaction4()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_7", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
-            var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
-            var accountService = new AccountService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
+            var transactionSubCategoryService = new TransactionSubCategoryService(dbContext);
+            var accountService = new AccountService(dbContext);
 
             //get misce's cash account
-            var misceCash = accountService.GetAccounts(_misceId).Where(a => a.Name == "Contanti").First();
+            var misceCash = accountService.GetAccounts(misceId).Where(a => a.Name == "Contanti").First();
             Assert.IsNotNull(misceCash);
 
             //get misce's elettronica transaction subcategory
-            var misceElettronica = transactionSubCategoryService.GetTransactionSubCategories(_misceId).Where(sc => sc.Name == "Elettronica").Single();
+            var misceElettronica = transactionSubCategoryService.GetTransactionSubCategories(misceId).Where(sc => sc.Name == "Elettronica").Single();
 
             //try to create a profit transaction under an expense category
-            transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            transactionService.CreateTransaction(misceId, new TransactionCreationDTOIn
             {
                 Amount = 50,
                 ToAccountId= misceCash.Id,
@@ -206,19 +234,25 @@ namespace Misce.WalletManager.Test.ServiceTests
         [TestMethod]
         public void TestCreateTransaction()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_8", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
-            var accountService = new AccountService(_dbContext);
-            var transactionSubCategoryService = new TransactionSubCategoryService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
+            var accountService = new AccountService(dbContext);
+            var transactionSubCategoryService = new TransactionSubCategoryService(dbContext);
 
             //get the users' accounts
-            var misceAccounts = accountService.GetAccounts(_misceId);
-            var saddamAccounts = accountService.GetAccounts(_saddamId);
-            var svetlanaAccounts = accountService.GetAccounts(_svetlanaId);
+            var misceAccounts = accountService.GetAccounts(misceId);
+            var saddamAccounts = accountService.GetAccounts(saddamId);
+            var svetlanaAccounts = accountService.GetAccounts(svetlanaId);
 
             //get saddam's transaction subcategories
-            var saddamDrugs = transactionSubCategoryService.GetTransactionSubCategories(_saddamId).Where(sc => sc.Name == "Drugs").Single();
-            var svetlanaOnlyFans = transactionSubCategoryService.GetTransactionSubCategories(_svetlanaId).Where(sc => sc.Name == "Onlyfans").Single();
+            var saddamDrugs = transactionSubCategoryService.GetTransactionSubCategories(saddamId).Where(sc => sc.Name == "Drugs").Single();
+            var svetlanaOnlyFans = transactionSubCategoryService.GetTransactionSubCategories(svetlanaId).Where(sc => sc.Name == "Onlyfans").Single();
 
             //get users' specific accounts
             var misceCash = misceAccounts.Where(a => a.Name == "Contanti").Single();
@@ -227,7 +261,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             //GAIN WITH NO SUBCATEGORY
 
-            var misceGainId = transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            var misceGainId = transactionService.CreateTransaction(misceId, new TransactionCreationDTOIn
             {
                 Amount = 50,
                 ToAccountId = misceCash.Id,
@@ -236,11 +270,11 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
 
             Assert.IsNotNull(misceGainId);
-            Assert.AreEqual(transactionService.GetTransactions(_misceId, 10, 0, toAccountId: misceCash.Id).Count(), 1);
+            Assert.AreEqual(transactionService.GetTransactions(misceId, 10, 0, toAccountId: misceCash.Id).Count(), 1);
 
             //GAIN WITH SUBCATEGORY
 
-            var svetlanaGainId = transactionService.CreateTransaction(_svetlanaId, new TransactionCreationDTOIn
+            var svetlanaGainId = transactionService.CreateTransaction(svetlanaId, new TransactionCreationDTOIn
             {
                 Amount = 69.42M,
                 TransactionSubCategoryId = svetlanaOnlyFans.Id,
@@ -250,11 +284,11 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
 
             Assert.IsNotNull(svetlanaGainId);
-            Assert.AreEqual(transactionService.GetTransactions(_svetlanaId, 10, 0, subCategoryId: svetlanaOnlyFans.Id).Count(), 1);
+            Assert.AreEqual(transactionService.GetTransactions(svetlanaId, 10, 0, subCategoryId: svetlanaOnlyFans.Id).Count(), 1);
 
             //PAYMENT WITHOUT SUBCATEGORY AND TITLE
 
-            var miscePayment = transactionService.CreateTransaction(_misceId, new TransactionCreationDTOIn
+            var miscePayment = transactionService.CreateTransaction(misceId, new TransactionCreationDTOIn
             {
                 Amount = 10,
                 FromAccountId = misceCash.Id,
@@ -263,7 +297,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
 
             Assert.IsNotNull(miscePayment);
-            Assert.AreEqual(transactionService.GetTransactions(_misceId, 10, 0, fromAccountId: misceCash.Id).Count(), 2);
+            Assert.AreEqual(transactionService.GetTransactions(misceId, 10, 0, fromAccountId: misceCash.Id).Count(), 2);
             Assert.AreEqual(miscePayment.Amount, 10);
             Assert.IsTrue(string.IsNullOrEmpty(miscePayment.Title));
             Assert.IsNull(miscePayment.ToAccount);
@@ -273,30 +307,42 @@ namespace Misce.WalletManager.Test.ServiceTests
         [ExpectedException(typeof(ElementNotFoundException))]
         public void TestFailingDeleteTransaction()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_9", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
 
             //try to delete a random transaction, this will fail
-            transactionService.DeleteTransaction(_misceId, Guid.NewGuid());
+            transactionService.DeleteTransaction(misceId, Guid.NewGuid());
         }
 
         [TestMethod]
         public void TestDeleteTransaction()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_10", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var transactionService = new TransactionService(_dbContext);
+            var transactionService = new TransactionService(dbContext);
 
             //get misce's gpu payment transaction
-            var misceGPUPayments = transactionService.GetTransactions(_misceId, 10, 0, title: "gt");
+            var misceGPUPayments = transactionService.GetTransactions(misceId, 10, 0, title: "gt");
             Assert.AreEqual(misceGPUPayments.Count(), 1);
             var misceGPUPayment = misceGPUPayments.First();
             Assert.AreEqual(misceGPUPayment.Title, "GT 610");
 
             //and delete it
-            transactionService.DeleteTransaction(_misceId, misceGPUPayment.Id);
+            transactionService.DeleteTransaction(misceId, misceGPUPayment.Id);
 
             //verify that the transaction was deleted
-            misceGPUPayments = transactionService.GetTransactions(_misceId, 10, 0, title: "gt");
+            misceGPUPayments = transactionService.GetTransactions(misceId, 10, 0, title: "gt");
             Assert.IsFalse(misceGPUPayments.Any());
         }
     }

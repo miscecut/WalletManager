@@ -1,24 +1,21 @@
 ﻿using Misce.WalletManager.BL.Classes;
-using Misce.WalletManager.Model.Data;
 
 namespace Misce.WalletManager.Test.ServiceTests
 {
     [TestClass]
     public class AccountTypeServiceTest
     {
-        private WalletManagerContext _dbContext = null!;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            _dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_TYPE_SERVICE", Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
-        }
-
         [TestMethod]
         public void TestGetAccountTypes()
         {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_TYPE_SERVICE_1", saddamId, misceId, svetlanaId);
+
             //initialize the services
-            var accountTypeService = new AccountTypeService(_dbContext);
+            var accountTypeService = new AccountTypeService(dbContext);
 
             //verify there are only 2 account types: cash and bank account
             var accountTypes = accountTypeService.GetAccountTypes();

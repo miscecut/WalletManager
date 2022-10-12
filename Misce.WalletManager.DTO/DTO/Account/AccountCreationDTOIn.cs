@@ -7,7 +7,7 @@ namespace Misce.WalletManager.DTO.DTO.Account
         [Required(ErrorMessage = "The account type ID has to be provided")]
         public Guid AccountTypeId { get; init; }
         [Required(ErrorMessage = "The account initial amount has to be provided")]
-        public int InitialAmount { get; init; }
+        public decimal InitialAmount { get; init; }
         [MaxLength(500, ErrorMessage = "The account description is too long")]
         public string? Description { get; init; }
         [Required(AllowEmptyStrings = false, ErrorMessage = "The account name has to be provided")]
