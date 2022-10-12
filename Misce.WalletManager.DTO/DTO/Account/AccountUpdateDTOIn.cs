@@ -12,8 +12,8 @@ namespace Misce.WalletManager.DTO.DTO.Account
         [MaxLength(500, ErrorMessage = "The account description is too long")]
         public string? Description { get; init; }
         [Required(ErrorMessage = "The account initial amount has to be provided")]
-        public decimal InitialAmount { get; init; }
+        public decimal? InitialAmount { get; init; }
         [Required(ErrorMessage = "The account status has to be provided")]
-        public bool IsActive { get; init; }
+        public bool? IsActive { get; init; }
     }
 }

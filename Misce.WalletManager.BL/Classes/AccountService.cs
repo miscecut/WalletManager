@@ -163,10 +163,10 @@ namespace Misce.WalletManager.BL.Classes
                 var accountToInsert = new Account
                 {
                     User = user,
-                    InitialAmount = account.InitialAmount,
+                    InitialAmount = account.InitialAmount.GetValueOrDefault(),
                     Name = account.Name,
                     AccountType = accountType,
-                    IsActive = account.IsActive,
+                    IsActive = account.IsActive.GetValueOrDefault(),
                     Description = account.Description
                 };
 
@@ -224,8 +224,8 @@ namespace Misce.WalletManager.BL.Classes
                     accountToUpdate.AccountType = accountType;
                     accountToUpdate.Name = account.Name;
                     accountToUpdate.Description = account.Description;
-                    accountToUpdate.IsActive = account.IsActive;
-                    accountToUpdate.InitialAmount = account.InitialAmount;
+                    accountToUpdate.IsActive = account.IsActive.GetValueOrDefault();
+                    accountToUpdate.InitialAmount = account.InitialAmount.GetValueOrDefault();
                     accountToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                     //commit changes in the db

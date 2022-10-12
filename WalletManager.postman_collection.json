@@ -422,7 +422,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/transactionsubcategories/2687eba3-8e0d-4c5c-105b-08daa544a3c1",
+							"raw": "https://localhost:7264/api/transactionsubcategories/f0e8df37-a7d1-4239-a1e2-1e3a65443a2b",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -431,7 +431,7 @@
 							"path": [
 								"api",
 								"transactionsubcategories",
-								"2687eba3-8e0d-4c5c-105b-08daa544a3c1"
+								"f0e8df37-a7d1-4239-a1e2-1e3a65443a2b"
 							]
 						}
 					},
@@ -494,7 +494,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/transactions?limit=10&page=0",
+							"raw": "https://localhost:7264/api/transactions?limit=1&page=0",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -507,7 +507,7 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "10"
+									"value": "1"
 								},
 								{
 									"key": "page",
@@ -560,7 +560,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Poke\",\r\n    \"amount\": 10.9\r\n}",
+							"raw": "{\r\n    \"fromAccountId\": \"a98cd911-0941-4591-83f4-6b4af4eafd89\",\r\n    \"title\": \"Troia\",\r\n    \"amount\": 30.5,\r\n    \"transactionSubCategoryId\": \"fd6c8c56-07c4-417e-d647-08daac507020\",\r\n    \"dateTime\": \"2022-10-12T15:40:55.714942+02:00\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -609,7 +609,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/transactions/89a8f2d8-a07c-4481-cab2-08da97dd6570",
+							"raw": "https://localhost:7264/api/transactions/46049c04-3f3d-457f-a0cf-df3b29e2c76d",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -618,7 +618,7 @@
 							"path": [
 								"api",
 								"transactions",
-								"89a8f2d8-a07c-4481-cab2-08da97dd6570"
+								"46049c04-3f3d-457f-a0cf-df3b29e2c76d"
 							]
 						}
 					},
@@ -690,7 +690,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM1OTNlYjcwLTNlZWItNDcyNi04MDZiLTE3YWZmOTcwYmQzOCIsImV4cCI6MTY2NTU4MDc2MSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.kY61N5uaq-lgjV3q2vuJe98UhFNSqu4Tfa3-FSCmjjc",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM1OTNlYjcwLTNlZWItNDcyNi04MDZiLTE3YWZmOTcwYmQzOCIsImV4cCI6MTY2NTU4NTQwNCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.FMfmT7x6_c13qDNEfmSrW9icu_r6L9pLg7-9a9eXtVY",
 				"type": "string"
 			}
 		]

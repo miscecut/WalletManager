@@ -342,7 +342,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             transactionService.DeleteTransaction(misceId, misceGPUPayment.Id);
 
             //verify that the transaction was deleted
-            misceGPUPayments = transactionService.GetTransactions(misceId, 10, 0, title: "gt");
+            misceGPUPayments = transactionService.GetTransactions(misceId, 10, 0, title: "gt 6");
             Assert.IsFalse(misceGPUPayments.Any());
         }
     }

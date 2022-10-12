@@ -1,4 +1,5 @@
-﻿using Misce.WalletManager.BL.Exceptions;
+﻿using Microsoft.EntityFrameworkCore;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
 using Misce.WalletManager.DTO.DTO.AccountType;
@@ -192,7 +193,7 @@ namespace Misce.WalletManager.BL.Classes
 
                     if (fromAccountIdIsValid && toAccountIdIsValid)
                     {
-                        var transactionSubCategory = subCategoryQuery.FirstOrDefault();
+                        var transactionSubCategory = subCategoryQuery.Include(tsc => tsc.Category).FirstOrDefault();
 
                         //transaction category type check, if the subcategory is under an expense category, the transaction must be an expense
                         if (transaction.TransactionSubCategoryId.HasValue && transactionSubCategory != null)
@@ -209,11 +210,11 @@ namespace Misce.WalletManager.BL.Classes
                         {
                             Title = transaction.Title,
                             Description = transaction.Description,
-                            Amount = transaction.Amount,
+                            Amount = transaction.Amount.GetValueOrDefault(),
                             FromAccount = userAccountsQuery.Where(a => a.Id == transaction.FromAccountId.GetValueOrDefault()).FirstOrDefault(),
                             ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault(),
                             User = user,
-                            DateTime = transaction.DateTime.ToUniversalTime(),
+                            DateTime = transaction.DateTime.GetValueOrDefault().ToUniversalTime(),
                             SubCategory = transactionSubCategory
                         };
                         _walletManagerContext.Transactions.Add(transactionToCreate);
@@ -294,8 +295,8 @@ namespace Misce.WalletManager.BL.Classes
                         transactionToUpdate.ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault();
                         transactionToUpdate.Title = transaction.Title;
                         transactionToUpdate.Description = transaction.Description;
-                        transactionToUpdate.Amount = transaction.Amount;
-                        transactionToUpdate.DateTime = transaction.DateTime.ToUniversalTime();
+                        transactionToUpdate.Amount = transaction.Amount.GetValueOrDefault();
+                        transactionToUpdate.DateTime = transaction.DateTime.GetValueOrDefault().ToUniversalTime();
                         transactionToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                         //commit changes in the db
