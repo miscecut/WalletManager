@@ -41,7 +41,11 @@ namespace Misce.WalletManager.API.Controllers
             if (user != null)
             {
                 var token = GenerateToken(user);
-                return Ok(token);
+                return Ok(new LoggedUserDTOOut
+                {
+                    Username = user.Username,
+                    Token = token,
+                });
             }
 
             return Unauthorized();

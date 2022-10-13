@@ -8,11 +8,11 @@ export default function Navbar(props) {
             <a className="navbar-brand" href="#">
                 <img src={AppLogo} alt="Wallet Manager Logo" height="35" className="d-inline-block align-text-top"></img>
             </a>
-            <div className="collapse navbar-collapse" id="navbarNav">
+            <div className="collapse navbar-collapse fs-5" id="navbarNav">
                 {
                     props.isUserLoggedIn
                     ?
-                    <ul className="navbar-nav fs-5">
+                    <ul className="navbar-nav">
                         <li className="nav-item">
                             <a className={`nav-link ${props.activePage === 'DASHBOARD' ? 'active' : ''}`} href="#">Dashboard</a>
                         </li>
@@ -29,7 +29,7 @@ export default function Navbar(props) {
                 {
                     props.isUserLoggedIn
                         ?
-                        <ul className="navbar-nav fs-5 ms-auto">
+                        <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
                                 <a className="nav-link" href="#"><i class="fa-solid fa-user"></i> {props.username}</a>
                             </li>
@@ -38,9 +38,9 @@ export default function Navbar(props) {
                             </li>
                         </ul>
                         :
-                        <ul className="navbar-nav fs-5 ms-auto">
+                        <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <a className={`nav-link ${props.activePage === 'LOGIN' ? 'active' : ''}`} href="#">Login <i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                                <p className={`nav-link ${props.activePage === 'LOGIN' ? 'active' : ''}`}>Login <i class="fa-solid fa-arrow-right-to-bracket"></i></p>
                             </li>
                             <li className="nav-item">
                                 <a className={`nav-link ${props.activePage === 'REGISTER' ? 'active' : ''}`} href="#">Register</a>

@@ -6,7 +6,7 @@ function App() {
         <div className="container-fluid px-0">
             <Navbar
                 activePage='DASHBOARD'
-                isUserLoggedIn={false}
+                isUserLoggedIn={true}
                 username='miscecut'
             />
         </div>
