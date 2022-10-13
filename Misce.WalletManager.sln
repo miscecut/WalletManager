@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.DTO", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.Test", "Misce.WalletManager.Test\Misce.WalletManager.Test.csproj", "{7E0C8A65-A5DF-4413-B5F0-61500EEDE5EE}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "misce.walletmanager.web", "Misce.WalletManager.WEB\misce.walletmanager.web.esproj", "{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Misce.WalletManager.WEB", "Misce.WalletManager.WEB\Misce.WalletManager.WEB.esproj", "{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
