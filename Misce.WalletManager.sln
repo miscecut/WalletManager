@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.DTO", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Misce.WalletManager.Test", "Misce.WalletManager.Test\Misce.WalletManager.Test.csproj", "{7E0C8A65-A5DF-4413-B5F0-61500EEDE5EE}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "misce.walletmanager.web", "Misce.WalletManager.WEB\misce.walletmanager.web.esproj", "{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,12 @@ Global
 		{7E0C8A65-A5DF-4413-B5F0-61500EEDE5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E0C8A65-A5DF-4413-B5F0-61500EEDE5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E0C8A65-A5DF-4413-B5F0-61500EEDE5EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398A87BE-ECE7-416B-A5BF-7FB1B90A2DDE}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
