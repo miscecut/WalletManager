@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Misce.WalletManager.DTO.DTO.Transaction.CustomValidationRules
+namespace Misce.WalletManager.DTO.CustomValidationRules
 {
     public class NoCategoryIfTransfer : ValidationAttribute
     {

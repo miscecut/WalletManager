@@ -255,6 +255,35 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestFailingCreateTransaction5()
+        {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_420", saddamId, misceId, svetlanaId);
+
+            //initialize the services
+            var transactionService = new TransactionService(dbContext);
+            var accountService = new AccountService(dbContext);
+
+            //get misce's cash account
+            var misceCash = accountService.GetAccounts(misceId).Where(a => a.Name == "Contanti").First();
+            Assert.IsNotNull(misceCash);
+
+            //try to create a profit transaction with 3 decimal places
+            transactionService.CreateTransaction(misceId, new TransactionCreationDTOIn
+            {
+                Amount = 50.777M,
+                ToAccountId = misceCash.Id,
+                DateTime = DateTime.UtcNow,
+                Title = "Paghetta!",
+                Description = "yeeee soldi"
+            });
+        }
+
+        [TestMethod]
         public void TestCreateTransaction()
         {
             //initialize the db context and the user ids
