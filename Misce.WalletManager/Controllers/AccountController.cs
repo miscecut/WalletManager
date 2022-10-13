@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Classes.Utils;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Misce.WalletManager.API.Controllers
 {
@@ -40,13 +42,9 @@ namespace Misce.WalletManager.API.Controllers
             if (userId.HasValue)
             {
                 var account = _accountService.GetAccount(id, userId.Value);
-
-                if (account != null)
-                    return Ok(account);
-                return NotFound();
+                return account != null ? Ok(account) : NotFound();
             }
 
-            //the user identity is null
             return Unauthorized();
         }
 
@@ -89,11 +87,11 @@ namespace Misce.WalletManager.API.Controllers
             }
             catch (IncorrectDataException e)
             {
-                return UnprocessableEntity(e.Message);
+                return UnprocessableEntity(JsonSerializer.Deserialize<ErrorContainer>(e.Message));
             }
             catch (Exception)
             {
-                return Problem("An internal server error occurred");
+                return Problem();
             }
         }
 
@@ -115,7 +113,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch(IncorrectDataException e)
                 {
-                    return UnprocessableEntity(e.Message);
+                    return UnprocessableEntity(JsonSerializer.Deserialize<ErrorContainer>(e.Message));
                 }
                 catch (ElementNotFoundException)
                 {

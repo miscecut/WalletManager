@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.User;
+using System.Text.Json;
 
 namespace Misce.WalletManager.API.Controllers
 {
@@ -40,7 +42,7 @@ namespace Misce.WalletManager.API.Controllers
             }
             catch (IncorrectDataException e)
             {
-                return UnprocessableEntity(e.Message);
+                return UnprocessableEntity(JsonSerializer.Deserialize<ErrorContainer>(e.Message));
             }
             catch (Exception)
             {

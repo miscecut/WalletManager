@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Classes.Utils;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Misce.WalletManager.API.Controllers
 {
@@ -38,10 +40,7 @@ namespace Misce.WalletManager.API.Controllers
             if (userId.HasValue)
             {
                 var categorySubCategory = _transactionSubCategoryService.GetTransactionSubCategory(userId.Value, id);
-
-                if (categorySubCategory != null)
-                    return Ok(categorySubCategory);
-                return NotFound();
+                return categorySubCategory != null ? Ok(categorySubCategory) : NotFound();
             }
 
             return Unauthorized();
@@ -83,7 +82,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch(IncorrectDataException e)
                 {
-                    return UnprocessableEntity(e.Message);
+                    return UnprocessableEntity(JsonSerializer.Deserialize<ErrorContainer>(e.Message));
                 }
                 catch(Exception)
                 {
@@ -112,7 +111,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch(IncorrectDataException e)
                 {
-                    return UnprocessableEntity(e.Message);
+                    return UnprocessableEntity(JsonSerializer.Deserialize<ErrorContainer>(e.Message));
                 }
                 catch (ElementNotFoundException)
                 {
@@ -120,7 +119,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (Exception)
                 {
-                    return Problem("An internal server error occurred");
+                    return Problem();
                 }
             }
 
@@ -149,7 +148,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (Exception)
                 {
-                    return Problem("An internal server error occurred");
+                    return Problem();
                 }
             }
 

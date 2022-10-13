@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Classes.Utils;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Transaction;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Misce.WalletManager.API.Controllers
 {
@@ -72,10 +74,7 @@ namespace Misce.WalletManager.API.Controllers
             if (userId.HasValue)
             {
                 var transaction = _transactionService.GetTransaction(userId.Value, id);
-
-                if (transaction != null)
-                    return Ok(transaction);
-                return NotFound();
+                return transaction != null ? Ok(transaction) : NotFound();
             }
 
             return Unauthorized();
@@ -103,11 +102,11 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (IncorrectDataException e)
                 {
-                    return UnprocessableEntity(e.Message);
+                    return UnprocessableEntity(JsonSerializer.Deserialize<ErrorContainer>(e.Message));
                 }
                 catch (Exception)
                 {
-                    return Problem("An internal server error occurred");
+                    return Problem();
                 }
             }
 
@@ -132,7 +131,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (IncorrectDataException e)
                 {
-                    return UnprocessableEntity(e.Message);
+                    return UnprocessableEntity(JsonSerializer.Deserialize<ErrorContainer>(e.Message));
                 }
                 catch (ElementNotFoundException)
                 {
@@ -140,7 +139,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (Exception)
                 {
-                    return Problem("An internal server error occurred");
+                    return Problem();
                 }
             }
 
@@ -169,7 +168,7 @@ namespace Misce.WalletManager.API.Controllers
                 }
                 catch (Exception)
                 {
-                    return Problem("An internal server error occurred");
+                    return Problem();
                 }
             }
 
