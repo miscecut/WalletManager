@@ -104,6 +104,29 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
+        public void TestTransactionsCount()
+        {
+            //initialize the db context and the user ids
+            var misceId = Guid.NewGuid();
+            var saddamId = Guid.NewGuid();
+            var svetlanaId = Guid.NewGuid();
+            var dbContext = DbContextGeneration.GenerateDb("TEST_TRANSACTION_SERVICE_69", saddamId, misceId, svetlanaId);
+
+            //initialize the services
+            var transactionService = new TransactionService(dbContext);
+            var accountService = new AccountService(dbContext);
+
+            //get saddam's bank account
+            var saddamBankAccount = accountService.GetAccounts(saddamId, active: true).First();
+            Assert.IsNotNull(saddamBankAccount);
+
+            //saddam has 4 transactions
+            Assert.AreEqual(transactionService.GetTransactionsCount(saddamId), 4);
+            //saddam has 1 profit transaction to his bank account
+            Assert.AreEqual(transactionService.GetTransactionsCount(saddamId, toAccountId: saddamBankAccount.Id), 1);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
         public void TestFailingCreateTransaction1()
         {

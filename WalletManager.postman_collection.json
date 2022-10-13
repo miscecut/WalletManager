@@ -494,7 +494,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://localhost:7264/api/transactions?limit=1&page=0",
+							"raw": "https://localhost:7264/api/transactions?limit=10&page=0",
 							"protocol": "https",
 							"host": [
 								"localhost"
@@ -507,7 +507,7 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "1"
+									"value": "10"
 								},
 								{
 									"key": "page",
@@ -627,62 +627,67 @@
 			]
 		},
 		{
-			"name": "/api/login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Users",
+			"item": [
+				{
+					"name": "/api/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7264/api/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"login"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "https://localhost:7264/api/login",
-					"protocol": "https",
-					"host": [
-						"localhost"
-					],
-					"port": "7264",
-					"path": [
-						"api",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/register",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\",\r\n    \"confirmPassword\": \"Matisse01!?\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "/api/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"miscecut\",\r\n    \"password\": \"Matisse01!?\",\r\n    \"confirmPassword\": \"Matisse01!?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7264/api/register",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"register"
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "https://localhost:7264/api/register",
-					"protocol": "https",
-					"host": [
-						"localhost"
-					],
-					"port": "7264",
-					"path": [
-						"api",
-						"register"
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"auth": {
@@ -690,7 +695,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM1OTNlYjcwLTNlZWItNDcyNi04MDZiLTE3YWZmOTcwYmQzOCIsImV4cCI6MTY2NTU4NTQwNCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.FMfmT7x6_c13qDNEfmSrW9icu_r6L9pLg7-9a9eXtVY",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjM1OTNlYjcwLTNlZWItNDcyNi04MDZiLTE3YWZmOTcwYmQzOCIsImV4cCI6MTY2NTY0OTgzMywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.vifo0eHfOxKqqkSI7tP0RpVVND2pFBndADVhdmmAbQU",
 				"type": "string"
 			}
 		]

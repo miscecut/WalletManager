@@ -91,25 +91,7 @@ namespace Misce.WalletManager.BL.Classes
 
         public IEnumerable<TransactionDTOOut> GetTransactions(Guid userId, int limit, int page, string? title = null,Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
         {
-            var query = from transaction in _walletManagerContext.Transactions
-                        where transaction.User.Id == userId
-                        select transaction;
-
-            //apply filters
-            if (title != null)
-                query = query.Where(t => t.Title != null && t.Title.ToUpper().Contains(title.ToUpper()));
-            if (fromAccountId != null)
-                query = query.Where(t => t.FromAccount != null && t.FromAccount.Id == fromAccountId);
-            if (toAccountId != null)
-                query = query.Where(t => t.ToAccount != null && t.ToAccount.Id == toAccountId);
-            if(categoryId != null)
-                query = query.Where(t => t.SubCategory != null && t.SubCategory.Category.Id == categoryId);
-            if (subCategoryId != null)
-                query = query.Where(t => t.SubCategory != null && t.SubCategory.Id == subCategoryId);
-            if (fromDateTime != null)
-                query = query.Where(t => t.DateTime >= fromDateTime);
-            if (toDateTime != null)
-                query = query.Where(t => t.DateTime <= toDateTime);
+            var query = GetFilteredTransactionsQuery(userId, title, fromAccountId, toAccountId, categoryId, subCategoryId, fromDateTime, toDateTime);
 
             //apply page and limit
             query = query.Skip(limit * page).Take(limit);
@@ -158,7 +140,13 @@ namespace Misce.WalletManager.BL.Classes
                     } : null
             }).ToList();
         }
-    
+
+        public int GetTransactionsCount(Guid userId, string? title = null, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
+        {
+            var transactionsQuery = GetFilteredTransactionsQuery(userId, title, fromAccountId, toAccountId, categoryId, subCategoryId, fromDateTime, toDateTime);
+            return transactionsQuery.Count();
+        }
+
         public TransactionDTOOut CreateTransaction(Guid userId, TransactionCreationDTOIn transaction)
         {
             //transaction creation data validation
@@ -350,6 +338,30 @@ namespace Misce.WalletManager.BL.Classes
                             select u;
 
             return userQuery.FirstOrDefault();
+        }
+
+        private IQueryable<Transaction> GetFilteredTransactionsQuery(Guid userId, string? title = null, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
+        {
+            var transactionsQuery = from transaction in _walletManagerContext.Transactions
+                                    where transaction.User.Id == userId
+                                    select transaction;
+            //apply filters
+            if (title != null)
+                transactionsQuery = transactionsQuery.Where(t => t.Title != null && t.Title.ToUpper().Contains(title.ToUpper()));
+            if (fromAccountId != null)
+                transactionsQuery = transactionsQuery.Where(t => t.FromAccount != null && t.FromAccount.Id == fromAccountId);
+            if (toAccountId != null)
+                transactionsQuery = transactionsQuery.Where(t => t.ToAccount != null && t.ToAccount.Id == toAccountId);
+            if (categoryId != null)
+                transactionsQuery = transactionsQuery.Where(t => t.SubCategory != null && t.SubCategory.Category.Id == categoryId);
+            if (subCategoryId != null)
+                transactionsQuery = transactionsQuery.Where(t => t.SubCategory != null && t.SubCategory.Id == subCategoryId);
+            if (fromDateTime != null)
+                transactionsQuery = transactionsQuery.Where(t => t.DateTime >= fromDateTime);
+            if (toDateTime != null)
+                transactionsQuery = transactionsQuery.Where(t => t.DateTime <= toDateTime);
+
+            return transactionsQuery;
         }
 
         #endregion

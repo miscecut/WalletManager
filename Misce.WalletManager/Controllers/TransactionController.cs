@@ -53,9 +53,12 @@ namespace Misce.WalletManager.API.Controllers
                 var request = HttpContext.Request;
                 var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase.ToUriComponent()}{request.Path.Value}{request.QueryString}";
 
-                //add next page header if limit was reached
+                //add next page header & total pages header if limit was reached
                 if (transactions.Count() == limit)
+                {
                     Response.Headers.Add("X-Next-Page", baseUrl.Replace($"page={page}", $"page={page + 1}"));
+                    Response.Headers.Add("X-Total-Pages", _transactionService.GetTransactionsCount(userId.Value, title, accountFromId, accountToId, categoryId, subCategoryId, dateFrom, dateTo).ToString());
+                }
                 //add previous page header if page is not the first (0)
                 if(page > 0)
                     Response.Headers.Add("X-Previous-Page", baseUrl.Replace($"page={page}", $"page={page - 1}"));
