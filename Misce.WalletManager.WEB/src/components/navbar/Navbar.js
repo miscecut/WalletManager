@@ -31,16 +31,16 @@ export default function Navbar(props) {
                         ?
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i class="fa-solid fa-user"></i> {props.username}</a>
+                                <a className="nav-link" href="#"><i className="fa-solid fa-user"></i> {props.username}</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+                                <a className="nav-link" href="#" onClick={props.Logout}><i className="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                             </li>
                         </ul>
                         :
                         <ul className="navbar-nav ms-auto">
                             <li className="nav-item">
-                                <p className={`nav-link ${props.activePage === 'LOGIN' ? 'active' : ''}`}>Login <i class="fa-solid fa-arrow-right-to-bracket"></i></p>
+                                <a className={`nav-link ${props.activePage === 'LOGIN' ? 'active' : ''}`} href="#">Login <i className="fa-solid fa-arrow-right-to-bracket"></i></a>
                             </li>
                             <li className="nav-item">
                                 <a className={`nav-link ${props.activePage === 'REGISTER' ? 'active' : ''}`} href="#">Register</a>
