@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-function LoginForm({ Login }) {
+function LoginForm({ login }) {
     const [details, setDetails] = useState({ username: '', password: '' });
 
     const submitHandler = e => {
         e.preventDefault();
-        Login(details);
+        login(details);
     }
 
     return <div className="container mt-5">

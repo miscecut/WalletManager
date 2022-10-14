@@ -34,7 +34,7 @@ export default function Navbar(props) {
                                 <a className="nav-link" href="#"><i className="fa-solid fa-user"></i> {props.username}</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#" onClick={props.Logout}><i className="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+                                <a className="nav-link" href="#" onClick={props.logout}><i className="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
                             </li>
                         </ul>
                         :
