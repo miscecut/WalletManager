@@ -16,5 +16,6 @@
     <Folder Include="src\components\loginform\" />
     <Folder Include="src\components\dashboard\" />
     <Folder Include="src\images\" />
+    <Folder Include="src\jsutils\" />
   </ItemGroup>
 </Project>
