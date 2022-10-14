@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 //components
 import Navbar from './components/navbar/Navbar.js';
+import RegisterForm from './components/registerform/RegisterForm.js';
 import LoginForm from './components/loginform/LoginForm.js';
 import Dashboard from './components/dashboard/Dashboard.js';
 //api
-import { getApiBaseUrl, getLoginPostSettings } from './jsutils/apirequests.js';
+import { getApiBaseUrl, getLoginPostSettings, getRegisterPostSettings } from './jsutils/apirequests.js';
 
 function App() {
     //app's state, with only username & token for the api
@@ -44,17 +45,18 @@ function App() {
 
     //change page function, this is called by the nav-links in the navbar, each one with its own pageName
     const changePage = pageName => {
-        setActivePage({
-            activePageName: pageName
-        });
+        let activePageOld = { ...activePage };
+        activePageOld.activePageName = pageName;
+        setActivePage(activePageOld);
     }
 
     //this function returns the component based on the page name provided
     const getPage = pageName => {
         if (pageName == 'LOGIN')
             return <LoginForm login={login} />
-        if (pageName == 'DASHBOARD')
-            return <Dashboard />
+        if (pageName == 'REGISTER')
+            return <RegisterForm />
+        return <Dashboard />
     }
 
     //app component rendering
@@ -62,15 +64,12 @@ function App() {
         <div className="container-fluid px-0">
             <Navbar
                 activePage={activePage.activePageName} //the name of the page link to be enlighted
-                isUserLoggedIn={user.username != ''} // if false, only the login & register are shown
-                username={user.username}
-                logout={logout}
+                isUserLoggedIn={user.username != ''} //if false, only the login & register are shown
+                username={user.username} //the name to be shown in the navbar
+                logout={logout} //logout function, binded to the logout button
+                changePage={changePage} //change page function, binded with every nav-link in the navbar
             />
-            {user.username != '' ?
-                getPage(activePage.activePageName)
-                :
-                <LoginForm login={login} />
-            }
+            {getPage(activePage.activePageName)}
         </div>
     );
 }
