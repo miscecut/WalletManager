@@ -38,7 +38,7 @@ namespace Misce.WalletManager.API.Controllers
             }
             catch (UsernameNotAvailableException)
             {
-                return Conflict("The username " + signInRequest.Username + " is not available");
+                return Conflict(new ErrorContainer("Username", $"The username {signInRequest.Username} is not available"));
             }
             catch (IncorrectDataException e)
             {

@@ -21,7 +21,7 @@ namespace Misce.WalletManager.BL.Classes.Utils
             var errorsList = new List<Error>();
 
             foreach (var validationResult in validationResults)
-                errorsList.Add(new Error(string.Join(";", validationResult.MemberNames), validationResult.ErrorMessage == null ? "" : validationResult.ErrorMessage));
+                errorsList.Add(new Error(string.Join("; ", validationResult.MemberNames), validationResult.ErrorMessage == null ? "" : validationResult.ErrorMessage));
 
             var errorContainer = new ErrorContainer(errorsList);
 

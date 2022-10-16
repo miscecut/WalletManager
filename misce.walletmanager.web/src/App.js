@@ -11,7 +11,7 @@ function App() {
     //app's state, with only username & token for the api
     const [user, setUser] = useState({ username: '', token: '' });
     //app's selected page
-    const [activePage, setActivePage] = useState({ activePageName: 'LOGIN' }); //the app start at the login page
+    const [activePage, setActivePage] = useState({ activePageName: 'LOGIN', errors: [] }); //the app starts at the login page
 
     const register = newUser => {
         fetch(getApiBaseUrl() + 'register', getRegisterPostSettings(newUser))
@@ -24,9 +24,12 @@ function App() {
                         password: newUser.password
                     })
                 }
-                //unauthorized, login failed
-                else if (res.status == 401)
-                    console.log('nope');
+                //registration failed due to some wrong input
+                else if (res.status == 422 || res.status == 409) {
+                    res.json().then(data => {
+                        changePage('REGISTER', data.errors);
+                    });
+                }
             });
     }
 
@@ -47,8 +50,9 @@ function App() {
                     });
                 }
                 //unauthorized, login failed
-                else if (res.status == 401)
-                    console.log('nope');
+                else if (res.status == 401) {
+
+                }
         });
     }
 
@@ -63,18 +67,19 @@ function App() {
     }
 
     //change page function, this is called by the nav-links in the navbar, each one with its own pageName
-    const changePage = pageName => {
+    const changePage = (pageName, errors = []) => {
         let activePageOld = { ...activePage };
         activePageOld.activePageName = pageName;
+        activePageOld.errors = errors;
         setActivePage(activePageOld);
     }
 
     //this function returns the component based on the page name provided
-    const getPage = pageName => {
+    const getPage = (pageName) => {
         if (pageName == 'LOGIN')
             return <LoginForm login={login} />
         if (pageName == 'REGISTER')
-            return <RegisterForm register={register} />
+            return <RegisterForm register={register} registrationErrors={activePage.errors} />
         return <Dashboard />
     }
 
