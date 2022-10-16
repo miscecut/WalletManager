@@ -1,4 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital@0;1&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: 'Georgia';
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
     background-color: #191b1e;
+}
+
+/* width */
+
+.w-100 {
+    width: 100%;
+}
+.w-100 * {
+    width: 100%;
+}
+
+/* margin */
+
+.mt-more {
+    margin-top: 30px;
+}
+
+/* containers */
+
+.misce-container {
+    display: flex;
+    justify-content: center;
+}
+
+.misce-central-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+    gap: 14px;
+    width: 350px;
+}
+
+/* text */
+.misce-login-title {
+    color: #ffb2ff;
+    font-weight: lighter;
+    font-size: 3em;
+    text-align: center;
+}
+
+/* buttons */
+
+.misce-btn {
+    padding: 8px 22px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 0;
+    border-radius: 20px;
+    cursor: pointer;
+    color: black;
+    background-color: #c3c3c3;
+    transition: all 0.3s ease 0s;
+}
+
+.misce-btn:hover {
+    color: white;
+    background-color: #b64fc8;
+}
+
+/* inputs */
+
+.misce-input {
+    background-color: #3c4042;
+    border-radius: 20px;
+    padding: 8px 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    color: white;
+    border: none;
+}
+.misce-input:focus {
+    outline: 2px solid #ffb2ff;
+}
+
+.misce-input-label {
+    color: #c3c3c3;
+    padding-left: 15px;
+    font-size: 1em;
 }

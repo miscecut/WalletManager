@@ -1,6 +1,41 @@
-/* active navbar link style */
-.nav-link.active {
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 4px;
+header {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: #3c4042;
+}
+
+nav {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    max-height: 1.8em;
+    padding: 0px 0px 0px 10px;
+}
+
+.nav-option-list {
+    list-style: none;
+}
+
+.nav-option-list .nav-option {
+    display: inline-block;
+    padding: 0px 10px;
+}
+
+.nav-option-list .nav-option a {
+    color: rgb(255,255,255,0.5);
+    text-decoration: none;
+    transition: all 0.3s ease 0s;
+}
+
+.nav-option-list .nav-option.active a {
+    color: #ea80fc;
+    font-weight: bold;
+}
+
+.nav-option-list .nav-option a:hover {
+    color: white;
 }

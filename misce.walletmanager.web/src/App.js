@@ -13,6 +13,23 @@ function App() {
     //app's selected page
     const [activePage, setActivePage] = useState({ activePageName: 'LOGIN' }); //the app start at the login page
 
+    const register = newUser => {
+        fetch(getApiBaseUrl() + 'register', getRegisterPostSettings(newUser))
+            .then(res => {
+                //if the registration was succesfull
+                if (res.ok) {
+                    //try to login directly
+                    login({
+                        username: newUser.username,
+                        password: newUser.password
+                    })
+                }
+                //unauthorized, login failed
+                else if (res.status == 401)
+                    console.log('nope');
+            });
+    }
+
     //login function
     const login = details => {
         fetch(getApiBaseUrl() + 'login', getLoginPostSettings(details))
@@ -40,7 +57,9 @@ function App() {
         setUser({
             username: '',
             token: ''
-        })
+        });
+        //show login
+        changePage('LOGIN');
     }
 
     //change page function, this is called by the nav-links in the navbar, each one with its own pageName
@@ -55,13 +74,13 @@ function App() {
         if (pageName == 'LOGIN')
             return <LoginForm login={login} />
         if (pageName == 'REGISTER')
-            return <RegisterForm />
+            return <RegisterForm register={register} />
         return <Dashboard />
     }
 
     //app component rendering
     return (
-        <div className="container-fluid px-0">
+        <div>
             <Navbar
                 activePage={activePage.activePageName} //the name of the page link to be enlighted
                 isUserLoggedIn={user.username != ''} //if false, only the login & register are shown
@@ -69,7 +88,9 @@ function App() {
                 logout={logout} //logout function, binded to the logout button
                 changePage={changePage} //change page function, binded with every nav-link in the navbar
             />
-            {getPage(activePage.activePageName)}
+            <div className="misce-container">
+                {getPage(activePage.activePageName)}
+            </div>
         </div>
     );
 }

@@ -8,27 +8,20 @@ function LoginForm({ login }) {
         login(details);
     }
 
-    return <div className="container mt-5">
-        <form onSubmit={submitHandler}>
-            <div className="row justify-content-center mt-3">
-                <div className="col-xl-4 col-lg-6 col-md-8">
-                    <label htmlFor="username" className="form-label text-white">Username</label>
-                    <input type="text" className="form-control" name="username" id="username" onChange={e => setDetails({ ...details, username: e.target.value })} value={details.username} required></input>
-                </div>
+    return <form onSubmit={submitHandler} className="misce-central-form-container">
+            <h1 className="misce-login-title">Welcome</h1>
+            <div className="w-100">
+                <label className="misce-input-label" htmlFor="username">Username:</label>
+                <input className="misce-input" type="text"  name="username" id="username" onChange={e => setDetails({ ...details, username: e.target.value })} value={details.username} required></input>
             </div>
-            <div className="row justify-content-center mt-3">
-                <div className="col-xl-4 col-lg-6 col-md-8">
-                    <label htmlFor="password" className="form-label text-white">Password</label>
-                    <input type="password" className="form-control" name="password" id="password" onChange={e => setDetails({ ...details, password: e.target.value })} value={details.password} required></input>
-                </div>
+            <div className="w-100">
+                <label className="misce-input-label" htmlFor="password">Password:</label>
+                <input className="misce-input" type="password" name="password" id="password" onChange={e => setDetails({ ...details, password: e.target.value })} value={details.password} required></input>
             </div>
-            <div className="row justify-content-center mt-5">
-                <div className="col-xl-4 col-lg-6 col-md-8">
-                    <button type="submit" className="btn btn-outline-light w-100">LOGIN</button>
-                </div>
+            <div className="w-100 mt-more">
+                <button className="misce-btn" type="submit">LOGIN</button>
             </div>
         </form>
-    </div>
 }
 
 export default LoginForm;
