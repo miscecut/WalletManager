@@ -9,11 +9,12 @@ nav {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    padding: 16px 0px;
 }
 
 .nav-logo {
     max-height: 1.8em;
-    padding: 0px 0px 0px 10px;
+    padding: 0px 10px 0px 10px;
 }
 
 .nav-option-list {
@@ -22,7 +23,7 @@ nav {
 
 .nav-option-list .nav-option {
     display: inline-block;
-    padding: 0px 10px;
+    padding: 0px 16px;
 }
 
 .nav-option-list .nav-option a {

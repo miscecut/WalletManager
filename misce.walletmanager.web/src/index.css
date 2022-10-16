@@ -2,6 +2,8 @@
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -40,19 +42,29 @@ body {
     align-items: center;
     height: 75vh;
     gap: 14px;
-    width: 350px;
+    width: 22em;
+    max-width: 98vw;
+
 }
 
 /* text */
+
 .misce-login-title {
     color: #ffb2ff;
     font-weight: lighter;
     font-size: 3em;
     text-align: center;
+    margin-bottom: 16px;
+}
+
+.misce-input-error-message {
+    font-size: 0.75em;
+    color: #ff6d74;
+    padding: 0px 16px;
+    text-align: justify;
 }
 
 /* buttons */
-
 .misce-btn {
     padding: 8px 22px;
     font-family: 'Montserrat', sans-serif;
@@ -65,10 +77,14 @@ body {
     background-color: #c3c3c3;
     transition: all 0.3s ease 0s;
 }
-
 .misce-btn:hover {
     color: white;
     background-color: #b64fc8;
+}
+.misce-btn:disabled:hover {
+    cursor: default;
+    color: #3c4042;
+    background-color: #c3c3c3;
 }
 
 /* inputs */
@@ -92,6 +108,6 @@ body {
 
 .misce-input-label {
     color: #c3c3c3;
-    padding-left: 15px;
+    padding-left: 16px;
     font-size: 1em;
 }

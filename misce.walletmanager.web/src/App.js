@@ -22,9 +22,9 @@ function App() {
                     login({
                         username: newUser.username,
                         password: newUser.password
-                    })
+                    });
                 }
-                //registration failed due to some wrong input
+                //registration failed due to some wrong input or the username being already in use
                 else if (res.status == 422 || res.status == 409) {
                     res.json().then(data => {
                         changePage('REGISTER', data.errors);

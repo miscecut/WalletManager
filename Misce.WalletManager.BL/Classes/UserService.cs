@@ -42,12 +42,20 @@ namespace Misce.WalletManager.BL.Classes
                 var rfc2898DeriveBytes = new Rfc2898DeriveBytes(userLogin.Password, saltBytes, 10000);
                 var isPasswordCorrect =  Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256)) == storedHash;
 
-                if (isPasswordCorrect)
+                if (isPasswordCorrect) 
+                {
+                    //update user's last login datetime
+                    user.LastLoginDateTime = DateTime.UtcNow;
+
+                    //and save changes in the db
+                    _walletManagerContext.SaveChanges();
+
                     return new UserDTOOut
                     {
                         Id = user.Id,
                         Username = userLogin.Username
                     };
+                }
 
                 return null;
             }
