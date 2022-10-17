@@ -4,12 +4,11 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {
     margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
     background-color: #191b1e;
 }
 
@@ -40,10 +39,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 75vh;
+    height: 80vh;
     gap: 14px;
     width: 22em;
-    max-width: 98vw;
+    max-width: 100%;
 
 }
 
@@ -52,13 +51,18 @@ body {
 .misce-login-title {
     color: #ffb2ff;
     font-weight: lighter;
-    font-size: 3em;
+    font-size: 3rem;
     text-align: center;
     margin-bottom: 16px;
 }
+@media screen and (max-width: 600px) {
+    .misce-login-title {
+        font-size: 2em;
+    }
+}
 
 .misce-input-error-message {
-    font-size: 0.75em;
+    font-size: 0.75rem;
     color: #ff6d74;
     padding: 0px 16px;
     text-align: justify;
@@ -67,7 +71,6 @@ body {
 /* buttons */
 .misce-btn {
     padding: 8px 22px;
-    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: bold;
     border: 0;
@@ -93,7 +96,6 @@ body {
     background-color: #3c4042;
     border-radius: 20px;
     padding: 8px 10px;
-    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     color: white;
     border: none;
@@ -109,5 +111,4 @@ body {
 .misce-input-label {
     color: #c3c3c3;
     padding-left: 16px;
-    font-size: 1em;
 }
