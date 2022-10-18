@@ -1,19 +1,83 @@
 .misce-card {
-    padding: 16px;
+    padding: 15px;
     background-color: #3c4042;
     border-radius: 20px;
     margin-top: 50px;
     display: flex;
+    align-items: center;
+    border: 1px solid #3c4042;
+}
+.misce-card:hover {
+    border: 1px solid #ea80fc;
 }
 
 .misce-card-icon {
     display: block;
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     background: #ea80fc;
-    border-radius: 30px;
-    background-image: url('../../images/cash-icon.png');
+    border-radius: 25px;
     background-size: contain;
     background-position: 50% 50%;
     background-repeat: no-repeat;
+}
+.misce-card-icon.expense {
+    background-image: url('../../images/expense-logo.png');
+}
+.misce-card-icon.profit {
+    background-image: url('../../images/profit-logo.png');
+}
+.misce-card-icon.transfer {
+    background-image: url('../../images/transfer-logo.png');
+}
+
+.misce-card-content {
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.misce-card-title {
+    color: white;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.misce-card-subtitle {
+    color: white;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.misce-card-description {
+    color: #c3c3c3;
+    font-size: 0.8rem;
+}
+
+.misce-card-subtitle-icon {
+    height: 1.2rem;
+    margin-right: 6px;
+}
+.misce-card-subtitle-icon.more-margin {
+    margin-inline: 10px;
+}
+
+.misce-card-amount-container {
+    margin-left: auto;
+    padding-left: 16px;
+}
+
+.misce-card-amount {
+    font-weight: bold;
+    color: white;
+    font-size: 2.2rem;
+    white-space: nowrap;
+}
+.misce-card-amount.profit {
+    color: #03dac6;
+}
+.misce-card-amount.expense {
+    color: #ff6d74;
 }
