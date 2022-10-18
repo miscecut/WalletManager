@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.User;
 using System.IdentityModel.Tokens.Jwt;
@@ -48,7 +49,7 @@ namespace Misce.WalletManager.API.Controllers
                 });
             }
 
-            return Unauthorized();
+            return Unauthorized(new ErrorContainer("password","Credenziali errate"));
         }
 
         #endregion

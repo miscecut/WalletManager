@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { getErrorMap } from "../../jsutils/errorhandling.js"
 
-function LoginForm({ login }) {
+function LoginForm({ login, loginErrors }) {
     const [details, setDetails] = useState({ username: '', password: '' });
 
     const submitHandler = e => {
         e.preventDefault();
         login(details);
     }
+
+    const errorMap = getErrorMap(loginErrors);
 
     return <form onSubmit={submitHandler} className="misce-central-form-container">
             <h1 className="misce-login-title">Welcome</h1>
@@ -16,7 +19,8 @@ function LoginForm({ login }) {
             </div>
             <div className="w-100">
                 <label className="misce-input-label" htmlFor="password">Password:</label>
-                <input className="misce-input" type="password" name="password" id="password" onChange={e => setDetails({ ...details, password: e.target.value })} value={details.password} required></input>
+                <input className={`misce-input ${errorMap['password'] != null ? 'misce-input-error' : ''}`} type="password" name="password" id="password" onChange={e => setDetails({ ...details, password: e.target.value })} value={details.password} required></input>
+                <p className="misce-input-error-message">{errorMap['password']}</p>
             </div>
             <div className="w-100 mt-more">
                 <button className="misce-btn" type="submit">LOGIN</button>

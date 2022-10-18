@@ -1,7 +1,10 @@
 import React from 'react';
+import Transaction from './../transaction/Transaction.js';
 
 function Dashboard() {
-    return <h1>bravo</h1>
+    return <div>
+        <Transaction />
+    </div>
 }
 
 export default Dashboard;

@@ -51,7 +51,9 @@ function App() {
                 }
                 //unauthorized, login failed
                 else if (res.status == 401) {
-
+                    res.json().then(data => {
+                        changePage('LOGIN', data.errors);
+                    });
                 }
         });
     }
@@ -77,7 +79,7 @@ function App() {
     //this function returns the component based on the page name provided
     const getPage = (pageName) => {
         if (pageName == 'LOGIN')
-            return <LoginForm login={login} />
+            return <LoginForm login={login} loginErrors={activePage.errors} />
         if (pageName == 'REGISTER')
             return <RegisterForm register={register} registrationErrors={activePage.errors} />
         return <Dashboard />

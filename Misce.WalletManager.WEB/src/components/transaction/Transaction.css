@@ -1,0 +1,19 @@
+.misce-card {
+    padding: 16px;
+    background-color: #3c4042;
+    border-radius: 20px;
+    margin-top: 50px;
+    display: flex;
+}
+
+.misce-card-icon {
+    display: block;
+    width: 60px;
+    height: 60px;
+    background: #ea80fc;
+    border-radius: 30px;
+    background-image: url('../../images/cash-icon.png');
+    background-size: contain;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
