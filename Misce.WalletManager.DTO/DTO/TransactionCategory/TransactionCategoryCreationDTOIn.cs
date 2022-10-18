@@ -10,6 +10,6 @@ namespace Misce.WalletManager.DTO.DTO.TransactionCategory
         [MaxLength(500, ErrorMessage = "The transaction category description is too long")]
         public string? Description { get; init; }
         [Required(ErrorMessage = "The transaction category type must be provided")]
-        public bool IsExpenseType { get; init; }
+        public bool? IsExpenseType { get; init; }
     }
 }

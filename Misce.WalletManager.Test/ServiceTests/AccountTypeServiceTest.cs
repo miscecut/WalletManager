@@ -8,11 +8,8 @@ namespace Misce.WalletManager.Test.ServiceTests
         [TestMethod]
         public void TestGetAccountTypes()
         {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_TYPE_SERVICE_1", saddamId, misceId, svetlanaId);
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
 
             //initialize the services
             var accountTypeService = new AccountTypeService(dbContext);

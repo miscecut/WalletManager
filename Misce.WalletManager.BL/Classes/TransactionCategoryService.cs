@@ -82,7 +82,7 @@ namespace Misce.WalletManager.BL.Classes
                     User = userQuery.First(),
                     Name = transactionCategory.Name,
                     Description = transactionCategory.Description,
-                    IsExpenseCategory = transactionCategory.IsExpenseType
+                    IsExpenseCategory = transactionCategory.IsExpenseType.GetValueOrDefault()
                 };
                 _walletManagerContext.TransactionCategories.Add(transactionCategoryToCreate);
 
