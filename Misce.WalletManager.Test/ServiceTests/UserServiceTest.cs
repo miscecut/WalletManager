@@ -1,7 +1,6 @@
 ﻿using Misce.WalletManager.BL.Classes;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.DTO.DTO.User;
-using Misce.WalletManager.Model.Data;
 
 namespace Misce.WalletManager.Test.ServiceTests
 {
@@ -10,13 +9,10 @@ namespace Misce.WalletManager.Test.ServiceTests
     {
         [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
-        public void TestFailingSignIn1()
+        public void TestTooShortPasswordFailingSignUp()
         {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_1", saddamId, misceId, svetlanaId);
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
 
             //initialize the services
             var userService = new UserService(dbContext);
@@ -33,13 +29,10 @@ namespace Misce.WalletManager.Test.ServiceTests
 
         [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
-        public void TestFailingSignIn2()
+        public void TestPasswordWithoutNumbersFailingSignUp()
         {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_2", saddamId, misceId, svetlanaId);
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
 
             //initialize the services
             var userService = new UserService(dbContext);
@@ -56,13 +49,10 @@ namespace Misce.WalletManager.Test.ServiceTests
 
         [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
-        public void TestFailingSignIn3()
+        public void TestPasswordUnconfirmedFailingSignUp()
         {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_3", saddamId, misceId, svetlanaId);
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
 
             //initialize the services
             var userService = new UserService(dbContext);
@@ -79,13 +69,10 @@ namespace Misce.WalletManager.Test.ServiceTests
 
         [TestMethod]
         [ExpectedException(typeof(UsernameNotAvailableException))]
-        public void TestSignIn()
+        public void TestUsernameAlreadyInUseFailingSignUp()
         {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_USER_SERVICE_4", saddamId, misceId, svetlanaId);
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
 
             //initialize the services
             var userService = new UserService(dbContext);
@@ -99,9 +86,6 @@ namespace Misce.WalletManager.Test.ServiceTests
             };
             userService.RegisterUser(newUser);
 
-            //verify that the new user can now log in
-            Assert.IsNotNull(userService.Authenticate(new UserLoginDTOIn { Username = "gigidag", Password = "Maritte0!?" }));
-
             //try to create the new user with an already taken username
             newUser = new UserSignInDTOIn
             {
@@ -110,6 +94,72 @@ namespace Misce.WalletManager.Test.ServiceTests
                 ConfirmPassword = "sdvlisw_esyivHGYU2KF"
             };
             userService.RegisterUser(newUser);
+        }
+
+        [TestMethod]
+        public void TestCorrectSignUpAndLogin()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+
+            //create the new user
+            var newUser = new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "Maritte0!?2",
+                ConfirmPassword = "Maritte0!?2"
+            };
+            userService.RegisterUser(newUser);
+
+            //verify that the new user can now log in
+            Assert.IsNotNull(userService.Authenticate(new UserLoginDTOIn { Username = "miscecut", Password = "Maritte0!?2" }));
+        }
+
+        [TestMethod]
+        public void TestWrongCredentialsFailingLogin()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+
+            //create the new user
+            var newUser = new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "Maritte0!?2",
+                ConfirmPassword = "Maritte0!?2"
+            };
+            userService.RegisterUser(newUser);
+
+            //verify that the new user can now log in
+            Assert.IsNull(userService.Authenticate(new UserLoginDTOIn { Username = "miscecut", Password = "aaaaAAA222!?" }));
+        }
+
+        [TestMethod]
+        public void TestNonExistingUserFailingLogin()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+
+            //create the new user
+            var newUser = new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "Maritte0!?2",
+                ConfirmPassword = "Maritte0!?2"
+            };
+            userService.RegisterUser(newUser);
+
+            //verify that the new user can now log in
+            Assert.IsNull(userService.Authenticate(new UserLoginDTOIn { Username = "pipppppo", Password = "aaaaAAA222!?" }));
         }
     }
 }
