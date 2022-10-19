@@ -4,7 +4,7 @@ import Navbar from './components/navbar/Navbar.js';
 import RegisterForm from './components/registerform/RegisterForm.js';
 import LoginForm from './components/loginform/LoginForm.js';
 import Dashboard from './components/dashboard/Dashboard.js';
-import Transactions from './components/transactions/Transactions.js';
+import TransactionsPage from './components/transactionspage/TransactionsPage.js';
 //api
 import { getApiBaseUrl, getLoginPostSettings, getRegisterPostSettings } from './jsutils/apirequests.js';
 
@@ -84,7 +84,7 @@ function App() {
         if (pageName == 'REGISTER')
             return <RegisterForm register={register} registrationErrors={activePage.errors} />
         if (pageName == 'TRANSACTIONS')
-            return <Transactions token={user.token} />
+            return <TransactionsPage token={user.token} />
         return <Dashboard />
     }
 

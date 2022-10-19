@@ -1,0 +1,5 @@
+.misce-transactions-container {
+    display: flex;
+    flex-direction: column;
+}
+

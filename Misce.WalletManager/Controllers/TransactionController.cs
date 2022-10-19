@@ -39,8 +39,8 @@ namespace Misce.WalletManager.API.Controllers
             string? title = null,
             Guid? accountFromId = null, 
             Guid? accountToId = null, 
-            Guid? categoryId = null,
-            Guid? subCategoryId = null,
+            Guid? transactionCategoryId = null,
+            Guid? transactionSubCategory = null,
             DateTime? dateFrom = null,
             DateTime? dateTo = null)
         {
@@ -48,7 +48,7 @@ namespace Misce.WalletManager.API.Controllers
 
             if (userId.HasValue)
             {
-                var transactions = _transactionService.GetTransactions(userId.Value, limit.GetValueOrDefault(), page.GetValueOrDefault(), title, accountFromId, accountToId, categoryId, subCategoryId, dateFrom, dateTo);
+                var transactions = _transactionService.GetTransactions(userId.Value, limit.GetValueOrDefault(), page.GetValueOrDefault(), title, accountFromId, accountToId, transactionCategoryId, transactionSubCategory, dateFrom, dateTo);
 
                 var request = HttpContext.Request;
                 var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase.ToUriComponent()}{request.Path.Value}{request.QueryString}";
@@ -57,7 +57,7 @@ namespace Misce.WalletManager.API.Controllers
                 if (transactions.Count() == limit)
                 {
                     Response.Headers.Add("X-Next-Page", baseUrl.Replace($"page={page}", $"page={page + 1}"));
-                    Response.Headers.Add("X-Total-Pages", _transactionService.GetTransactionsCount(userId.Value, title, accountFromId, accountToId, categoryId, subCategoryId, dateFrom, dateTo).ToString());
+                    Response.Headers.Add("X-Total-Pages", _transactionService.GetTransactionsCount(userId.Value, title, accountFromId, accountToId, transactionCategoryId, transactionSubCategory, dateFrom, dateTo).ToString());
                 }
                 //add previous page header if page is not the first (0)
                 if(page > 0)

@@ -51,3 +51,15 @@ export function getTransactionCategoriesGetQueryParameters(transactionType) {
         return '';
     return ('?' + new URLSearchParams(isExpenseTypeParameter));
 }
+
+export function getTransactionsGetQueryParameters(transactionsFilters) {
+    let parameters = {
+        limit: 1000,
+        page: 0
+    };
+    //transaction category id
+    if (transactionsFilters.transactionCategoryId != null && transactionsFilters.transactionCategoryId != '')
+        parameters.transactionCategoryId = transactionsFilters.transactionCategoryId;
+    //return query
+    return ('?' + new URLSearchParams(parameters));
+}

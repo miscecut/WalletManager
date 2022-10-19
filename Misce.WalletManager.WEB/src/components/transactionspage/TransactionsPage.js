@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 //css
-import './Transactions.css';
+import './TransactionsPage.css';
 //components
-//import Transaction from './../transaction/Transaction.js';
+import TransactionsContainer from './../transactionscontainer/TransactionsContainer.js';
 //api
 import { getApiBaseUrl, getGetCommonSettings, getTransactionCategoriesGetQueryParameters } from './../../jsutils/apirequests.js';
 
-function Transactions(props) {
+function TransactionsPage(props) {
     //the available transaction categories to chose from
     const [transactionCategories, setTransactionCategories] = useState([]);
     //groupBy: 'DAYS', 'WEEKS', 'MONTHS'
@@ -31,12 +31,15 @@ function Transactions(props) {
 
     //component render
     return <div className="misce-transactions-page-container">
-        <div className="misce-card misce-transactions-container">
-            
+        <div className="misce-card misce-transactions-content">
+            <TransactionsContainer
+                token={props.token}
+                transactionsFilters={filters}
+            />
         </div>
         <div className="misce-card misce-transactions-filters">
-            <button className="misce-btn w-100" type="button">aggiungi transazione</button>
-            <button className="misce-btn w-100" type="button">gestisci categorie</button>
+            <button className="misce-btn w-100" type="button">add transaction</button>
+            <button className="misce-btn w-100" type="button">edit categories</button>
             <div className="misce-input-container">
                 <label className="misce-input-label">Group transactions:</label>
                 <select className="misce-select" value={filters.groupBy} onChange={e => setFilters({ ...filters, groupBy: e.target.value })}>
@@ -69,4 +72,4 @@ function Transactions(props) {
     </div>
 }
 
-export default Transactions;
+export default TransactionsPage;

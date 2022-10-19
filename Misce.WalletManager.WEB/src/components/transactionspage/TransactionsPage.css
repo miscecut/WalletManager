@@ -12,11 +12,11 @@
     }
 }
 
-.misce-transactions-container {
+.misce-transactions-content {
     width: 78%;
 }
 @media screen and (max-width: 992px) {
-    .misce-transactions-container {
+    .misce-transactions-content {
         width: 100%;
         order: 1;
     }
