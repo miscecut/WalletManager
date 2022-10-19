@@ -1,0 +1,37 @@
+.misce-transactions-page-container {
+    width:100%;
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+}
+@media screen and (max-width: 992px) {
+    .misce-transactions-page-container {
+        gap: 10px;
+        margin: 10px;
+        flex-direction: column;
+    }
+}
+
+.misce-transactions-container {
+    padding: 20px;
+    width: 75%;
+}
+@media screen and (max-width: 992px) {
+    .misce-transactions-container {
+        padding: 10px;
+        width: 100%;
+        order: 1;
+    }
+}
+
+.misce-transactions-filters {
+    padding: 20px;
+    width: 25%;
+}
+@media screen and (max-width: 992px) {
+    .misce-transactions-filters {
+        padding: 10px;
+        width: 100%;
+        order: 0;
+    }
+}

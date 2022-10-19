@@ -10,7 +10,7 @@ namespace Misce.WalletManager.Test.ServiceTests
     public class TransactionCategoryServiceTest
     {
         [TestMethod]
-        public void TestTransactionCategoryCreationAndRetrieving()
+        public void TestTransactionCategoryCreateAndGet()
         {
             //initialize the db context
             var dbContext = DbContextGeneration.GenerateDb();
@@ -99,7 +99,7 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
-        public void TestTransactionCategoryCreationAndSingleRetrieving()
+        public void TestTransactionCategoryCreateAndGetSingle()
         {
             //initialize the db context
             var dbContext = DbContextGeneration.GenerateDb();
@@ -172,7 +172,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
         [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
-        public void TestUnprovidedNameFailingTransactionCategoryCreation()
+        public void TestUnprovidedNameFailingTransactionCategoryCreate()
         {
             //initialize the db context
             var dbContext = DbContextGeneration.GenerateDb();
@@ -199,7 +199,7 @@ namespace Misce.WalletManager.Test.ServiceTests
 
         [TestMethod]
         [ExpectedException(typeof(IncorrectDataException))]
-        public void TestUnprovidedIsExpenseTypeFailingTransactionCategoryCreation()
+        public void TestUnprovidedIsExpenseTypeFailingTransactionCategoryCreate()
         {
             //initialize the db context
             var dbContext = DbContextGeneration.GenerateDb();
@@ -224,7 +224,7 @@ namespace Misce.WalletManager.Test.ServiceTests
         }
 
         [TestMethod]
-        public void TestTransactionCategoryCorrectUpdate()
+        public void TestTransactionCategoryUpdate()
         {
             //initialize the db context
             var dbContext = DbContextGeneration.GenerateDb();
@@ -343,6 +343,40 @@ namespace Misce.WalletManager.Test.ServiceTests
                 Name = "Electronicz",
                 IsExpenseType = true,
                 Description = "this category is not mine"
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestTooLongNameTransactionCategoryFailingUpdate()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+            var transactionCategoryService = new TransactionCategoryService(dbContext);
+
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "merions",
+                Password = "Wella111111",
+                ConfirmPassword = "Wella111111"
+            });
+
+            //create the other user's electronics transaction category
+            var createdElectronicsTransactionCategory = transactionCategoryService.CreateTransactionCategory(user.Id, new TransactionCategoryCreationDTOIn
+            {
+                Name = "Electronics",
+                IsExpenseType = true
+            });
+
+            //try to update it with a too long name, this should be impossbile
+            transactionCategoryService.UpdateTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id, new TransactionCategoryUpdateDTOIn
+            {
+                Name = "Electroniczzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+                IsExpenseType = true
             });
         }
 

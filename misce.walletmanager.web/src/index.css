@@ -69,6 +69,7 @@ body {
 
 /* buttons */
 .misce-btn {
+    text-transform: uppercase;
     padding: 8px 22px;
     font-size: 1rem;
     font-weight: bold;
@@ -115,4 +116,18 @@ body {
 .misce-input-label {
     color: #c3c3c3;
     padding-left: 16px;
+}
+
+/* cards */
+
+.misce-card {
+    padding: 15px;
+    background-color: #24282a; /*#3c4042*/
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #24282a;
+}
+.misce-card.misce-hover-purple:hover {
+    border: 1px solid #ea80fc;
 }

@@ -26,7 +26,7 @@ function Transaction({ transaction }) {
                 </p>
     }
 
-    return <div className="misce-card">
+    return <div className="misce-card misce-hover-purple">
         <div className={`misce-card-icon ${transactionType}`}></div>
             <div className="misce-card-content">
                 <p className="misce-card-title">{transaction.title}</p>
