@@ -13,7 +13,7 @@
 }
 
 .misce-transactions-container {
-    width: 75%;
+    width: 78%;
 }
 @media screen and (max-width: 992px) {
     .misce-transactions-container {
@@ -23,13 +23,14 @@
 }
 
 .misce-transactions-filters {
-    width: 25%;
+    width: 22%;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 @media screen and (max-width: 992px) {
     .misce-transactions-filters {
+        gap: 10px;
         width: 100%;
         order: 0;
     }

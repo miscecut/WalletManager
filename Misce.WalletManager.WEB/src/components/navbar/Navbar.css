@@ -1,6 +1,5 @@
 header {
     display: flex;
-    justify-content: start;
     align-items: center;
     background-color: #3c4042;
 }
@@ -39,4 +38,28 @@ nav {
 
 .nav-option-list .nav-option a:hover {
     color: white;
+}
+
+@media screen and (max-width: 992px) {
+    header {
+        flex-direction: column;
+    }
+
+    .nav-logo {
+        display: none;
+        max-height: 2em;
+        padding: 10px 0px 0px 0px;
+    }
+
+    nav {
+        flex-direction: column;
+        justify-content: center;
+        padding: 5px 0px;
+    }
+
+    .nav-option-list {
+        margin-block: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
 }

@@ -54,11 +54,6 @@ body {
     text-align: center;
     margin-bottom: 16px;
 }
-@media screen and (max-width: 600px) {
-    .misce-login-title {
-        font-size: 2.25em;
-    }
-}
 
 .misce-input-error-message {
     font-size: 0.75rem;
@@ -150,4 +145,14 @@ body {
 }
 .misce-card.misce-hover-purple:hover {
     border: 1px solid #ea80fc;
+}
+
+@media screen and (max-width: 992px) {
+    .misce-login-title {
+        font-size: 2.25em;
+    }
+
+    .misce-card {
+        padding: 10px;
+    }
 }
