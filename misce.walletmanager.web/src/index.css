@@ -133,6 +133,15 @@ body {
     padding-left: 16px;
 }
 
+/* select options */
+
+.misce-option.profit-option {
+    color: #03dac6;
+}
+.misce-option.expense-option {
+    color: #ff6d74;
+}
+
 /* cards */
 
 .misce-card {

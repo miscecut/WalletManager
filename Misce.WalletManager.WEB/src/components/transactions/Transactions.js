@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //css
 import './Transactions.css';
 //components
 //import Transaction from './../transaction/Transaction.js';
+//api
+import { getApiBaseUrl, getGetCommonSettings, getTransactionCategoriesGetQueryParameters } from './../../jsutils/apirequests.js';
 
 function Transactions(props) {
+    //the available transaction categories to chose from
+    const [transactionCategories, setTransactionCategories] = useState([]);
     //groupBy: 'DAYS', 'WEEKS', 'MONTHS'
     //transactionType: null, '', 'PROFIT', 'EXPENSE', 'TRANSFER'
-    const [filters, setFilters] = useState({ groupBy: 'DAYS', transactionType: null, });
+    const [filters, setFilters] = useState({ groupBy: 'DAYS', transactionType: '', transactionCategoryId: '' });
 
-    //function getAccountFilterSelect() {
-    //}
-
-    function getTransactionCategoriesSelect() {
-        let token = props.token;
-        
-    }
+    //update the available transaction categories when the transaction type selected i updated
+    useEffect(() => {
+        //if 'Tranfer' was selected, there is no point in showing the transaction category select
+        if (filters.transactionType == 'TRANSFER') {
+            setTransactionCategories([]);
+            setFilters({...filters, transactionCategoryId: '' });
+        }
+        else {
+            fetch(getApiBaseUrl() + 'transactioncategories' + getTransactionCategoriesGetQueryParameters(filters.transactionType), getGetCommonSettings(props.token))
+                .then(res => {
+                    if (res.ok)
+                        res.json().then(data => setTransactionCategories(data));
+                });
+        }
+    }, [filters.transactionType]);
 
     //component render
     return <div className="misce-transactions-page-container">
@@ -26,7 +38,7 @@ function Transactions(props) {
             <button className="misce-btn w-100" type="button">aggiungi transazione</button>
             <button className="misce-btn w-100" type="button">gestisci categorie</button>
             <div className="misce-input-container">
-                <label className="misce-input-label" htmlFor="username">Group transactions:</label>
+                <label className="misce-input-label">Group transactions:</label>
                 <select className="misce-select" value={filters.groupBy} onChange={e => setFilters({ ...filters, groupBy: e.target.value })}>
                     <option value="DAYS">By day</option>
                     <option value="WEEKS">By Week</option>
@@ -34,7 +46,7 @@ function Transactions(props) {
                 </select>
             </div>
             <div className="misce-input-container">
-                <label className="misce-input-label" htmlFor="username">Transaction type:</label>
+                <label className="misce-input-label">Transaction type:</label>
                 <select className="misce-select" value={filters.transactionType} onChange={e => setFilters({ ...filters, transactionType: e.target.value })}>
                     <option value="">All</option>
                     <option value="PROFIT">Profit</option>
@@ -42,6 +54,17 @@ function Transactions(props) {
                     <option value="TRANSFER">Transfer</option>
                 </select>
             </div>
+            {filters.transactionType === 'TRANSFER' ?
+                ''
+                :
+                <div className="misce-input-container">
+                    <label className="misce-input-label">Transaction category:</label>
+                    <select className="misce-select" value={filters.transactionCategoryId} onChange={e => setFilters({ ...filters, transactionCategoryId: e.target.value })}>
+                        <option value="">All</option>
+                        {transactionCategories.map(tc => <option className={`misce-option ${tc.isExpenseType ? 'expense-option' : 'profit-option'}`} value={tc.id}>{tc.name}</option>)}
+                    </select>
+                </div>
+            }
         </div>
     </div>
 }
