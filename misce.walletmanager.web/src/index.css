@@ -68,6 +68,7 @@ body {
 }
 
 /* buttons */
+
 .misce-btn {
     text-transform: uppercase;
     padding: 8px 22px;
@@ -92,15 +93,34 @@ body {
 
 /* inputs */
 
-.misce-input {
+.misce-input-container {
+    width: 100%;
+}
+.misce-input-container * {
+    width: 100%;
+}
+
+.misce-input, .misce-select {
     background-color: #3c4042;
     border-radius: 20px;
-    padding: 8px 10px;
+    padding: 8px 14px;
     font-size: 1rem;
     color: white;
     border: none;
 }
-.misce-input:focus {
+.misce-select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url('./images/select-arrow-white.png');
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
+}
+.misce-select:focus {
+    background-image: url('./images/select-arrow-purple.png');
+}
+.misce-input:focus, .misce-select:focus {
     outline: 2px solid #ffb2ff;
 }
 
