@@ -164,9 +164,6 @@ body {
     align-items: center;
     border: 1px solid #24282a;
 }
-.misce-card.misce-hover-purple:hover {
-    border: 1px solid #ea80fc;
-}
 
 @media screen and (max-width: 992px) {
     .misce-login-title {

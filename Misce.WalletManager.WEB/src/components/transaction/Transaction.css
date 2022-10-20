@@ -7,6 +7,9 @@
     grid-template-columns: auto auto 1fr;
     align-items: center;
 }
+.misce-transaction-card:hover {
+    border: 1px solid #ea80fc;
+}
 
 .misce-transaction-card-icon {
     width: 44px;
