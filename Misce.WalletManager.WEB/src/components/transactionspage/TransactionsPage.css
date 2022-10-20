@@ -8,6 +8,7 @@
 .misce-transactions-content {
     width: 78%;
     align-items: start;
+    height: fit-content;
 }
 
 .misce-transactions-filters {
