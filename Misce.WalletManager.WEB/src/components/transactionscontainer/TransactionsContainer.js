@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 //css
 import './TransactionsContainer.css';
+//components
+import TransactionsSection from './../transactionssection/TransactionsSection.js'
 //api
 import { getApiBaseUrl, getGetCommonSettings, getTransactionsGetQueryParameters } from './../../jsutils/apirequests.js';
 
 function TransactionsContainer({ token, transactionsFilters }) {
     const [transactions, setTransactions] = useState([]);
 
+    //get the filtered transactions from the api when the filters change
     useEffect(() => {
-        //get the filtered transactions from the api
         fetch(getApiBaseUrl() + 'transactions' + getTransactionsGetQueryParameters(transactionsFilters), getGetCommonSettings(token))
             .then(res => {
                 if (res.ok)
@@ -16,14 +18,28 @@ function TransactionsContainer({ token, transactionsFilters }) {
             });
     }, [transactionsFilters]);
 
-    let dividedTransactions = {};
-    transactions.forEach(transaction => {
-        let transactionDateAndTime = new Date(transaction.dateTime);
+    //draw the content, the transactions divided by day or week or month
+    function generateTransactionsSections() {
+        //if no transaction were found, return a message
+        if (transactions.length == 0)
+            return <h1>NIENTE</h1>;
+        else {
+            //start by dividing the transactions by day, week or month
+            let dividedTransactions = {};
+            let transactionSections = []; //this will contain all the jsx sections
+            transactions.forEach(transaction => {
+                let transactionDateAndTime = new Date(transaction.dateTime);
+                let day = transactionDateAndTime.getDate();
+                let month = transactionDateAndTime.getMonth();
+                let year = transactionDateAndTime.getFullYear();
+            });
+            return <TransactionsSection transactions={transactions} />
+        }
+    }
 
-    });
-
+    //render component
     return <div className="misce-transactions-container-content">
-
+        {generateTransactionsSections()}
     </div>;
 }
 

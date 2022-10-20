@@ -26,13 +26,13 @@ function Transaction({ transaction }) {
                 </p>
     }
 
-    return <div className="misce-card misce-hover-purple">
-        <div className={`misce-card-icon ${transactionType}`}></div>
+    return <div className="misce-hover-purple misce-transaction-card">
+            <div className={`misce-card-icon ${transactionType}`}></div>
             <div className="misce-card-content">
                 <p className="misce-card-title">{transaction.title}</p>
                 {getTransactionCardSubTitle()}
-            <p className="misce-card-subtitle"><img className="misce-card-subtitle-icon" src={CalendarIcon}></img> {transaction.dateTime}</p>
-                <p className="misce-card-description">safgas ga ifhiuh iwehf uihergdvsdvsdv</p> 
+                <p className="misce-card-subtitle"><img className="misce-card-subtitle-icon" src={CalendarIcon}></img> {transaction.dateTime}</p>
+                <p className="misce-card-description">{transaction.description == null || transaction.description == '' ? <i>No description</i> : transaction.description}</p> 
             </div>
             <div className="misce-card-amount-container">
                 <p className={`misce-card-amount ${transactionType}`}>{transaction.amount} &euro;</p>

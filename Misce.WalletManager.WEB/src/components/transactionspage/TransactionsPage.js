@@ -13,13 +13,24 @@ import {
 } from './../../jsutils/apirequests.js';
 
 function TransactionsPage(props) {
+    //set one month ago as default fromDate filter value
+    let oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+    oneMonthAgo.setHours(0, 0, 0, 0);
+
     //the available transaction categories to chose from
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the available transaction subcategories to chose from
     const [transactionSubCategories, setTransactionSubCategories] = useState([]);
     //groupBy: 'DAYS', 'WEEKS', 'MONTHS'
-    //transactionType: null, '', 'PROFIT', 'EXPENSE', 'TRANSFER'
-    const [filters, setFilters] = useState({ groupBy: 'DAYS', transactionType: '', transactionCategoryId: '', transactionCategoryId: '' });
+    //transactionType: '', 'PROFIT', 'EXPENSE', 'TRANSFER'
+    const [filters, setFilters] = useState({
+        groupBy: 'DAYS',
+        fromDate: oneMonthAgo.toISOString().substring(0, 10),
+        transactionType: '',
+        transactionCategoryId: '',
+        transactionCategoryId: ''
+    });
     //modals state
     const [modals, setModals] = useState({ transactionCreateModalIsOpen: false });
 
@@ -79,6 +90,10 @@ function TransactionsPage(props) {
                     <option value="WEEKS">By Week</option>
                     <option value="MONTHS">By Month</option>
                 </select>
+            </div>
+            <div className="misce-input-container">
+                <label className="misce-input-label">From date:</label>
+                <input className="misce-input" type="date" value={filters.fromDate} onChange={e => setFilters({ ...filters, fromDate: e.target.value })}></input>
             </div>
             <div className="misce-input-container">
                 <label className="misce-input-label">Transaction type:</label>
