@@ -62,6 +62,8 @@ export function getTransactionsGetQueryParameters(transactionsFilters) {
         parameters.transactionCategoryId = transactionsFilters.transactionCategoryId;
     if (transactionsFilters.transactionSubCategoryId != null && transactionsFilters.transactionSubCategoryId != '')
         parameters.transactionSubCategoryId = transactionsFilters.transactionSubCategoryId;
+    if (transactionsFilters.fromDate != null && transactionsFilters.fromDate != '')
+        parameters.dateFrom = transactionsFilters.fromDate;
     //return query
     return ('?' + new URLSearchParams(parameters));
 }
