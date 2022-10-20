@@ -1,6 +1,6 @@
 .misce-transaction-card {
     background-color: #3c4042;
-    padding: 10px;
+    padding: 8px;
     border: 1px solid #24282a;
     border-radius: 18px;
     display: grid;
@@ -37,12 +37,13 @@
 .misce-transaction-card-title {
     color: white;
     font-weight: bold;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+    padding-left: 23px;
 }
 
 .misce-transaction-card-subtitle {
     color: white;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     display: flex;
     align-items: center;
 }
@@ -53,8 +54,8 @@
 }
 
 .misce-transaction-card-subtitle-icon {
-    height: 1.2rem;
-    margin-right: 7px;
+    height: 1.1rem;
+    margin-right: 6px;
 }
 .misce-transaction-card-subtitle-icon.more-margin {
     margin-inline: 9px;
@@ -68,7 +69,7 @@
 .misce-transaction-card-amount {
     font-weight: bold;
     color: white;
-    font-size: 2rem;
+    font-size: 1.9rem;
     white-space: nowrap;
 }
 .misce-transaction-card-amount.profit {
@@ -80,11 +81,12 @@
 
 @media screen and (max-width: 576px) {
     .misce-transaction-transaction-card {
-        padding: 8px;
+        padding: 7px;
     }
 
     .misce-transaction-card-title {
         font-size: 1.2rem;
+        padding-left: 21px;
     }
 
     .misce-transaction-card-icon {
@@ -94,7 +96,7 @@
     }
 
     .misce-transaction-card-subtitle {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .misce-transaction-card-description {
@@ -103,12 +105,12 @@
     }
 
     .misce-transaction-card-amount {
-        font-size: 1.7rem;
+        font-size: 1.6rem;
     }
 
     .misce-transaction-card-subtitle-icon {
         height: 1rem;
-        margin-right: 6px;
+        margin-right: 5px;
     }
 
     .misce-transaction-transaction-card {

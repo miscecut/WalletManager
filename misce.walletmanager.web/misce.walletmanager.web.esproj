@@ -21,6 +21,5 @@
     <Folder Include="src\components\transaction\" />
     <Folder Include="src\components\registerform\" />
     <Folder Include="src\images\" />
-    <Folder Include="src\jsutils\" />
   </ItemGroup>
 </Project>

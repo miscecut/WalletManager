@@ -5,6 +5,9 @@ import './Transaction.css';
 import BankLogo from '../../images/bank-icon.png'
 import CalendarIcon from '../../images/calendar-icon.png'
 import ArrowIconWhite from '../../images/arrow-right-icon.png'
+import TransactionCategoryIcon from '../../images/category-icon.png'
+//utils
+import { formatMoneyAmount } from './../../jsutils/beautifiers.js';
 
 function Transaction({ transaction }) {
     //determine the transaction type for the correct icon to show
@@ -22,22 +25,24 @@ function Transaction({ transaction }) {
                 </p>
         else
             return <p className="misce-transaction-card-subtitle">
-                    <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount != null ? transaction.fromAccount.name : transaction.toAccount.name} {transaction.transactionSubCategory != null ? '- ' + transaction.transactionSubCategory.name : ''}
+                    <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount != null ? transaction.fromAccount.name : transaction.toAccount.name}
                 </p>
     }
 
     return <div className="misce-hover-purple misce-transaction-card">
             <div className={`misce-transaction-card-icon ${transactionType}`}></div>
             <div className="misce-transaction-card-content">
-                <p className="misce-transaction-card-title">{transaction.title}</p>
+            <p className="misce-transaction-card-title">{transaction.title}</p>
+                <p className="misce-transaction-card-subtitle"><img className="misce-transaction-card-subtitle-icon" src={TransactionCategoryIcon}></img> {transaction.transactionSubCategory != null ? transaction.transactionSubCategory.name : <i>No category</i>}</p>
                 {getTransactionCardSubTitle()}
                 <p className="misce-transaction-card-subtitle"><img className="misce-transaction-card-subtitle-icon" src={CalendarIcon}></img> {transaction.dateTime}</p>
-                <p className="misce-transaction-card-description">{transaction.description == null || transaction.description == '' ? <i>No description</i> : transaction.description}</p> 
             </div>
             <div className="misce-transaction-card-amount-container">
-                <p className={`misce-transaction-card-amount ${transactionType}`}>{transaction.amount} &euro;</p>
+                <p className={`misce-transaction-card-amount ${transactionType}`}>{formatMoneyAmount(transaction.amount)} &euro;</p>
             </div>
         </div>
 }
 
 export default Transaction;
+
+//<p className="misce-transaction-card-description">{transaction.description == null || transaction.description == '' ? <i>No description</i> : transaction.description}</p> 
