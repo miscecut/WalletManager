@@ -63,3 +63,15 @@ export function getTransactionsGetQueryParameters(transactionsFilters) {
     //return query
     return ('?' + new URLSearchParams(parameters));
 }
+
+export function getTransactionSubCategoriesGetQueryParameters(transactionCategoryId) {
+    let parameters = {
+        limit: 1000,
+        page: 0
+    };
+    //transaction category id
+    if (transactionCategoryId != null && transactionCategoryId != '')
+        parameters.transactionCategoryId = transactionCategoryId;
+    //return query
+    return ('?' + new URLSearchParams(parameters));
+}

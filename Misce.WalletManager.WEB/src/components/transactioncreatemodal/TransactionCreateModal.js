@@ -7,7 +7,6 @@ function TransactionCreateModal(props) {
                 <p className="misce-modal-title">Transaction creation</p>
                 <button className="misce-close-button" type="button" onClick={props.closeButtonFunction}></button>
             </div>
-            
         </div>
     </div>
 }
