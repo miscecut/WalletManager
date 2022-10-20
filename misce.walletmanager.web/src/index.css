@@ -86,6 +86,18 @@ body {
     background-color: #c3c3c3;
 }
 
+.misce-close-button {
+    height: 1.8rem;
+    width: 1.8rem;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.9rem;
+    background-image: url('images/close-button-icon.png');
+    background-position: center;
+    background-size: contain;
+    margin-left: auto;
+}
+
 /* inputs */
 
 .misce-input-container {
@@ -164,4 +176,56 @@ body {
     .misce-card {
         padding: 10px;
     }
+}
+
+/* modals */
+
+.misce-modal-container {
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+.misce-modal-container.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.misce-modal {
+    background-color: #24282a;
+    border: 0;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    width: 650px;
+}
+@media screen and (max-width: 992px) {
+    .misce-modal {
+        padding: 10px;
+        border-radius: 0px;
+        height: 100vh;
+        width: 100vw;
+    }
+}
+
+.misce-modal-title-container {
+    display: grid;
+    grid-template-columns: 1fr repeat(1, auto) 1fr;
+    width: 100%;
+    justify-items: center;
+}
+
+.misce-modal-title {
+    grid-column-start: 2;
+    color: white;
+    font-size: 1.5rem;
 }

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './TransactionsPage.css';
 //components
 import TransactionsContainer from './../transactionscontainer/TransactionsContainer.js';
+import TransactionCreateModal from './../transactioncreatemodal/TransactionCreateModal.js';
 //api
 import { getApiBaseUrl, getGetCommonSettings, getTransactionCategoriesGetQueryParameters } from './../../jsutils/apirequests.js';
 
@@ -12,6 +13,11 @@ function TransactionsPage(props) {
     //groupBy: 'DAYS', 'WEEKS', 'MONTHS'
     //transactionType: null, '', 'PROFIT', 'EXPENSE', 'TRANSFER'
     const [filters, setFilters] = useState({ groupBy: 'DAYS', transactionType: '', transactionCategoryId: '' });
+    //modals state
+    const [modals, setModals] = useState({ transactionCreateModalIsOpen: false });
+
+    //this function closes the transaction create modal
+    const closeTransactionCreateModal = () => setModals({ ...modals, transactionCreateModalIsOpen: false });
 
     //update the available transaction categories when the transaction type selected i updated
     useEffect(() => {
@@ -38,7 +44,7 @@ function TransactionsPage(props) {
             />
         </div>
         <div className="misce-card misce-transactions-filters">
-            <button className="misce-btn w-100" type="button">add transaction</button>
+            <button className="misce-btn w-100" type="button" onClick={() => setModals({ ...modals, transactionCreateModalIsOpen: true })}>add transaction</button>
             <button className="misce-btn w-100" type="button">edit categories</button>
             <div className="misce-input-container">
                 <label className="misce-input-label">Group transactions:</label>
@@ -69,6 +75,10 @@ function TransactionsPage(props) {
                 </div>
             }
         </div>
+        <TransactionCreateModal
+            show={modals.transactionCreateModalIsOpen}
+            closeButtonFunction={closeTransactionCreateModal}
+        />
     </div>
 }
 

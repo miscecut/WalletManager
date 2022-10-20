@@ -20,7 +20,7 @@ function TransactionsContainer({ token, transactionsFilters }) {
     transactions.forEach(transaction => {
         let transactionDateAndTime = new Date(transaction.dateTime);
 
-    })
+    });
 
     return <div className="misce-transactions-container-content">
 
