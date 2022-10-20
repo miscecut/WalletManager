@@ -27,12 +27,16 @@ function TransactionsContainer({ token, transactionsFilters }) {
             let dividedTransactions = {};
             let transactionSections = []; //this will contain all the jsx sections
             transactions.forEach(transaction => {
-                let transactionDateAndTime = new Date(transaction.dateTime);
-                let day = transactionDateAndTime.getDate();
-                let month = transactionDateAndTime.getMonth();
-                let year = transactionDateAndTime.getFullYear();
+                //this will be the section title
+                let sectionTitle = new Date(transaction.dateTime).toLocaleDateString();
+                //put the transaction in the correct section
+                if (dividedTransactions[sectionTitle] == null)
+                    dividedTransactions[sectionTitle] = [];
+                dividedTransactions[sectionTitle].push(transaction);
             });
-            return <TransactionsSection transactions={transactions} />
+            //at this point, all the transactions are divided, the section jsxs must be created
+            transactionSections = Object.keys(dividedTransactions).map(sectionTitle => <TransactionsSection transactions={dividedTransactions[sectionTitle]} title={sectionTitle}/>)
+            return transactionSections;
         }
     }
 

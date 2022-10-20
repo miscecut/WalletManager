@@ -363,7 +363,7 @@ namespace Misce.WalletManager.BL.Classes
             if (toDateTime != null)
                 transactionsQuery = transactionsQuery.Where(t => t.DateTime <= toDateTime);
 
-            return transactionsQuery;
+            return transactionsQuery.OrderByDescending(t => t.DateTime); //order by datetime desc
         }
 
         #endregion

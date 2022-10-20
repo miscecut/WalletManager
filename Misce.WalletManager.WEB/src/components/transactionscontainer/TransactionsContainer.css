@@ -1,7 +1,8 @@
 .misce-transactions-container-content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    row-gap: 10px;
+    column-gap: 15px;
     width: 100%;
 }
 
