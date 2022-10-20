@@ -17,25 +17,25 @@ function Transaction({ transaction }) {
     function getTransactionCardSubTitle() {
         let isTransfer = transactionType == 'transfer';
         if (isTransfer)
-            return <p className="misce-card-subtitle">
-                <img className="misce-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount.name} <img className="misce-card-subtitle-icon more-margin" src={ArrowIconWhite}></img> <img className="misce-card-subtitle-icon" src={BankLogo}></img> {transaction.toAccount.name}
+            return <p className="misce-transaction-card-subtitle">
+                <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount.name} <img className="misce-transaction-card-subtitle-icon more-margin" src={ArrowIconWhite}></img> <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.toAccount.name}
                 </p>
         else
-            return <p className="misce-card-subtitle">
-                    <img className="misce-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount != null ? transaction.fromAccount.name : transaction.toAccount.name} {transaction.transactionSubCategory != null ? '- ' + transaction.transactionSubCategory.name : ''}
+            return <p className="misce-transaction-card-subtitle">
+                    <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount != null ? transaction.fromAccount.name : transaction.toAccount.name} {transaction.transactionSubCategory != null ? '- ' + transaction.transactionSubCategory.name : ''}
                 </p>
     }
 
     return <div className="misce-hover-purple misce-transaction-card">
-            <div className={`misce-card-icon ${transactionType}`}></div>
-            <div className="misce-card-content">
-                <p className="misce-card-title">{transaction.title}</p>
+            <div className={`misce-transaction-card-icon ${transactionType}`}></div>
+            <div className="misce-transaction-card-content">
+                <p className="misce-transaction-card-title">{transaction.title}</p>
                 {getTransactionCardSubTitle()}
-                <p className="misce-card-subtitle"><img className="misce-card-subtitle-icon" src={CalendarIcon}></img> {transaction.dateTime}</p>
-                <p className="misce-card-description">{transaction.description == null || transaction.description == '' ? <i>No description</i> : transaction.description}</p> 
+                <p className="misce-transaction-card-subtitle"><img className="misce-transaction-card-subtitle-icon" src={CalendarIcon}></img> {transaction.dateTime}</p>
+                <p className="misce-transaction-card-description">{transaction.description == null || transaction.description == '' ? <i>No description</i> : transaction.description}</p> 
             </div>
-            <div className="misce-card-amount-container">
-                <p className={`misce-card-amount ${transactionType}`}>{transaction.amount} &euro;</p>
+            <div className="misce-transaction-card-amount-container">
+                <p className={`misce-transaction-card-amount ${transactionType}`}>{transaction.amount} &euro;</p>
             </div>
         </div>
 }
