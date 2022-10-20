@@ -29,7 +29,7 @@ function TransactionsPage(props) {
         fromDate: oneMonthAgo.toISOString().substring(0, 10),
         transactionType: '',
         transactionCategoryId: '',
-        transactionCategoryId: ''
+        transactionSubCategoryId: ''
     });
     //modals state
     const [modals, setModals] = useState({ transactionCreateModalIsOpen: false });

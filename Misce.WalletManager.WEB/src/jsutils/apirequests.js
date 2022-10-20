@@ -60,6 +60,8 @@ export function getTransactionsGetQueryParameters(transactionsFilters) {
     //transaction category id
     if (transactionsFilters.transactionCategoryId != null && transactionsFilters.transactionCategoryId != '')
         parameters.transactionCategoryId = transactionsFilters.transactionCategoryId;
+    if (transactionsFilters.transactionSubCategoryId != null && transactionsFilters.transactionSubCategoryId != '')
+        parameters.transactionSubCategoryId = transactionsFilters.transactionSubCategoryId;
     //return query
     return ('?' + new URLSearchParams(parameters));
 }

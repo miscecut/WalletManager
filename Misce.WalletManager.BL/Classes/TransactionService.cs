@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
@@ -8,6 +9,7 @@ using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
+using System.Text.Json;
 
 namespace Misce.WalletManager.BL.Classes
 {
@@ -218,10 +220,10 @@ namespace Misce.WalletManager.BL.Classes
                             throw new Exception();
                     }
                     else
-                        throw new IncorrectDataException("The account ID was not found");
+                        throw new IncorrectDataException();
                 }
                 else
-                    throw new IncorrectDataException("The transaction subcategory ID " + transaction.TransactionSubCategoryId + " was not found");
+                    throw new IncorrectDataException(JsonSerializer.Serialize(new ErrorContainer("TransactionSubCategoryId", "The provided transaction ID " + transaction.TransactionSubCategoryId + " was not found")));
             }
             else
                 throw new UserNotFoundException();

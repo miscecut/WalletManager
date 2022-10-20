@@ -8,7 +8,6 @@ import { getApiBaseUrl, getGetCommonSettings, getTransactionsGetQueryParameters 
 
 function TransactionsContainer({ token, transactionsFilters }) {
     const [transactions, setTransactions] = useState([]);
-
     //get the filtered transactions from the api when the filters change
     useEffect(() => {
         fetch(getApiBaseUrl() + 'transactions' + getTransactionsGetQueryParameters(transactionsFilters), getGetCommonSettings(token))
