@@ -9,10 +9,10 @@
 }
 
 .misce-transaction-card-icon {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     background: #ea80fc;
-    border-radius: 24px;
+    border-radius: 22px;
     background-size: contain;
     background-position: 50% 50%;
     background-repeat: no-repeat;
@@ -113,6 +113,10 @@
 
     .misce-transaction-transaction-card {
         grid-template-columns: auto auto;
+    }
+
+    .misce-transaction-card-amount-container {
+        grid-column: 2 / 4;
     }
 
     .misce-transaction-card-content {
