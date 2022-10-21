@@ -1,4 +1,5 @@
 using Misce.WalletManager.BL.Classes;
+using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.DTO.DTO.Account;
 using Misce.WalletManager.DTO.DTO.Transaction;
 using Misce.WalletManager.DTO.DTO.User;
@@ -216,6 +217,194 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
             Assert.AreEqual(accountService.GetAccount(user.Id, createdUserWallet.Id)?.ActualAmount ?? 0, 87.3M);
             Assert.AreEqual(accountService.GetAccount(user.Id, createdUserWallet.Id)?.InitialAmount ?? 0, 120.5M);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestNoNameAccountFailingCreate()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+            var accountService = new AccountService(dbContext);
+            var accountTypeService = new AccountTypeService(dbContext);
+
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "GS7fss787f",
+                ConfirmPassword = "GS7fss787f"
+            });
+
+            //get the bank account account type
+            var bankAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First().Id;
+
+            //create the user's wallet
+            var createdUserWallet = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                InitialAmount = 120.5M,
+                IsActive = true,
+                AccountTypeId = bankAccountTypeId
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestNoInitialAmountAccountFailingCreate()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+            var accountService = new AccountService(dbContext);
+            var accountTypeService = new AccountTypeService(dbContext);
+
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "GS7fss787f",
+                ConfirmPassword = "GS7fss787f"
+            });
+
+            //get the bank account account type
+            var bankAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First().Id;
+
+            //create the user's wallet
+            var createdUserWallet = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                Name = "Random name",
+                IsActive = false,
+                AccountTypeId = bankAccountTypeId
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestNoAccountTypeIdAccountFailingCreate()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+            var accountService = new AccountService(dbContext);
+
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "GS7fss787f",
+                ConfirmPassword = "GS7fss787f"
+            });
+
+            //create the user's wallet
+            var createdUserWallet = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                Name = "Random name",
+                IsActive = false,
+                InitialAmount = -3
+            });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(IncorrectDataException))]
+        public void TestNoActiveStatusAccountFailingCreate()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+            var accountService = new AccountService(dbContext);
+            var accountTypeService = new AccountTypeService(dbContext);
+
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "GS7fss787f",
+                ConfirmPassword = "GS7fss787f"
+            });
+
+            //get the bank account account type
+            var bankAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First().Id;
+
+            //create the user's wallet
+            var createdUserWallet = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                Name = "Random name",
+                InitialAmount = 0,
+                AccountTypeId = bankAccountTypeId
+            });
+        }
+
+        [TestMethod]
+        public void TestAccountUpdate()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+            var accountService = new AccountService(dbContext);
+            var accountTypeService = new AccountTypeService(dbContext);
+            var transactionService = new TransactionService(dbContext);
+
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "GS7fss787f",
+                ConfirmPassword = "GS7fss787f"
+            });
+
+            //get the bank account account type
+            var bankAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First().Id;
+            var cashAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Cash").First().Id;
+
+            //create the user's wallet
+            var createdUserWallet = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                Name = "Wallet",
+                InitialAmount = 14.69M,
+                IsActive = true,
+                AccountTypeId = cashAccountTypeId,
+                Description = "my wallet!"
+            });
+
+            //create an expense to decrease the total amount of the user's wallet
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                FromAccountId = createdUserWallet.Id,
+                Amount = 1.19M,
+                Title = "Onions",
+                DateTime = DateTime.UtcNow
+            });
+
+            //update the wallet
+            accountService.UpdateAccount(user.Id, createdUserWallet.Id, new AccountUpdateDTOIn
+            {
+                Name = "Updated wallet that now is a bank account",
+                InitialAmount = 15.69M,
+                AccountTypeId = bankAccountTypeId,
+                Description = "updated",
+                IsActive = true
+            });
+
+            var updatedWallet = accountService.GetAccount(user.Id, createdUserWallet.Id);
+            Assert.IsNotNull(updatedWallet);
+            Assert.IsTrue(updatedWallet.IsActive);
+            Assert.AreEqual(updatedWallet.Name, "Updated wallet that now is a bank account");
+            Assert.AreEqual(updatedWallet.Description, "updated");
+            Assert.AreEqual(updatedWallet.InitialAmount, 15.69M);
+            Assert.AreEqual(updatedWallet.ActualAmount, 14.5M);
+            Assert.IsNotNull(updatedWallet.AccountType);
+            Assert.AreEqual(updatedWallet.AccountType.Name, "Bank account");
         }
     }
 }
