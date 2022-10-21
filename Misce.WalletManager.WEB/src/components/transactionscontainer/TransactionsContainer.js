@@ -36,7 +36,7 @@ function TransactionsContainer({ token, transactionsFilters }) {
                 dividedTransactions[sectionTitle].push(transaction);
             });
             //at this point, all the transactions are divided, the section jsxs must be created
-            transactionSections = Object.keys(dividedTransactions).map(sectionTitle => <TransactionsSection transactions={dividedTransactions[sectionTitle]} title={sectionTitle}/>)
+            transactionSections = Object.keys(dividedTransactions).map(sectionTitle => <TransactionsSection key={sectionTitle} transactions={dividedTransactions[sectionTitle]} title={sectionTitle}/>)
             return transactionSections;
         }
     }

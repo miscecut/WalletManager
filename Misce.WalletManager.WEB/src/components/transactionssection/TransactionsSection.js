@@ -12,7 +12,7 @@ function TransactionsSection({ title, transactions }) {
             <p className="misce-transactions-section-header-title">{title}</p>
             <hr className="misce-transactions-section-header-line"></hr>
         </div>
-        {transactions.map(t => <Transaction transaction={{ ...t, dateTime: new Date(t.dateTime).toLocaleString().replace(',', ' -') }} />)}
+        {transactions.map(t => <Transaction key={t.id} transaction={{ ...t, dateTime: new Date(t.dateTime).toLocaleString().replace(',', ' -') }} />)}
     </div>
 }
 

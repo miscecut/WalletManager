@@ -129,7 +129,7 @@ function TransactionsPage(props) {
                     <label className="misce-input-label">From account:</label>
                     <select className="misce-select" value={filters.fromAccountId} onChange={e => setFilters({ ...filters, fromAccountId: e.target.value })}>
                         <option value="">All</option>
-                        {accounts.map(account => <option className="misce-option" value={account.id}>{account.name}</option>)}
+                        {accounts.map(account => <option key={account.id} className="misce-option" value={account.id}>{account.name}</option>)}
                     </select>
                 </div>
                 :
@@ -140,7 +140,7 @@ function TransactionsPage(props) {
                     <label className="misce-input-label">To account:</label>
                     <select className="misce-select" value={filters.toAccountId} onChange={e => setFilters({ ...filters, toAccountId: e.target.value })}>
                         <option value="">All</option>
-                        {accounts.map(account => <option className="misce-option" value={account.id}>{account.name}</option>)}
+                        {accounts.map(account => <option key={account.id} className="misce-option" value={account.id}>{account.name}</option>)}
                     </select>
                 </div>
                 :
@@ -151,7 +151,7 @@ function TransactionsPage(props) {
                     <label className="misce-input-label">Transaction category:</label>
                     <select className="misce-select" value={filters.transactionCategoryId} onChange={e => setFilters({ ...filters, transactionCategoryId: e.target.value })}>
                         <option value="">All</option>
-                        {transactionCategories.map(tc => <option className={`misce-option ${tc.isExpenseType ? 'expense-option' : 'profit-option'}`} value={tc.id}>{tc.name}</option>)}
+                        {transactionCategories.map(tc => <option key={tc.id} className={`misce-option ${tc.isExpenseType ? 'expense-option' : 'profit-option'}`} value={tc.id}>{tc.name}</option>)}
                     </select>
                 </div>
                 :
@@ -162,7 +162,7 @@ function TransactionsPage(props) {
                     <label className="misce-input-label">Transaction subcategory:</label>
                     <select className="misce-select" value={filters.transactionSubCategoryId} onChange={e => setFilters({ ...filters, transactionSubCategoryId: e.target.value })}>
                         <option value="">All</option>
-                        {transactionSubCategories.map(tsc => <option className="misce-option" value={tsc.id}>{tsc.name}</option>)}
+                        {transactionSubCategories.map(tsc => <option key={tsc.id} className="misce-option" value={tsc.id}>{tsc.name}</option>)}
                     </select>
                 </div>
                 :
