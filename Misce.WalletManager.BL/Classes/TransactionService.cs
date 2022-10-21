@@ -32,61 +32,77 @@ namespace Misce.WalletManager.BL.Classes
 
         public TransactionDTOOut? GetTransaction(Guid userId, Guid transactionId)
         {
-            var query = from transaction in _walletManagerContext.Transactions
-                        from account in _walletManagerContext.Accounts
-                        join subCategory in _walletManagerContext.TransactionSubCategories
-                            on transaction.SubCategory equals subCategory into subCategories
-                        from subCategorySubquery in subCategories.DefaultIfEmpty()
-                        join category in _walletManagerContext.TransactionCategories
-                            on subCategorySubquery.Category equals category
-                        where transaction.User.Id == userId
-                        && transaction.Id == transactionId
-                        && (account == transaction.FromAccount || account == transaction.ToAccount)
-                        select new TransactionDTOOut
-                        {
-                            Id = transactionId,
-                            Title = transaction.Title,
-                            Description = transaction.Description,
-                            Amount = transaction.Amount,
-                            FromAccount = transaction.FromAccount == null ? null : new AccountReducedDTOOut
-                            {
-                                Id = transaction.FromAccount.Id,
-                                Name = transaction.FromAccount.Name,
-                                IsActive = transaction.FromAccount.IsActive,
-                                AccountType = new AccountTypeDTOOut
-                                {
-                                    Id = transaction.FromAccount.AccountType.Id,
-                                    Name = transaction.FromAccount.AccountType.Name
-                                }
-                            },
-                            ToAccount = transaction.ToAccount == null ? null : new AccountReducedDTOOut
-                            {
-                                Id = transaction.ToAccount.Id,
-                                Name = transaction.ToAccount.Name,
-                                IsActive = transaction.ToAccount.IsActive,
-                                AccountType = new AccountTypeDTOOut
-                                {
-                                    Id = transaction.ToAccount.AccountType.Id,
-                                    Name = transaction.ToAccount.AccountType.Name
-                                }
-                            },
-                            DateTime = transaction.DateTime,
-                            TransactionSubCategory = transaction.SubCategory != null ? new TransactionSubCategoryDTOOut
-                            {
-                                Id = subCategorySubquery.Id,
-                                Name = subCategorySubquery.Name,
-                                Description = subCategorySubquery.Description,
-                                TransactionCategory = new TransactionCategoryDTOOut
-                                {
-                                    Id = subCategorySubquery.Category.Id,
-                                    Name = subCategorySubquery.Category.Name,
-                                    Description = subCategorySubquery.Category.Description,
-                                    IsExpenseType = subCategorySubquery.Category.IsExpenseCategory
-                                }
-                            } : null
-                        };
+            var transactionQuery = from transaction in _walletManagerContext.Transactions
+                                   where transaction.User.Id == userId
+                                   && transaction.Id == transactionId
+                                   select transaction;
 
-            return query.FirstOrDefault();
+            if(transactionQuery.Any())
+            {
+                var transaction = transactionQuery.First();
+                Account? fromAccount = null;
+                Account? toAccount = null;
+                TransactionSubCategory? subCategory = null; 
+
+                if(transaction.SubCategory != null)
+                    subCategory = (from tsc in _walletManagerContext.TransactionSubCategories
+                                   where tsc.Id == transaction.SubCategory.Id
+                                   select tsc).FirstOrDefault();
+                if(transaction.FromAccount != null)
+                    fromAccount = (from acc in _walletManagerContext.Accounts
+                                   where acc.Id == transaction.FromAccount.Id
+                                   select acc).FirstOrDefault();
+                if(transaction.ToAccount != null)
+                    toAccount = (from acc in _walletManagerContext.Accounts
+                                 where acc.Id == transaction.ToAccount.Id
+                                 select acc).FirstOrDefault();
+
+                return new TransactionDTOOut
+                {
+                    Id = transaction.Id,
+                    Title = transaction.Title,
+                    Description = transaction.Description,
+                    Amount = transaction.Amount,
+                    FromAccount = fromAccount == null ? null : new AccountReducedDTOOut
+                    {
+                        Id = fromAccount.Id,
+                        Name = fromAccount.Name,
+                        IsActive = fromAccount.IsActive,
+                        AccountType = new AccountTypeDTOOut
+                        {
+                            Id = fromAccount.AccountType.Id,
+                            Name = fromAccount.AccountType.Name
+                        }
+                    },
+                    ToAccount = toAccount == null ? null : new AccountReducedDTOOut
+                    {
+                        Id = toAccount.Id,
+                        Name = toAccount.Name,
+                        IsActive = toAccount.IsActive,
+                        AccountType = new AccountTypeDTOOut
+                        {
+                            Id = toAccount.AccountType.Id,
+                            Name = toAccount.AccountType.Name
+                        }
+                    },
+                    DateTime = transaction.DateTime,
+                    TransactionSubCategory = subCategory == null ? null : new TransactionSubCategoryDTOOut
+                    {
+                        Id = subCategory.Id,
+                        Name = subCategory.Name,
+                        Description = subCategory.Description,
+                        TransactionCategory = new TransactionCategoryDTOOut
+                        {
+                            Id = subCategory.Category.Id,
+                            Name = subCategory.Category.Name,
+                            Description = subCategory.Category.Description,
+                            IsExpenseType = subCategory.Category.IsExpenseCategory
+                        }
+                    }
+                };
+            }
+
+            return null;
         }
 
         public IEnumerable<TransactionDTOOut> GetTransactions(Guid userId, int limit, int page, string? title = null,Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)

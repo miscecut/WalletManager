@@ -1,6 +1,7 @@
 using Misce.WalletManager.BL.Classes;
-using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.DTO.DTO.Account;
+using Misce.WalletManager.DTO.DTO.Transaction;
+using Misce.WalletManager.DTO.DTO.User;
 
 namespace Misce.WalletManager.Test.ServiceTests
 {
@@ -8,288 +9,124 @@ namespace Misce.WalletManager.Test.ServiceTests
     public class AccountServiceTest
     {
         [TestMethod]
-        public void TestGetAccounts()
+        public void TestAccountCreateAndGet()
         {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_1", saddamId, misceId, svetlanaId);
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
 
             //initialize the services
-            var accountService = new AccountService(dbContext);
-            var accountTypeService = new AccountTypeService(dbContext);
-
-            //get the bank account account type
-            var bankAccountType = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First();
-            Assert.IsNotNull(bankAccountType);
-
-            //get the 3 users' accounts
-            var misceAccounts = accountService.GetAccounts(misceId);
-            var saddamAccounts = accountService.GetAccounts(saddamId);
-            var svetlanaAccounts = accountService.GetAccounts(svetlanaId);
-
-            Assert.AreEqual(misceAccounts.Count(), 2); //miscecut has 2 accounts
-            Assert.AreEqual(misceAccounts.Where(a => a.Name == "Banco BPM").Count(), 1); //miscecut has a bank account named "Banco BPM"
-
-            Assert.AreEqual(saddamAccounts.Count(), 1); //saddam has 1 account
-            Assert.AreEqual(saddamAccounts.Where(a => a.Name == "Banco BPM").Count(), 0); //saddam doesn't see misce's account
-            Assert.AreEqual(saddamAccounts.First().ActualAmount, 313M);
-            Assert.AreEqual(saddamAccounts.First().AccountType.Name, "Bank account");
-
-            Assert.AreEqual(svetlanaAccounts.Count(), 2); //svetlana has 2 accounts
-            Assert.AreEqual(svetlanaAccounts.Where(a => a.AccountType.Name == "Cash").Count(), 1); //svetlana has an account with type "Soldi"
-
-            //with active query parameter
-            var misceActiveAccounts = accountService.GetAccounts(misceId, active: true);
-
-            Assert.AreEqual(misceActiveAccounts.Count(), 1); //miscecut has 1 active account
-            Assert.AreEqual(misceActiveAccounts.Where(a => a.Name == "Contanti").Count(), 1);
-
-            //with account type id parameter
-            var svetlanaCashAccounts = accountService.GetAccounts(svetlanaId, accountTypeId: bankAccountType.Id);
-
-            Assert.AreEqual(svetlanaCashAccounts.Count(), 1);
-        }
-
-        [TestMethod]
-        public void TestGetAccount()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_2", saddamId, misceId, svetlanaId);
-
-            //initialize the services
-            var accountService = new AccountService(dbContext);
-
-            //get misce's cash account's id
-            var misceCashAccountGuid = accountService
-                .GetAccounts(misceId)
-                .Where(a => a.Name == "Contanti")
-                .Select(a => a.Id)
-                .First();
-
-            //try to get misce's account with misce's account and saddam's account
-            var misceCashAccount = accountService.GetAccount(misceCashAccountGuid, misceId);
-            var saddamGoAway = accountService.GetAccount(misceCashAccountGuid, saddamId);
-
-            Assert.IsNotNull(misceCashAccount);
-            Assert.AreEqual(misceCashAccount.ActualAmount, 9.01M);
-            Assert.IsNotNull(misceCashAccount.AccountType);
-            Assert.AreEqual(misceCashAccount.AccountType.Name, "Cash");
-            Assert.IsNull(saddamGoAway);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(IncorrectDataException))]
-        public void TestFailingCreateAccount()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_3", saddamId, misceId, svetlanaId);
-
-            //initialize the services
-            var accountService = new AccountService(dbContext);
-
-            //try to create a new account with a not valid account type id
-            var newSvetlanalAccount = new AccountCreationDTOIn
-            {
-                InitialAmount = 1000,
-                Name = "Buoni pasto",
-                IsActive = true,
-                AccountTypeId = Guid.NewGuid()
-            };
-            accountService.CreateAccount(svetlanaId, newSvetlanalAccount);
-        }
-
-        [TestMethod]
-        public void TestCreateAccount()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_4", saddamId, misceId, svetlanaId);
-
-            //initialize the services
-            var accountTypeService = new AccountTypeService(dbContext);
-            var accountService = new AccountService(dbContext);
-
-            //get the account types
-            var accountTypes = accountTypeService.GetAccountTypes();
-
-            //create a new account for svetlana
-            var newSvetlanalAccount = new AccountCreationDTOIn
-            {
-                InitialAmount = 1000,
-                Name = "Buoni pasto",
-                Description = "io putana",
-                IsActive = true,
-                AccountTypeId = accountTypes.Where(at => at.Name == "Bank account").Select(at => at.Id).First()
-            };
-            var newAccount = accountService.CreateAccount(svetlanaId, newSvetlanalAccount);
-
-            //verify that the account now exists with the correct fields
-            var createdSvetlanaAccount = accountService.GetAccount(newAccount.Id, svetlanaId);
-            Assert.IsNotNull(createdSvetlanaAccount);
-            Assert.AreEqual(createdSvetlanaAccount.Name, "Buoni pasto");
-            Assert.AreEqual(createdSvetlanaAccount.ActualAmount, 1000);
-            Assert.IsTrue(createdSvetlanaAccount.IsActive);
-            Assert.AreEqual(createdSvetlanaAccount.Description, "io putana");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(IncorrectDataException))]
-        public void TestFailingUpdateAccount1()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_5", saddamId, misceId, svetlanaId);
-
-            //initialize the services
-            var accountTypeService = new AccountTypeService(dbContext);
-            var accountService = new AccountService(dbContext);
-
-            //get svetlana's sex bank account, with no description
-            var svetlanaBankAccount = accountService.GetAccounts(svetlanaId, active: true).Where(a => a.Name == "Sex Bank").First();
-            Assert.IsNotNull(svetlanaBankAccount);
-            Assert.AreEqual(svetlanaBankAccount.Name, "Sex Bank");
-            Assert.IsNull(svetlanaBankAccount.Description);
-
-            //try to update the account without a name and a status
-            var updatedSvetlanaBankAccount = new AccountUpdateDTOIn
-            {
-                InitialAmount = svetlanaBankAccount.InitialAmount,
-                AccountTypeId = svetlanaBankAccount.AccountType.Id,
-                Description = "banca di sesso"
-            };
-            accountService.UpdateAccount(svetlanaId, svetlanaBankAccount.Id, updatedSvetlanaBankAccount);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ElementNotFoundException))]
-        public void TestFailingUpdateAccount2()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_6", saddamId, misceId, svetlanaId);
-
-            //initialize the services
-            var accountTypeService = new AccountTypeService(dbContext);
-            var accountService = new AccountService(dbContext);
-
-            //get svetlana's sex bank account, with no description
-            var svetlanaBankAccount = accountService.GetAccounts(svetlanaId, active: true).Where(a => a.Name == "Sex Bank").First();
-            Assert.IsNotNull(svetlanaBankAccount);
-            Assert.AreEqual(svetlanaBankAccount.Name, "Sex Bank");
-            Assert.IsNull(svetlanaBankAccount.Description);
-
-            //try to update the account with misce's user
-            var updatedSvetlanaBankAccount = new AccountUpdateDTOIn
-            {
-                InitialAmount = svetlanaBankAccount.InitialAmount,
-                Name = "Sexxx Bank",
-                IsActive = svetlanaBankAccount.IsActive,
-                AccountTypeId = svetlanaBankAccount.AccountType.Id,
-                Description = "banca di sesso"
-            };
-            accountService.UpdateAccount(misceId, svetlanaBankAccount.Id, updatedSvetlanaBankAccount);
-        }
-
-        [TestMethod]
-        public void TestUpdateAccount()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_7", saddamId, misceId, svetlanaId);
-
-            //initialize the services
-            var accountService = new AccountService(dbContext);
-            var accountTypeService = new AccountTypeService(dbContext);
-
-            //get svetlana's sex bank account, with no description
-            var svetlanaBankAccount = accountService.GetAccounts(svetlanaId, active: true).Where(a => a.Name == "Sex Bank").First();
-            Assert.IsNotNull(svetlanaBankAccount);
-            Assert.AreEqual(svetlanaBankAccount.Name, "Sex Bank");
-            Assert.IsNull(svetlanaBankAccount.Description);
-
-            //update the account with a new name and a description
-            var updatedSvetlanaBankAccount = new AccountUpdateDTOIn
-            {
-                InitialAmount = svetlanaBankAccount.InitialAmount,
-                Name = "Sexxx Bank",
-                IsActive = svetlanaBankAccount.IsActive,
-                AccountTypeId = svetlanaBankAccount.AccountType.Id,
-                Description = "banca di sesso"
-            };
-            var updatedAccountId = accountService.UpdateAccount(svetlanaId, svetlanaBankAccount.Id, updatedSvetlanaBankAccount);
-
-            //verify the changes in the updated account
-            svetlanaBankAccount = accountService.GetAccount(updatedAccountId.Id, svetlanaId);
-            Assert.IsNotNull(svetlanaBankAccount);
-            Assert.AreEqual(svetlanaBankAccount.Name, "Sexxx Bank");
-            Assert.AreEqual(svetlanaBankAccount.Description, "banca di sesso");
-            Assert.IsTrue(svetlanaBankAccount.IsActive);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(ElementNotFoundException))]
-        public void TestFailingDeleteAccount()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_8", saddamId, misceId, svetlanaId);
-
-            //initialize the services
-            var accountService = new AccountService(dbContext);
-            var accountTypeService = new AccountTypeService(dbContext);
-
-            //get saddam's bank account
-            var bankAccountType = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First();
-            var saddamBankAllah = accountService.GetAccounts(saddamId, accountTypeId: bankAccountType.Id).Where(a => a.Name == "Banco Allah").First();
-            Assert.IsNotNull(saddamBankAllah);
-
-            //try to delete saddam's account with svetlana's id, this will trigger the exception and fail
-            accountService.DeleteAccount(svetlanaId, saddamBankAllah.Id);
-        }
-
-        [TestMethod]
-        public void TestDeleteAccount()
-        {
-            //initialize the db context and the user ids
-            var misceId = Guid.NewGuid();
-            var saddamId = Guid.NewGuid();
-            var svetlanaId = Guid.NewGuid();
-            var dbContext = DbContextGeneration.GenerateDb("TEST_ACCOUNT_SERVICE_9", saddamId, misceId, svetlanaId);
-
-            //initialize the services
+            var userService = new UserService(dbContext);
             var accountService = new AccountService(dbContext);
             var accountTypeService = new AccountTypeService(dbContext);
             var transactionService = new TransactionService(dbContext);
 
-            //get saddam's bank account
-            var saddamBankAllah = accountService.GetAccounts(saddamId).Where(a => a.Name == "Banco Allah").First();
-            Assert.IsNotNull(saddamBankAllah);
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "GS7fss787f",
+                ConfirmPassword = "GS7fss787f"
+            });
 
-            //and delete it
-            accountService.DeleteAccount(saddamId, saddamBankAllah.Id);
+            //create the other user
+            var otherUser = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "nomeacaso",
+                Password = "dnvin!IHUIHUIH2",
+                ConfirmPassword = "dnvin!IHUIHUIH2"
+            });
 
-            //verify that the account was succesfully deleted and there are none left
-            Assert.IsFalse(accountService.GetAccounts(saddamId).Any());
-            //verify that, since every transaction was under the deleted account, there are none left
-            Assert.IsFalse(transactionService.GetTransactions(saddamId, 100, 0).Any());
+            //get the bank account account type
+            var bankAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First().Id;
+            var cashAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Cash").First().Id;
+
+            //create the user's inactive bank account
+            var createdUserBankAccount = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                Name = "NY Bank",
+                InitialAmount = 500,
+                IsActive = false,
+                AccountTypeId = bankAccountTypeId
+            });
+            Assert.IsNotNull(createdUserBankAccount);
+            Assert.IsFalse(createdUserBankAccount.IsActive);
+            Assert.AreEqual(createdUserBankAccount.Name, "NY Bank");
+            Assert.IsTrue(string.IsNullOrEmpty(createdUserBankAccount.Description));
+            Assert.AreEqual(createdUserBankAccount.InitialAmount, 500);
+            Assert.AreEqual(createdUserBankAccount.ActualAmount, 500);
+            Assert.IsNotNull(createdUserBankAccount.AccountType);
+            Assert.AreEqual(createdUserBankAccount.AccountType.Name, "Bank account");
+
+            //create the user's wallet
+            var createdUserWallet = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                Name = "Wallet",
+                InitialAmount = 14.69M,
+                IsActive = true,
+                AccountTypeId = cashAccountTypeId,
+                Description = "my wallet!"
+            });
+            Assert.IsNotNull(createdUserWallet);
+            Assert.IsTrue(createdUserWallet.IsActive);
+            Assert.AreEqual(createdUserWallet.Name, "Wallet");
+            Assert.AreEqual(createdUserWallet.Description, "my wallet!");
+            Assert.AreEqual(createdUserWallet.InitialAmount, 14.69M);
+            Assert.AreEqual(createdUserWallet.ActualAmount, 14.69M);
+            Assert.IsNotNull(createdUserWallet.AccountType);
+            Assert.AreEqual(createdUserWallet.AccountType.Name, "Cash");
+
+            //create the other user's bank account
+            var createdOtherUserBankAccount = accountService.CreateAccount(otherUser.Id, new AccountCreationDTOIn
+            {
+                Name = "BPM",
+                InitialAmount = 12.8M,
+                IsActive = true,
+                AccountTypeId = bankAccountTypeId
+            });
+            Assert.IsNotNull(createdOtherUserBankAccount);
+            Assert.IsTrue(createdOtherUserBankAccount.IsActive);
+            Assert.AreEqual(createdOtherUserBankAccount.Name, "BPM");
+            Assert.IsTrue(string.IsNullOrEmpty(createdOtherUserBankAccount.Description));
+            Assert.AreEqual(createdOtherUserBankAccount.InitialAmount, 12.8M);
+            Assert.AreEqual(createdOtherUserBankAccount.ActualAmount, 12.8M);
+            Assert.IsNotNull(createdOtherUserBankAccount.AccountType);
+            Assert.AreEqual(createdOtherUserBankAccount.AccountType.Name, "Bank account");
+
+            //get user's accounts
+            var userAccounts = accountService.GetAccounts(user.Id);
+            Assert.AreEqual(userAccounts.Count(), 2);
+            Assert.IsFalse(userAccounts.Where(a => a.Name == "BPM").Any());
+
+            //get user's active accounts
+            var userActiveAccounts = accountService.GetAccounts(user.Id, active: true);
+            Assert.AreEqual(userActiveAccounts.Count(), 1);
+            Assert.IsTrue(userActiveAccounts.Where(a => a.Name == "Wallet").Any());
+            Assert.AreEqual(userActiveAccounts.First().ActualAmount, 14.69M);
+
+            //get user's bank accounts
+            var userBankAccounts = accountService.GetAccounts(user.Id, accountTypeId: bankAccountTypeId);
+            Assert.AreEqual(userBankAccounts.Count(), 1);
+            Assert.IsTrue(userBankAccounts.Where(a => a.Name == "NY Bank").Any());
+
+            //create an expense to decrease the total amount of the user's wallet
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                FromAccountId = createdUserWallet.Id,
+                Amount = 1.19M,
+                Title = "Onions",
+                DateTime = DateTime.UtcNow
+            });
+            Assert.AreEqual(accountService.GetAccounts(user.Id, active: true, accountTypeId: cashAccountTypeId).Single().ActualAmount, 13.5M);
+
+            //create a profit to decrease the total amount of the user's wallet
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                ToAccountId = createdUserWallet.Id,
+                Amount = 20,
+                Title = "Random money",
+                DateTime = DateTime.UtcNow
+            });
+            Assert.AreEqual(accountService.GetAccounts(user.Id, active: true, accountTypeId: cashAccountTypeId).Single().ActualAmount, 33.5M);
         }
     }
 }
