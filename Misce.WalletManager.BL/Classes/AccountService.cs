@@ -27,7 +27,7 @@ namespace Misce.WalletManager.BL.Classes
 
         #region Public Methods
 
-        public AccountDTOOut? GetAccount(Guid id, Guid userId)
+        public AccountDTOOut? GetAccount(Guid userId, Guid id)
         {
             var query = from a in _walletManagerContext.Accounts
                         where a.Id == id

@@ -41,7 +41,7 @@ namespace Misce.WalletManager.API.Controllers
 
             if (userId.HasValue)
             {
-                var account = _accountService.GetAccount(id, userId.Value);
+                var account = _accountService.GetAccount(userId.Value, id);
                 return account != null ? Ok(account) : NotFound();
             }
 

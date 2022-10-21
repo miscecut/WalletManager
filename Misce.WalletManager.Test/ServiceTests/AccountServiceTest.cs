@@ -128,5 +128,94 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
             Assert.AreEqual(accountService.GetAccounts(user.Id, active: true, accountTypeId: cashAccountTypeId).Single().ActualAmount, 33.5M);
         }
+
+        [TestMethod]
+        public void TestAccountCreateAndGetSingle()
+        {
+            //initialize the db context
+            var dbContext = DbContextGeneration.GenerateDb();
+
+            //initialize the services
+            var userService = new UserService(dbContext);
+            var accountService = new AccountService(dbContext);
+            var accountTypeService = new AccountTypeService(dbContext);
+            var transactionService = new TransactionService(dbContext);
+
+            //create the user
+            var user = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "miscecut",
+                Password = "GS7fss787f",
+                ConfirmPassword = "GS7fss787f"
+            });
+
+            //create the other user
+            var otherUser = userService.RegisterUser(new UserSignInDTOIn
+            {
+                Username = "nomeacaso",
+                Password = "dnvin!IHUIHUIH2",
+                ConfirmPassword = "dnvin!IHUIHUIH2"
+            });
+
+            //get the bank account account type
+            var bankAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First().Id;
+            var cashAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Cash").First().Id;
+
+            //create the user's wallet
+            var createdUserWallet = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                Name = "Wallet",
+                InitialAmount = 120.5M,
+                IsActive = true,
+                AccountTypeId = cashAccountTypeId,
+                Description = "my wallet!"
+            });
+
+            //create the other user's bank account
+            var createdOtherUserBankAccount = accountService.CreateAccount(otherUser.Id, new AccountCreationDTOIn
+            {
+                Name = "BPM",
+                InitialAmount = 0,
+                IsActive = true,
+                AccountTypeId = bankAccountTypeId
+            });
+
+            //get user's account
+            var userWallet = accountService.GetAccount(user.Id, createdUserWallet.Id);
+            Assert.IsNotNull(userWallet);
+            Assert.IsTrue(userWallet.IsActive);
+            Assert.AreEqual(userWallet.Name, "Wallet");
+            Assert.AreEqual(userWallet.Description, "my wallet!");
+            Assert.AreEqual(userWallet.InitialAmount, 120.5M);
+            Assert.AreEqual(userWallet.ActualAmount, 120.5M);
+            Assert.IsNotNull(userWallet.AccountType);
+            Assert.AreEqual(userWallet.AccountType.Name, "Cash");
+
+            //try to get the other user's account, this should be impossible
+            var otherUserAccount = accountService.GetAccount(user.Id, createdOtherUserBankAccount.Id);
+            Assert.IsNull(otherUserAccount);
+
+            //create an expense to decrease the total amount of the user's wallet
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                FromAccountId = createdUserWallet.Id,
+                Amount = 13.2M,
+                Title = "Stuff",
+                DateTime = DateTime.UtcNow
+            });
+            Assert.AreEqual(accountService.GetAccount(user.Id, createdUserWallet.Id)?.ActualAmount ?? 0, 107.3M);
+            Assert.AreEqual(accountService.GetAccount(user.Id, createdUserWallet.Id)?.InitialAmount ?? 0, 120.5M);
+
+            //create a profit to decrease the total amount of the user's wallet
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                FromAccountId = createdUserWallet.Id,
+                Amount = 20,
+                Title = "Random expense",
+                DateTime = DateTime.UtcNow
+            });
+            Assert.AreEqual(accountService.GetAccount(user.Id, createdUserWallet.Id)?.ActualAmount ?? 0, 87.3M);
+            Assert.AreEqual(accountService.GetAccount(user.Id, createdUserWallet.Id)?.InitialAmount ?? 0, 120.5M);
+        }
     }
 }
