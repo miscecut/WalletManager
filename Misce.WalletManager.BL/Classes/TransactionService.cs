@@ -47,15 +47,21 @@ namespace Misce.WalletManager.BL.Classes
                 if(transaction.SubCategory != null)
                     subCategory = (from tsc in _walletManagerContext.TransactionSubCategories
                                    where tsc.Id == transaction.SubCategory.Id
-                                   select tsc).FirstOrDefault();
+                                   select tsc)
+                                   .Include(tsc => tsc.Category)
+                                   .FirstOrDefault();
                 if(transaction.FromAccount != null)
                     fromAccount = (from acc in _walletManagerContext.Accounts
                                    where acc.Id == transaction.FromAccount.Id
-                                   select acc).FirstOrDefault();
+                                   select acc)
+                                   .Include(acc => acc.AccountType)
+                                   .FirstOrDefault();
                 if(transaction.ToAccount != null)
                     toAccount = (from acc in _walletManagerContext.Accounts
                                  where acc.Id == transaction.ToAccount.Id
-                                 select acc).FirstOrDefault();
+                                 select acc)
+                                 .Include(acc => acc.AccountType)
+                                 .FirstOrDefault();
 
                 return new TransactionDTOOut
                 {
@@ -219,7 +225,7 @@ namespace Misce.WalletManager.BL.Classes
                             ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault(),
                             User = user,
                             DateTime = transaction.DateTime.GetValueOrDefault().ToUniversalTime(),
-                            SubCategory = transactionSubCategory
+                            SubCategory = transaction.TransactionSubCategoryId.HasValue ? transactionSubCategory : null
                         };
                         _walletManagerContext.Transactions.Add(transactionToCreate);
 
