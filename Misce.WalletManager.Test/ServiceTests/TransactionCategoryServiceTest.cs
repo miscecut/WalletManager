@@ -1,5 +1,7 @@
 ﻿using Misce.WalletManager.BL.Classes;
 using Misce.WalletManager.BL.Exceptions;
+using Misce.WalletManager.DTO.DTO.Account;
+using Misce.WalletManager.DTO.DTO.Transaction;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using Misce.WalletManager.DTO.DTO.User;
@@ -388,8 +390,11 @@ namespace Misce.WalletManager.Test.ServiceTests
 
             //initialize the services
             var userService = new UserService(dbContext);
+            var accountService = new AccountService(dbContext);
+            var accountTypeService = new AccountTypeService(dbContext);
             var transactionCategoryService = new TransactionCategoryService(dbContext);
             var transactionSubCategoryService = new TransactionSubCategoryService(dbContext);
+            var transactionService = new TransactionService(dbContext);
 
             //create the user
             var user = userService.RegisterUser(new UserSignInDTOIn
@@ -397,6 +402,18 @@ namespace Misce.WalletManager.Test.ServiceTests
                 Username = "merions",
                 Password = "Wella111111",
                 ConfirmPassword = "Wella111111"
+            });
+
+            //get the bank account account type
+            var bankAccountTypeId = accountTypeService.GetAccountTypes().Where(at => at.Name == "Bank account").First().Id;
+
+            //create a bank account for the user
+            var createdAccount = accountService.CreateAccount(user.Id, new AccountCreationDTOIn
+            {
+                AccountTypeId = bankAccountTypeId,
+                Name = "Banco BPM",
+                InitialAmount = 1000,
+                IsActive = true
             });
 
             //create the user's electronics transaction category
@@ -407,12 +424,12 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
 
             //and create the sub categories under electronics
-            transactionSubCategoryService.CreateTransactionSubCategory(user.Id, new TransactionSubCategoryCreationDTOIn
+            var createdPcSubCategory = transactionSubCategoryService.CreateTransactionSubCategory(user.Id, new TransactionSubCategoryCreationDTOIn
             {
                 Name = "PC",
                 TransactionCategoryId = createdElectronicsTransactionCategory.Id
             });
-            transactionSubCategoryService.CreateTransactionSubCategory(user.Id, new TransactionSubCategoryCreationDTOIn
+            var createdCarSubCategory = transactionSubCategoryService.CreateTransactionSubCategory(user.Id, new TransactionSubCategoryCreationDTOIn
             {
                 Name = "Car",
                 TransactionCategoryId = createdElectronicsTransactionCategory.Id
@@ -426,7 +443,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
 
             //and create the sub categories under dresses
-            transactionSubCategoryService.CreateTransactionSubCategory(user.Id, new TransactionSubCategoryCreationDTOIn
+            var createdShoesSubCategory = transactionSubCategoryService.CreateTransactionSubCategory(user.Id, new TransactionSubCategoryCreationDTOIn
             {
                 Name = "Shoes",
                 TransactionCategoryId = createdDressesTransactionCategory.Id
@@ -437,12 +454,42 @@ namespace Misce.WalletManager.Test.ServiceTests
                 TransactionCategoryId = createdDressesTransactionCategory.Id
             });
 
+            //finally, create 2 transactions under the electronics category
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                FromAccountId = createdAccount.Id,
+                Title = "GTX 3070",
+                Amount = 532.9M,
+                DateTime = DateTime.UtcNow,
+                TransactionSubCategoryId = createdPcSubCategory.Id
+            });
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                FromAccountId = createdAccount.Id,
+                Title = "New battery",
+                Amount = 101.24M,
+                DateTime = DateTime.UtcNow,
+                TransactionSubCategoryId = createdCarSubCategory.Id
+            });
+            transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
+            {
+                FromAccountId = createdAccount.Id,
+                Title = "New shoes",
+                Amount = 49,
+                DateTime = DateTime.UtcNow,
+                TransactionSubCategoryId = createdShoesSubCategory.Id
+            });
+
             //and delete the electronics category
             transactionCategoryService.DeleteTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id);
             //check that the electronics category is now gone
             Assert.IsNull(transactionCategoryService.GetTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id));
             //and the sub categories under electronics are gone too
             Assert.IsFalse(transactionSubCategoryService.GetTransactionSubCategories(user.Id, transactionCategoryId: createdElectronicsTransactionCategory.Id).Any());
+            //and there are still 3 transactions
+            Assert.AreEqual(transactionService.GetTransactionsCount(user.Id), 3);
+            //but there are now 2 transactions without subcategory
+            Assert.AreEqual(transactionService.GetTransactions(user.Id, 100, 0).Where(t => t.TransactionSubCategory == null).Count(), 2);
         }
 
         [TestMethod]
