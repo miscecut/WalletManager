@@ -5,6 +5,8 @@ import './TransactionsContainer.css';
 import TransactionsSection from './../transactionssection/TransactionsSection.js'
 //api
 import { getApiBaseUrl, getGetCommonSettings, getTransactionsGetQueryParameters } from './../../jsutils/apirequests.js';
+//images
+import NothingImage from './../../images/nothing-gray.png';
 
 function TransactionsContainer({ token, transactionsFilters }) {
     const [transactions, setTransactions] = useState([]);
@@ -18,11 +20,19 @@ function TransactionsContainer({ token, transactionsFilters }) {
             });
     }, [transactionsFilters]);
 
+    //TODO: make this a component(elementName)?
+    function getNoTransactionsJsx() {
+        return <div className="misce-no-elements-card">
+            <img className="misce-no-elements-card-image" src={NothingImage}></img>
+            <p className="misce-no-elements-card-message">No transactions found.</p>
+        </div>
+    }
+
     //draw the content, the transactions divided by day or week or month
     function generateTransactionsSections() {
         //if no transaction were found, return a message
         if (transactions.length == 0)
-            return <h1>NIENTE</h1>;
+            return getNoTransactionsJsx();
         else {
             //start by dividing the transactions by day, week or month
             let dividedTransactions = {};
