@@ -14,10 +14,12 @@ import {
 
 function TransactionsPage(props) {
     //set one month ago as default fromDate filter value
-    let oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-    oneMonthAgo.setHours(0, 0, 0, 0);
+    let now = new Date();
+    let theFirstOfTheMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    theFirstOfTheMonth.setHours(2, 0, 0, 0); //2 because gtm +2
 
+    //the user's accounts to chose from
+    const [accounts, setAccounts] = useState([]);
     //the available transaction categories to chose from
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the available transaction subcategories to chose from
@@ -26,16 +28,29 @@ function TransactionsPage(props) {
     //transactionType: '', 'PROFIT', 'EXPENSE', 'TRANSFER'
     const [filters, setFilters] = useState({
         groupBy: 'DAYS',
-        fromDate: oneMonthAgo.toISOString().substring(0, 10),
+        fromDate: theFirstOfTheMonth.toISOString().substring(0, 10),
         transactionType: '',
         transactionCategoryId: '',
-        transactionSubCategoryId: ''
+        transactionSubCategoryId: '',
+        fromAccountId: '',
+        toAccountId: ''
     });
     //modals state
     const [modals, setModals] = useState({ transactionCreateModalIsOpen: false });
 
     //this function closes the transaction create modal
     const closeTransactionCreateModal = () => setModals({ ...modals, transactionCreateModalIsOpen: false });
+
+    //get the user's account, this function is called only at the page startup
+    useEffect(() => {
+        fetch(getApiBaseUrl() + 'accounts', getGetCommonSettings(props.token))
+            .then(res => {
+                if (res.ok)
+                    res.json().then(data => {
+                        setAccounts(data);
+                    });
+            });
+    }, []);
 
     //update the available transaction categories when the transaction type selected is updated
     useEffect(() => {
@@ -50,7 +65,12 @@ function TransactionsPage(props) {
                     if (res.ok)
                         res.json().then(data => {
                             setTransactionCategories(data);
-                            setFilters({...filters, transactionCategoryId: '' });
+                            setFilters({
+                                ...filters,
+                                transactionCategoryId: '',
+                                fromAccountId: filters.transactionType == 'PROFIT' ? '' : filters.fromAccountId,
+                                toAccountId: filters.transactionType == 'EXPENSE' ? '' : filters.toAccountId
+                            });
                         });
                 });
         }
@@ -104,9 +124,29 @@ function TransactionsPage(props) {
                     <option value="TRANSFER">Transfer</option>
                 </select>
             </div>
-            {filters.transactionType === 'TRANSFER' ?
-                ''
+            {filters.transactionType != 'PROFIT' ?
+                <div className="misce-input-container">
+                    <label className="misce-input-label">From account:</label>
+                    <select className="misce-select" value={filters.fromAccountId} onChange={e => setFilters({ ...filters, fromAccountId: e.target.value })}>
+                        <option value="">All</option>
+                        {accounts.map(account => <option className="misce-option" value={account.id}>{account.name}</option>)}
+                    </select>
+                </div>
                 :
+                ''
+            }
+            {filters.transactionType != 'EXPENSE' ?
+                <div className="misce-input-container">
+                    <label className="misce-input-label">To account:</label>
+                    <select className="misce-select" value={filters.toAccountId} onChange={e => setFilters({ ...filters, toAccountId: e.target.value })}>
+                        <option value="">All</option>
+                        {accounts.map(account => <option className="misce-option" value={account.id}>{account.name}</option>)}
+                    </select>
+                </div>
+                :
+                ''
+            }
+            {filters.transactionType != 'TRANSFER' ?
                 <div className="misce-input-container">
                     <label className="misce-input-label">Transaction category:</label>
                     <select className="misce-select" value={filters.transactionCategoryId} onChange={e => setFilters({ ...filters, transactionCategoryId: e.target.value })}>
@@ -114,10 +154,10 @@ function TransactionsPage(props) {
                         {transactionCategories.map(tc => <option className={`misce-option ${tc.isExpenseType ? 'expense-option' : 'profit-option'}`} value={tc.id}>{tc.name}</option>)}
                     </select>
                 </div>
-            }
-            {filters.transactionType === 'TRANSFER' || filters.transactionCategoryId === '' ?
-                ''
                 :
+                ''
+            }
+            {filters.transactionType != 'TRANSFER' && filters.transactionCategoryId != '' ?
                 <div className="misce-input-container">
                     <label className="misce-input-label">Transaction subcategory:</label>
                     <select className="misce-select" value={filters.transactionSubCategoryId} onChange={e => setFilters({ ...filters, transactionSubCategoryId: e.target.value })}>
@@ -125,6 +165,8 @@ function TransactionsPage(props) {
                         {transactionSubCategories.map(tsc => <option className="misce-option" value={tsc.id}>{tsc.name}</option>)}
                     </select>
                 </div>
+                :
+                ''
             }
         </div>
         <TransactionCreateModal

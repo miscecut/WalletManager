@@ -57,7 +57,10 @@ export function getTransactionsGetQueryParameters(transactionsFilters) {
         limit: 1000,
         page: 0
     };
-    //transaction category id
+    if (transactionsFilters.fromAccountId != null && transactionsFilters.fromAccountId != '')
+        parameters.accountFromId = transactionsFilters.fromAccountId;
+    if (transactionsFilters.toAccountId != null && transactionsFilters.toAccountId != '')
+        parameters.accountToId = transactionsFilters.toAccountId;
     if (transactionsFilters.transactionCategoryId != null && transactionsFilters.transactionCategoryId != '')
         parameters.transactionCategoryId = transactionsFilters.transactionCategoryId;
     if (transactionsFilters.transactionSubCategoryId != null && transactionsFilters.transactionSubCategoryId != '')
