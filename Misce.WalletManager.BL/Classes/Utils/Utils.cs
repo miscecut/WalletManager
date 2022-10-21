@@ -15,6 +15,11 @@ namespace Misce.WalletManager.BL.Classes.Utils
             return validationResults;
         }
 
+        public static string SerializeSingleError(string field, string errorMessage)
+        {
+            return JsonSerializer.Serialize(new ErrorContainer(field, errorMessage));
+        }
+
         //this method returns a json with all the errors in the provided validation result list
         public static string SerializeErrors(IEnumerable<ValidationResult> validationResults)
         {

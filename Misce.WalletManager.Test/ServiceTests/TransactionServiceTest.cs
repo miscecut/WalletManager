@@ -59,7 +59,7 @@ namespace Misce.WalletManager.Test.ServiceTests
                 Description = "I forgot the description",
                 DateTime = saddamC4Puchase.DateTime,
                 Amount = 100.45M,
-                SubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
+                TransactionSubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
             };
             transactionService.UpdateTransaction(saddamId, saddamC4Puchase.Id, transactionToUpdate);
         }
@@ -89,7 +89,7 @@ namespace Misce.WalletManager.Test.ServiceTests
                 Description = "I forgot the description",
                 DateTime = saddamC4Puchase.DateTime,
                 Amount = 100.45M,
-                SubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
+                TransactionSubCategoryId = saddamC4Puchase.TransactionSubCategory?.Id ?? null
             };
             transactionService.UpdateTransaction(saddamId, saddamC4Puchase.Id, transactionToUpdate);
 

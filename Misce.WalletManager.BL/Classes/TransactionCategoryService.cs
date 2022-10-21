@@ -3,7 +3,6 @@ using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
-using System.Security.Principal;
 
 namespace Misce.WalletManager.BL.Classes
 {

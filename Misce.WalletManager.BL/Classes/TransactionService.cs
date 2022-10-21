@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
@@ -9,7 +8,6 @@ using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
-using System.Text.Json;
 
 namespace Misce.WalletManager.BL.Classes
 {
@@ -190,9 +188,9 @@ namespace Misce.WalletManager.BL.Classes
                         {
                             var isTransactionCategoryExpenseType = transactionSubCategory.Category.IsExpenseCategory;
                             if (transaction.ToAccountId.HasValue && !transaction.FromAccountId.HasValue && isTransactionCategoryExpenseType)
-                                throw new IncorrectDataException("An expense transaction must be created under an expense transaction subcategory");
+                                throw new IncorrectDataException(Utils.Utils.SerializeSingleError("TransactionSubCategoryId", "An expense transaction must be created under an expense transaction subcategory"));
                             if (!transaction.ToAccountId.HasValue && transaction.FromAccountId.HasValue && !isTransactionCategoryExpenseType)
-                                throw new IncorrectDataException("A profit transaction must be created under a profit transaction subcategory");
+                                throw new IncorrectDataException(Utils.Utils.SerializeSingleError("TransactionSubCategoryId", "A profit transaction must be created under a profit transaction subcategory"));
                         }
 
                         //create the transaction
@@ -220,10 +218,10 @@ namespace Misce.WalletManager.BL.Classes
                             throw new Exception();
                     }
                     else
-                        throw new IncorrectDataException();
+                        throw new IncorrectDataException(Utils.Utils.SerializeSingleError(transaction.FromAccountId != null ? "FromAccountId" : "ToAccountId", "The provided account ID " + (transaction.FromAccountId != null ? transaction.FromAccountId : transaction.ToAccountId) + " was not found"));
                 }
                 else
-                    throw new IncorrectDataException(JsonSerializer.Serialize(new ErrorContainer("TransactionSubCategoryId", "The provided transaction ID " + transaction.TransactionSubCategoryId + " was not found")));
+                    throw new IncorrectDataException(Utils.Utils.SerializeSingleError("TransactionSubCategoryId", "The provided transaction subcategory ID " + transaction.TransactionSubCategoryId + " was not found"));
             }
             else
                 throw new UserNotFoundException();
@@ -247,10 +245,10 @@ namespace Misce.WalletManager.BL.Classes
                 //check if the eventual transaction subcategory exists and it's owned by the user
                 var subCategoryQuery = from subCategory in _walletManagerContext.TransactionSubCategories
                                        where subCategory.Category.User.Id == userId
-                                       && (!transaction.SubCategoryId.HasValue || transaction.SubCategoryId.Value == subCategory.Id)
+                                       && (!transaction.TransactionSubCategoryId.HasValue || transaction.TransactionSubCategoryId.Value == subCategory.Id)
                                        select subCategory;
 
-                if (!transaction.SubCategoryId.HasValue || subCategoryQuery.Any())
+                if (!transaction.TransactionSubCategoryId.HasValue || subCategoryQuery.Any())
                 {
                     //accounts check
                     var userAccountsQuery = from account in _walletManagerContext.Accounts
@@ -273,14 +271,14 @@ namespace Misce.WalletManager.BL.Classes
                         {
                             var isTransactionCategoryExpenseType = transactionSubCategory.Category.IsExpenseCategory;
                             if (transaction.ToAccountId.HasValue && !transaction.FromAccountId.HasValue && isTransactionCategoryExpenseType)
-                                throw new IncorrectDataException("An expense transaction must be created under an expense transaction subcategory");
+                                throw new IncorrectDataException(Utils.Utils.SerializeSingleError("TransactionSubCategoryId", "An expense transaction must be created under an expense transaction subcategory"));
                             if (!transaction.ToAccountId.HasValue && transaction.FromAccountId.HasValue && !isTransactionCategoryExpenseType)
-                                throw new IncorrectDataException("A profit transaction must be created under a profit transaction subcategory");
+                                throw new IncorrectDataException(Utils.Utils.SerializeSingleError("TransactionSubCategoryId", "A profit transaction must be created under a profit transaction subcategory"));
                         }
 
                         //update the transaction
                         var transactionToUpdate = transactionToUpdateQuery.First();
-                        transactionToUpdate.SubCategory = transaction.SubCategoryId.HasValue ? subCategoryQuery.First() : null;
+                        transactionToUpdate.SubCategory = transaction.TransactionSubCategoryId.HasValue ? subCategoryQuery.First() : null;
                         transactionToUpdate.FromAccount = userAccountsQuery.Where(a => a.Id == transaction.FromAccountId.GetValueOrDefault()).FirstOrDefault();
                         transactionToUpdate.ToAccount = userAccountsQuery.Where(a => a.Id == transaction.ToAccountId.GetValueOrDefault()).FirstOrDefault();
                         transactionToUpdate.Title = transaction.Title;
@@ -300,10 +298,10 @@ namespace Misce.WalletManager.BL.Classes
                             throw new Exception();
                     }
                     else
-                        throw new IncorrectDataException("The account ID was not found");
+                        throw new IncorrectDataException(Utils.Utils.SerializeSingleError(transaction.FromAccountId != null ? "FromAccountId" : "ToAccountId", "The provided account ID " + (transaction.FromAccountId != null ? transaction.FromAccountId : transaction.ToAccountId) + " was not found"));
                 }
                 else
-                    throw new IncorrectDataException("The transaction subcategory ID " + transaction.SubCategoryId + " was not found");
+                    throw new IncorrectDataException(Utils.Utils.SerializeSingleError("TransactionSubCategoryId", "The provided transaction subcategory ID " + transaction.TransactionSubCategoryId + " was not found"));
             }
             else
                 throw new ElementNotFoundException();

@@ -192,7 +192,7 @@ namespace Misce.WalletManager.BL.Classes
                 };
             }
             else
-                throw new IncorrectDataException("The account type ID " + account.AccountTypeId + " was not found");
+                throw new IncorrectDataException(Utils.Utils.SerializeSingleError("AccountTypeId", "The account type ID " + account.AccountTypeId + " was not found"));
         }
 
         public AccountDTOOut UpdateAccount(Guid userId, Guid accountId, AccountUpdateDTOIn account)
@@ -235,7 +235,7 @@ namespace Misce.WalletManager.BL.Classes
                     return GetAccount(accountId, userId);
                 }
                 else
-                    throw new IncorrectDataException("The account type ID " + account.AccountTypeId + " was not found");
+                    throw new IncorrectDataException((Utils.Utils.SerializeSingleError("AccountTypeId", "The account type ID " + account.AccountTypeId + " was not found")));
             }
             else
                 throw new ElementNotFoundException();

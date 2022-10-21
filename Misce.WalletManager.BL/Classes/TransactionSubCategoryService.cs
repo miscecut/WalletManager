@@ -105,7 +105,7 @@ namespace Misce.WalletManager.BL.Classes
                 return createdTransactionSubCategory == null ? throw new Exception() : createdTransactionSubCategory;
             }
             else
-                throw new IncorrectDataException("The transaction category ID " + transactionSubCategory.TransactionCategoryId + " was not found");
+                throw new IncorrectDataException((Utils.Utils.SerializeSingleError("TransactionCategoryId", "The transaction category ID " + transactionSubCategory.TransactionCategoryId + " was not found")));
         }
 
         public TransactionSubCategoryDTOOut UpdateTransactionSubCategory(Guid userId, Guid transactionSubCategoryId, TransactionSubCategoryUpdateDTOIn transactionSubCategory)
@@ -144,7 +144,7 @@ namespace Misce.WalletManager.BL.Classes
                     return updatedTransactionSubCategory == null ? throw new Exception() : updatedTransactionSubCategory;
                 }
                 else
-                    throw new IncorrectDataException("The transaction category ID " + transactionSubCategory.TransactionCategoryId + " was not found");
+                    throw new IncorrectDataException((Utils.Utils.SerializeSingleError("TransactionCategoryId", "The transaction category ID " + transactionSubCategory.TransactionCategoryId + " was not found")));
             }
             else
                 throw new ElementNotFoundException();
