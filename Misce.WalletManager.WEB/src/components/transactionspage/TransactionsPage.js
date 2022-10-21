@@ -55,7 +55,7 @@ function TransactionsPage(props) {
     //update the available transaction categories when the transaction type selected is updated
     useEffect(() => {
         //if 'Tranfer' was selected, there is no point in showing the transaction category select
-        if (filters.transactionType == 'TRANSFER') {
+        if (filters.transactionType == '2') {
             setTransactionCategories([]);
             setFilters({...filters, transactionCategoryId: '' });
         }
@@ -68,8 +68,8 @@ function TransactionsPage(props) {
                             setFilters({
                                 ...filters,
                                 transactionCategoryId: '',
-                                fromAccountId: filters.transactionType == 'PROFIT' ? '' : filters.fromAccountId,
-                                toAccountId: filters.transactionType == 'EXPENSE' ? '' : filters.toAccountId
+                                fromAccountId: filters.transactionType == '1' ? '' : filters.fromAccountId,
+                                toAccountId: filters.transactionType == '0' ? '' : filters.toAccountId
                             });
                         });
                 });
@@ -79,7 +79,7 @@ function TransactionsPage(props) {
     //update the available transaction subcategories when the transaction category id selected is updated
     useEffect(() => {
         //if 'Tranfer' was selected or All the transaction categories are shown, there is no point in showing the transaction category select
-        if (filters.transactionType == 'TRANSFER' || filters.transactionCategoryId == '') {
+        if (filters.transactionType == 2 || filters.transactionCategoryId == '') {
             setTransactionSubCategories([]);
             setFilters({ ...filters, transactionSubCategoryId: '' });
         }
@@ -119,12 +119,12 @@ function TransactionsPage(props) {
                 <label className="misce-input-label">Transaction type:</label>
                 <select className="misce-select" value={filters.transactionType} onChange={e => setFilters({ ...filters, transactionType: e.target.value })}>
                     <option value="">All</option>
-                    <option value="PROFIT">Profit</option>
-                    <option value="EXPENSE">Expense</option>
-                    <option value="TRANSFER">Transfer</option>
+                    <option value="1">Profit</option>
+                    <option value="0">Expense</option>
+                    <option value="2">Transfer</option>
                 </select>
             </div>
-            {filters.transactionType != 'PROFIT' ?
+            {filters.transactionType != '1' ?
                 <div className="misce-input-container">
                     <label className="misce-input-label">From account:</label>
                     <select className="misce-select" value={filters.fromAccountId} onChange={e => setFilters({ ...filters, fromAccountId: e.target.value })}>
@@ -135,7 +135,7 @@ function TransactionsPage(props) {
                 :
                 ''
             }
-            {filters.transactionType != 'EXPENSE' ?
+            {filters.transactionType != '0' ?
                 <div className="misce-input-container">
                     <label className="misce-input-label">To account:</label>
                     <select className="misce-select" value={filters.toAccountId} onChange={e => setFilters({ ...filters, toAccountId: e.target.value })}>
@@ -146,7 +146,7 @@ function TransactionsPage(props) {
                 :
                 ''
             }
-            {filters.transactionType != 'TRANSFER' ?
+            {filters.transactionType != '2' ?
                 <div className="misce-input-container">
                     <label className="misce-input-label">Transaction category:</label>
                     <select className="misce-select" value={filters.transactionCategoryId} onChange={e => setFilters({ ...filters, transactionCategoryId: e.target.value })}>
@@ -157,7 +157,7 @@ function TransactionsPage(props) {
                 :
                 ''
             }
-            {filters.transactionType != 'TRANSFER' && filters.transactionCategoryId != '' ?
+            {filters.transactionType != '2' && filters.transactionCategoryId != '' ?
                 <div className="misce-input-container">
                     <label className="misce-input-label">Transaction subcategory:</label>
                     <select className="misce-select" value={filters.transactionSubCategoryId} onChange={e => setFilters({ ...filters, transactionSubCategoryId: e.target.value })}>

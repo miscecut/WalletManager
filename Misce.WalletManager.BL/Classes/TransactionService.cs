@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Misce.WalletManager.BL.Enums;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
@@ -111,9 +112,9 @@ namespace Misce.WalletManager.BL.Classes
             return null;
         }
 
-        public IEnumerable<TransactionDTOOut> GetTransactions(Guid userId, int limit, int page, string? title = null,Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
+        public IEnumerable<TransactionDTOOut> GetTransactions(Guid userId, int limit, int page, TransactionType? transactionType = null, string? title = null, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
         {
-            var query = GetFilteredTransactionsQuery(userId, title, fromAccountId, toAccountId, categoryId, subCategoryId, fromDateTime, toDateTime);
+            var query = GetFilteredTransactionsQuery(userId, transactionType, title, fromAccountId, toAccountId, categoryId, subCategoryId, fromDateTime, toDateTime);
 
             //apply page and limit
             query = query.Skip(limit * page).Take(limit);
@@ -163,9 +164,9 @@ namespace Misce.WalletManager.BL.Classes
             }).ToList();
         }
 
-        public int GetTransactionsCount(Guid userId, string? title = null, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
+        public int GetTransactionsCount(Guid userId, TransactionType? transactionType = null, string ? title = null, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
         {
-            var transactionsQuery = GetFilteredTransactionsQuery(userId, title, fromAccountId, toAccountId, categoryId, subCategoryId, fromDateTime, toDateTime);
+            var transactionsQuery = GetFilteredTransactionsQuery(userId, transactionType, title, fromAccountId, toAccountId, categoryId, subCategoryId, fromDateTime, toDateTime);
             return transactionsQuery.Count();
         }
 
@@ -362,12 +363,21 @@ namespace Misce.WalletManager.BL.Classes
             return userQuery.FirstOrDefault();
         }
 
-        private IQueryable<Transaction> GetFilteredTransactionsQuery(Guid userId, string? title = null, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
+        private IQueryable<Transaction> GetFilteredTransactionsQuery(Guid userId, TransactionType? transactionType = null, string ? title = null, Guid? fromAccountId = null, Guid? toAccountId = null, Guid? categoryId = null, Guid? subCategoryId = null, DateTime? fromDateTime = null, DateTime? toDateTime = null)
         {
             var transactionsQuery = from transaction in _walletManagerContext.Transactions
                                     where transaction.User.Id == userId
                                     select transaction;
             //apply filters
+            if(transactionType != null)
+            {
+                if(transactionType == TransactionType.EXPENSE)
+                    transactionsQuery = transactionsQuery.Where(t => t.FromAccount != null && t.ToAccount == null);
+                else if (transactionType == TransactionType.PROFIT)
+                    transactionsQuery = transactionsQuery.Where(t => t.FromAccount == null && t.ToAccount != null);
+                else //TRANSFER
+                    transactionsQuery = transactionsQuery.Where(t => t.FromAccount != null && t.ToAccount != null);
+            }
             if (title != null)
                 transactionsQuery = transactionsQuery.Where(t => t.Title != null && t.Title.ToUpper().Contains(title.ToUpper()));
             if (fromAccountId != null)

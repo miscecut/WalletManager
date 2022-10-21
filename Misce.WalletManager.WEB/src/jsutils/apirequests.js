@@ -57,6 +57,8 @@ export function getTransactionsGetQueryParameters(transactionsFilters) {
         limit: 1000,
         page: 0
     };
+    if (transactionsFilters.transactionType != null && transactionsFilters.transactionType != '')
+        parameters.transactionType = transactionsFilters.transactionType;
     if (transactionsFilters.fromAccountId != null && transactionsFilters.fromAccountId != '')
         parameters.accountFromId = transactionsFilters.fromAccountId;
     if (transactionsFilters.toAccountId != null && transactionsFilters.toAccountId != '')

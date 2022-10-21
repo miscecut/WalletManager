@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Classes.Utils;
+using Misce.WalletManager.BL.Enums;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Transaction;
@@ -36,6 +37,7 @@ namespace Misce.WalletManager.API.Controllers
         public IActionResult GetTransactions(
             int? limit = 10, 
             int? page = 0, 
+            TransactionType? transactionType = null,
             string? title = null,
             Guid? accountFromId = null, 
             Guid? accountToId = null, 
@@ -48,7 +50,7 @@ namespace Misce.WalletManager.API.Controllers
 
             if (userId.HasValue)
             {
-                var transactions = _transactionService.GetTransactions(userId.Value, limit.GetValueOrDefault(), page.GetValueOrDefault(), title, accountFromId, accountToId, transactionCategoryId, transactionSubCategoryId, dateFrom, dateTo);
+                var transactions = _transactionService.GetTransactions(userId.Value, limit.GetValueOrDefault(), page.GetValueOrDefault(), transactionType, title, accountFromId, accountToId, transactionCategoryId, transactionSubCategoryId, dateFrom, dateTo);
 
                 var request = HttpContext.Request;
                 var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase.ToUriComponent()}{request.Path.Value}{request.QueryString}";
@@ -57,7 +59,7 @@ namespace Misce.WalletManager.API.Controllers
                 if (transactions.Count() == limit)
                 {
                     Response.Headers.Add("X-Next-Page", baseUrl.Replace($"page={page}", $"page={page + 1}"));
-                    Response.Headers.Add("X-Total-Pages", _transactionService.GetTransactionsCount(userId.Value, title, accountFromId, accountToId, transactionCategoryId, transactionSubCategoryId, dateFrom, dateTo).ToString());
+                    Response.Headers.Add("X-Total-Pages", _transactionService.GetTransactionsCount(userId.Value, transactionType, title, accountFromId, accountToId, transactionCategoryId, transactionSubCategoryId, dateFrom, dateTo).ToString());
                 }
                 //add previous page header if page is not the first (0)
                 if(page > 0)
