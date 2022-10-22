@@ -185,6 +185,7 @@ function TransactionsPage(props) {
             closeButtonFunction={closeTransactionCreateModal}
         />
         <TransactionCategoriesManagementModal
+            token={props.token}
             show={modals.editCategoriesModalIsOpen}
             closeButtonFunction={closeEditCategoriesModal}
         />

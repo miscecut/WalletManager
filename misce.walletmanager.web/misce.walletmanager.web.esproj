@@ -21,6 +21,7 @@
     <Folder Include="src\components\transactionscontainer\" />
     <Folder Include="src\components\transaction\" />
     <Folder Include="src\components\registerform\" />
+    <Folder Include="src\components\utils\mutuallyexclusivepills\" />
     <Folder Include="src\images\" />
   </ItemGroup>
 </Project>
