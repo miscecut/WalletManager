@@ -97,7 +97,11 @@ function TransactionsPage(props) {
         <div className="misce-card misce-transactions-content">
             <TransactionsContainer
                 token={props.token}
-                transactionsFilters={filters}
+                transactionType={filters.transactionType}
+                fromAccountId={filters.fromAccountId}
+                toAccountId={filters.toAccountId}
+                transactionCategoryId={filters.transactionCategoryId}
+                transactionSubCategoryId={filters.transactionSubCategoryId}
             />
         </div>
         <div className="misce-card misce-transactions-filters">

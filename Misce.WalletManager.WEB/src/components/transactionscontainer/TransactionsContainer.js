@@ -8,17 +8,23 @@ import { getApiBaseUrl, getGetCommonSettings, getTransactionsGetQueryParameters 
 //images
 import NothingImage from './../../images/nothing-gray.png';
 
-function TransactionsContainer({ token, transactionsFilters }) {
+function TransactionsContainer(props) {
     const [transactions, setTransactions] = useState([]);
 
-    //get the filtered transactions from the api when the filters change
+    //get the filtered transactions from the api
     useEffect(() => {
-        fetch(getApiBaseUrl() + 'transactions' + getTransactionsGetQueryParameters(transactionsFilters), getGetCommonSettings(token))
+        fetch(getApiBaseUrl() + 'transactions' + getTransactionsGetQueryParameters({
+            transactionType: props.transactionType,
+            fromAccountId: props.fromAccountId,
+            toAccountId: props.toAccountId,
+            transactionCategoryId: props.transactionCategoryId,
+            transactionSubCategoryId: props.transactionSubCategoryId
+        }), getGetCommonSettings(props.token))
             .then(res => {
                 if (res.ok)
                     res.json().then(data => setTransactions(data));
             });
-    }, [transactionsFilters]);
+    }, [props.transactionType, props.fromAccountId, props.toAccountId, props.transactionCategoryId, props.transactionSubCategoryId]);
 
     //TODO: make this a component(elementName)?
     function getNoTransactionsJsx() {
