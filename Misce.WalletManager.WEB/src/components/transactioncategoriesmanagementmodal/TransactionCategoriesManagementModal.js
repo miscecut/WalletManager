@@ -1,10 +1,10 @@
 import React from 'react';
 
-function TransactionCreateModal(props) {
+function TransactionCategoriesManagementModal(props) {
     return <div className={`misce-modal-container ${props.show ? 'show' : ''}`}>
         <div className="misce-modal">
             <div className="misce-modal-title-container">
-                <p className="misce-modal-title">Transaction creation</p>
+                <p className="misce-modal-title">Edit categories</p>
                 <button className="misce-close-button" type="button" onClick={props.closeButtonFunction}></button>
             </div>
             <div className="misce-modal-content">
@@ -14,4 +14,4 @@ function TransactionCreateModal(props) {
     </div>
 }
 
-export default TransactionCreateModal;
+export default TransactionCategoriesManagementModal;

@@ -18,13 +18,14 @@ function TransactionsContainer(props) {
             fromAccountId: props.fromAccountId,
             toAccountId: props.toAccountId,
             transactionCategoryId: props.transactionCategoryId,
-            transactionSubCategoryId: props.transactionSubCategoryId
+            transactionSubCategoryId: props.transactionSubCategoryId,
+            fromDate: props.fromDate
         }), getGetCommonSettings(props.token))
             .then(res => {
                 if (res.ok)
                     res.json().then(data => setTransactions(data));
             });
-    }, [props.transactionType, props.fromAccountId, props.toAccountId, props.transactionCategoryId, props.transactionSubCategoryId]);
+    }, [props.transactionType, props.fromAccountId, props.toAccountId, props.transactionCategoryId, props.transactionSubCategoryId, props.fromDate]);
 
     //TODO: make this a component(elementName)?
     function getNoTransactionsJsx() {

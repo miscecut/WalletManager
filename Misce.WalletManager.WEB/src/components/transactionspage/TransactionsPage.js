@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import './TransactionsPage.css';
 //components
 import TransactionsContainer from './../transactionscontainer/TransactionsContainer.js';
+//modals
 import TransactionCreateModal from './../transactioncreatemodal/TransactionCreateModal.js';
+import TransactionCategoriesManagementModal from './../transactioncategoriesmanagementmodal/TransactionCategoriesManagementModal.js';
 //api
 import {
     getApiBaseUrl,
@@ -36,10 +38,16 @@ function TransactionsPage(props) {
         toAccountId: ''
     });
     //modals state
-    const [modals, setModals] = useState({ transactionCreateModalIsOpen: false });
+    const [modals, setModals] = useState({
+        transactionCreateModalIsOpen: false,
+        editCategoriesModalIsOpen: false
+    });
 
     //this function closes the transaction create modal
     const closeTransactionCreateModal = () => setModals({ ...modals, transactionCreateModalIsOpen: false });
+
+    //this function closes the transaction categories management modal
+    const closeEditCategoriesModal = () => setModals({ ...modals, editCategoriesModalIsOpen: false });
 
     //get the user's account, this function is called only at the page startup
     useEffect(() => {
@@ -98,6 +106,7 @@ function TransactionsPage(props) {
             <TransactionsContainer
                 token={props.token}
                 transactionType={filters.transactionType}
+                fromDate={filters.fromDate}
                 fromAccountId={filters.fromAccountId}
                 toAccountId={filters.toAccountId}
                 transactionCategoryId={filters.transactionCategoryId}
@@ -106,13 +115,11 @@ function TransactionsPage(props) {
         </div>
         <div className="misce-card misce-transactions-filters">
             <button className="misce-btn w-100" type="button" onClick={() => setModals({ ...modals, transactionCreateModalIsOpen: true })}>add transaction</button>
-            <button className="misce-btn w-100" type="button">edit categories</button>
+            <button className="misce-btn w-100" type="button" onClick={() => setModals({ ...modals, editCategoriesModalIsOpen: true })}>edit categories</button>
             <div className="misce-input-container">
                 <label className="misce-input-label">Group transactions:</label>
                 <select className="misce-select" value={filters.groupBy} onChange={e => setFilters({ ...filters, groupBy: e.target.value })}>
                     <option value="DAYS">By day</option>
-                    <option value="WEEKS">By Week</option>
-                    <option value="MONTHS">By Month</option>
                 </select>
             </div>
             <div className="misce-input-container">
@@ -176,6 +183,10 @@ function TransactionsPage(props) {
         <TransactionCreateModal
             show={modals.transactionCreateModalIsOpen}
             closeButtonFunction={closeTransactionCreateModal}
+        />
+        <TransactionCategoriesManagementModal
+            show={modals.editCategoriesModalIsOpen}
+            closeButtonFunction={closeEditCategoriesModal}
         />
     </div>
 }
