@@ -5,18 +5,15 @@ import TransactionCategoryCreationForm from './../transactioncategorycreationfor
 //api
 import {
     getApiBaseUrl,
-    getGetCommonSettings
+    getGetCommonSettings,
+    getTransactionCategoryCreatePostSettings
 } from '../../../jsutils/apirequests.js';
 
 function TransactionCategoriesManagementModal(props) {
     //the user's transaction categories to chose from
     const [transactionCategories, setTransactionCategories] = useState([]);
-    //the selected transaction category to edit
-    const [selectedTransactionCategory, setSelectedTransactionCategory] = useState({ selectedTransactionCategoryId: '' });
-    //the user's transaction categories to chose from
-    const [transactionSubCategories, setTransactionSubCategories] = useState([]);
-    //the selected transaction category to edit
-    const [selectedTransactionSubCategory, setSelectedTransactionSubCategory] = useState({ selectedTransactionSubCategoryId: '' });
+    //the errors on the creation of a transaction category
+    const [transactionCreationErrors, setTransactionCreationErrors] = useState([]);
 
     //get the user's transaction categories
     useEffect(() => {
@@ -29,25 +26,32 @@ function TransactionCategoriesManagementModal(props) {
             });
     }, []);
 
-    //get the selected transaction category subcategories
-    useEffect(() => {
-        if (selectedTransactionCategory.selectedTransactionCategoryId != '')
-            fetch(getApiBaseUrl() + 'transactionsubcategories?transactionCategoryId=' + selectedTransactionCategory.selectedTransactionCategoryId, getGetCommonSettings(props.token))
-                .then(res => {
-                    if (res.ok)
-                        res.json().then(data => {
-                            setTransactionSubCategories(data);
-                        });
-                });
-        //else
-        //    setTransactionSubCategories([]);
-    }, [selectedTransactionCategory]);
-
-    //click on a category
-    const selectCategoryClick = tcId => setSelectedTransactionCategory({ ...selectedTransactionCategory, selectedTransactionCategoryId: tcId });
-
-    //click on a subcategory
-    const selectSubCategoryClick = tcId => setSelectedTransactionSubCategory({ ...selectedTransactionSubCategory, selectedTransactionSubCategoryId: tcId });
+    //this function creates a transaction category with specified name and type (expense or not expense)
+    const createTransactionCategory = transactionCategoryToCreate => {
+        //the transaction category gets created
+        fetch(getApiBaseUrl() + 'transactioncategories', getTransactionCategoryCreatePostSettings(transactionCategoryToCreate, props.token))
+            .then(res => {
+                //if the operation was succesfull...
+                if (res.ok)
+                    res.json().then(() => {
+                        //...fetch the transaction categories again to see the new transaction category
+                        fetch(getApiBaseUrl() + 'transactioncategories', getGetCommonSettings(props.token))
+                            .then(res => {
+                                if (res.ok)
+                                    res.json().then(data => {
+                                        setTransactionCategories(data);
+                                        //clean errors, if there are
+                                        if (transactionCreationErrors.length != 0)
+                                            setTransactionCreationErrors([]);
+                                    });
+                            });
+                    });
+                else if (res.status == 422)
+                    res.json().then(data => {
+                        setTransactionCreationErrors(data);
+                    });
+            });
+    }
 
     //render component
     return <div className={`misce-modal-container ${props.show ? 'show' : ''}`}>
@@ -61,7 +65,11 @@ function TransactionCategoriesManagementModal(props) {
                     key={tc.id}
                     transactionCategory={tc}
                 />)}
-                <TransactionCategoryCreationForm />
+                <hr className="misce-wide-hr"></hr>
+                <TransactionCategoryCreationForm
+                    errors={transactionCreationErrors}
+                    createTransactionCategory={createTransactionCategory}
+                />
             </div>
         </div>
     </div>

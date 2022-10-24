@@ -3,10 +3,13 @@ const commonPostHeader = {
     'Content-Type': 'application/json'
 };
 
-function getPostSettings(bodyData) {
+function getPostSettings(bodyData, token = null) {
+    let postHeader = commonPostHeader;
+    if (token != null)
+        postHeader['Authorization'] = 'Bearer ' + token;
     return {
         method: 'POST',
-        headers: commonPostHeader,
+        headers: postHeader,
         body: JSON.stringify(bodyData)
     }
 }
@@ -30,6 +33,13 @@ export function getRegisterPostSettings(registerForm) {
         password: registerForm.password,
         confirmPassword: registerForm.confirmPassword
     });
+}
+
+export function getTransactionCategoryCreatePostSettings(transactionCategoryForm, token) {
+    return getPostSettings({
+        name: transactionCategoryForm.name,
+        isExpenseType: transactionCategoryForm.isExpenseType,
+    }, token);
 }
 
 //GET requests

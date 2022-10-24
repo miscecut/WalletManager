@@ -4,8 +4,12 @@
     align-items: center;
     justify-content: space-between;
     background-color: #3c4042;
-    padding: 10px;
+    border: 1px solid transparent;
+    padding: 12px;
     border-radius: 18px;
+}
+.misce-transaction-category:hover {
+    border: 1px solid #ea80fc;
 }
 
 .misce-transaction-category-name {
@@ -22,5 +26,18 @@
 
 .misce-transaction-category-actions {
     display: flex;
-    gap: 5px;
+    gap: 8px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .misce-transaction-category {
+        padding: 10px;
+    }
+
+    .misce-transaction-category-name {
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding-left: 4px;
+    }
 }

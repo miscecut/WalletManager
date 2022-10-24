@@ -58,7 +58,10 @@ namespace Misce.WalletManager.BL.Classes
             if (isExpenseType != null)
                 categoriesQuery = categoriesQuery.Where(category => category.IsExpenseType == isExpenseType);
 
-            return categoriesQuery.ToList();
+            return categoriesQuery
+                .OrderBy(tc => tc.IsExpenseType)
+                .ThenBy(tc => tc.Name)
+                .ToList();
         }
 
         public TransactionCategoryDTOOut CreateTransactionCategory(Guid userId, TransactionCategoryCreationDTOIn transactionCategory)

@@ -1,0 +1,14 @@
+.misce-transaction-category-cration-form-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 15px;
+    row-gap: 10px;
+    align-items: end;
+}
+
+@media screen and (max-width: 768px) {
+    .misce-transaction-category-cration-form-container {
+        grid-template-columns: 1fr;
+    }
+}
