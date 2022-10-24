@@ -5,7 +5,7 @@ import './TransactionsPage.css';
 import TransactionsContainer from './../transactionscontainer/TransactionsContainer.js';
 //modals
 import TransactionCreateModal from './../transactioncreatemodal/TransactionCreateModal.js';
-import TransactionCategoriesManagementModal from './../transactioncategoriesmanagementmodal/TransactionCategoriesManagementModal.js';
+import TransactionCategoriesManagementModal from './../transactioncategories/transactioncategoriesmanagementmodal/TransactionCategoriesManagementModal.js';
 //api
 import {
     getApiBaseUrl,

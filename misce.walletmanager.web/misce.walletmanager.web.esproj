@@ -15,13 +15,13 @@
     <Folder Include="src\components\navbar\" />
     <Folder Include="src\components\loginform\" />
     <Folder Include="src\components\dashboard\" />
-    <Folder Include="src\components\transactioncategoriesmanagementmodal\" />
+    <Folder Include="src\components\transactioncategories\transactioncategoriesmanagementmodal\" />
+    <Folder Include="src\components\transactioncategories\transactioncategory\" />
     <Folder Include="src\components\transactionssection\" />
     <Folder Include="src\components\transactioncreatemodal\" />
     <Folder Include="src\components\transactionscontainer\" />
     <Folder Include="src\components\transaction\" />
     <Folder Include="src\components\registerform\" />
-    <Folder Include="src\components\utils\mutuallyexclusivepills\" />
     <Folder Include="src\images\" />
   </ItemGroup>
 </Project>
