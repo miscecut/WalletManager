@@ -36,7 +36,7 @@ function TransactionCategoryCreationForm(props) {
                 <option value="EXPENSE">Expense</option>
             </select>
         </div>
-        <button className="misce-btn misce-btn-add" type="submit">add <i class="fa-solid fa-plus"></i></button>
+        <button className="misce-btn misce-btn-add label-margin-fix" type="submit">add <i className="fa-solid fa-plus"></i></button>
     </form>
 }
 

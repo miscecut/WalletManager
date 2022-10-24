@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+//css
+import './TransactionCategoriesManagementModal.css';
 //components
 import TransactionCategory from './../transactioncategory/TransactionCategory.js';
 import TransactionCategoryCreationForm from './../transactioncategorycreationform/TransactionCategoryCreationForm.js';
@@ -14,6 +16,8 @@ function TransactionCategoriesManagementModal(props) {
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the errors on the creation of a transaction category
     const [transactionCreationErrors, setTransactionCreationErrors] = useState([]);
+    //the selected transaction category to edit, if this has a value, the modal changes entirely
+    const [transactionCategoryToEdit, setTransactionCategoryToEdit] = useState({ transactionCategoryId: '' });
 
     //get the user's transaction categories
     useEffect(() => {
@@ -48,10 +52,13 @@ function TransactionCategoriesManagementModal(props) {
                     });
                 else if (res.status == 422)
                     res.json().then(data => {
-                        setTransactionCreationErrors(data);
+                        setTransactionCreationErrors(data.errors);
                     });
             });
     }
+
+    //this function is assigned to the pencil edit button, it selects a transaction category to update (by showing a completely different "modal subpage")
+    const selectTransactionCategoryToEdit = transactionCategoryId => setTransactionCategoryToEdit({ ...transactionCategoryToEdit, transactionCategoryId: transactionCategoryId });
 
     //render component
     return <div className={`misce-modal-container ${props.show ? 'show' : ''}`}>
@@ -60,17 +67,25 @@ function TransactionCategoriesManagementModal(props) {
                 <p className="misce-modal-title">Edit categories</p>
                 <button className="misce-close-button" type="button" onClick={props.closeButtonFunction}></button>
             </div>
-            <div className="misce-modal-content">
-                {transactionCategories.map(tc => <TransactionCategory
-                    key={tc.id}
-                    transactionCategory={tc}
-                />)}
-                <hr className="misce-wide-hr"></hr>
-                <TransactionCategoryCreationForm
-                    errors={transactionCreationErrors}
-                    createTransactionCategory={createTransactionCategory}
-                />
-            </div>
+            {transactionCategoryToEdit.transactionCategoryId === '' ?
+                <div className="misce-modal-content">
+                    <div className="misce-transaction-categories-container">
+                        {transactionCategories.map(tc => <TransactionCategory key={tc.id}
+                            transactionCategory={tc}
+                            editClick={selectTransactionCategoryToEdit}
+                        />)}
+                    </div>
+                    <hr className="misce-wide-hr"></hr>
+                    <TransactionCategoryCreationForm
+                        errors={transactionCreationErrors}
+                        createTransactionCategory={createTransactionCategory}
+                    />
+                </div>
+                :
+                <div className="misce-modal-content">
+                    <p>aaaaa</p>
+                </div>
+            }
         </div>
     </div>
 }
