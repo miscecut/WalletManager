@@ -97,16 +97,16 @@ body {
     cursor: pointer;
 }
 .misce-action-button.misce-edit-button {
-    background-image: url('images/edit-icon-black.png');
+    background-image: url('images/edit-icon-gray.png');
 }
 .misce-action-button.misce-delete-button {
-    background-image: url('images/delete-icon-black.png');
+    background-image: url('images/delete-icon-gray.png');
 }
 .misce-action-button.misce-edit-button:hover, .misce-action-button.misce-edit-button:focus {
-    background-image: url('images/edit-icon-white.png');
+    background-image: url('images/edit-icon-purple.png');
 }
 .misce-action-button.misce-delete-button:hover, .misce-action-button.misce-delete-button:focus {
-    background-image: url('images/delete-icon-white.png');
+    background-image: url('images/delete-icon-red.png');
 }
 
 .misce-close-button {
@@ -126,13 +126,6 @@ body {
     .misce-action-button {
         height: 1.2rem;
         width: 1.2rem;
-    }
-    .misce-action-button.misce-edit-button {
-        background-image: url('images/edit-icon-white.png');
-    }
-
-    .misce-action-button.misce-delete-button {
-        background-image: url('images/delete-icon-white.png');
     }
 
     .misce-close-button {
