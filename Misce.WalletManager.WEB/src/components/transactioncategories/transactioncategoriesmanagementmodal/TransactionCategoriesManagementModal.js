@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+//components
+import TransactionCategory from './../transactioncategory/TransactionCategory.js';
+import TransactionCategoryCreationForm from './../transactioncategorycreationform/TransactionCategoryCreationForm.js';
 //api
 import {
     getApiBaseUrl,
@@ -54,7 +57,11 @@ function TransactionCategoriesManagementModal(props) {
                 <button className="misce-close-button" type="button" onClick={props.closeButtonFunction}></button>
             </div>
             <div className="misce-modal-content">
-                
+                {transactionCategories.map(tc => <TransactionCategory
+                    key={tc.id}
+                    transactionCategory={tc}
+                />)}
+                <TransactionCategoryCreationForm />
             </div>
         </div>
     </div>
