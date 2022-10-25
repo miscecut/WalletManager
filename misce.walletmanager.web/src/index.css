@@ -287,3 +287,19 @@ body {
         gap: 15px;
     }
 }
+
+/* scrollbar */
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #191b1e;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c3c3c3;
+    border-radius: 8px;
+}
