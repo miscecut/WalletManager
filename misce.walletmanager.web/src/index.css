@@ -320,3 +320,9 @@ body {
     background: #c3c3c3;
     border-radius: 8px;
 }
+
+/* fixes */
+
+.label-margin-fix {
+    margin-top: 19px;
+}

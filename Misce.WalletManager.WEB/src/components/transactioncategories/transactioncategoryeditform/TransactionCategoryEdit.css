@@ -7,10 +7,6 @@
     align-items: start;
 }
 
-.label-margin-fix {
-    margin-top: 19px;
-}
-
 .misce-input-container.misce-tc-edit-input-container {
     grid-column: 1 / 3;
 }

@@ -19,6 +19,7 @@
     <Folder Include="src\components\transactioncategories\transactioncategoryedit\" />
     <Folder Include="src\components\transactioncategories\transactioncategorycreationform\" />
     <Folder Include="src\components\transactioncategories\transactioncategoriesmanagementmodal\" />
+    <Folder Include="src\components\transactioncategories\transactionsubcategories\transactionsubcategorycreationform\" />
     <Folder Include="src\components\transactioncategories\transactionsubcategories\transactionsubcategory\" />
     <Folder Include="src\components\transactionssection\" />
     <Folder Include="src\components\transactioncreatemodal\" />

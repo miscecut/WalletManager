@@ -4,6 +4,7 @@ import './TransactionCategoryEdit.css';
 //components
 import TransactionCategoryEditForm from './../transactioncategoryeditform/TransactionCategoryEditForm.js';
 import TransactionSubCategory from './../transactionsubcategories/transactionsubcategory/TransactionSubCategory.js';
+import TransactionSubCategoryCreationForm from './../transactionsubcategories/transactionsubcategorycreationform/TransactionSubCategoryCreationForm.js';
 //utils
 import {
     getTransactionCategoryUpdateSettings,
@@ -20,6 +21,8 @@ function TransactionCategoryEdit({ token, transactionCategoryId }) {
     const [transactionSubCategories, setTransactionSubCategories] = useState([]);
     //the transaction category update errors
     const [updateErrors, setUpdateErrors] = useState([]);
+    //the transaction subcategory creation errors
+    const [transactionSubCategoryCreationErrors, setTransactionSubCategoryCreationErrors] = useState([]);
 
     //EFFECTS
 
@@ -61,6 +64,10 @@ function TransactionCategoryEdit({ token, transactionCategoryId }) {
             <p className="misce-transaction-subcategories-container-title">Edit subcategories</p>
             {transactionSubCategories.map(tsc => <TransactionSubCategory transactionSubCategory={tsc} />)}
         </div>
+        <p className="misce-transaction-subcategories-container-title">Add subcategory</p>
+        <TransactionSubCategoryCreationForm
+            errors={transactionSubCategoryCreationErrors}
+        />
     </div>
 }
 
