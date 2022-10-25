@@ -255,8 +255,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             var updatedElectronicsTransactionCategory = transactionCategoryService.UpdateTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id, new TransactionCategoryUpdateDTOIn
             {
                 Name = "Electronics & Stuff",
-                Description = "Electronic stuff",
-                IsExpenseType = true
+                Description = "Electronic stuff"
             });
             Assert.IsNotNull(updatedElectronicsTransactionCategory);
             Assert.AreEqual(updatedElectronicsTransactionCategory.Name, "Electronics & Stuff");
@@ -272,8 +271,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //delete description in the category
             updatedElectronicsTransactionCategory = transactionCategoryService.UpdateTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id, new TransactionCategoryUpdateDTOIn
             {
-                Name = "Electronics & Stuff",
-                IsExpenseType = true
+                Name = "Electronics & Stuff"
             });
             Assert.IsNotNull(updatedElectronicsTransactionCategory);
             Assert.AreEqual(updatedElectronicsTransactionCategory.Name, "Electronics & Stuff");
@@ -286,23 +284,22 @@ namespace Misce.WalletManager.Test.ServiceTests
             Assert.IsTrue(string.IsNullOrEmpty(updatedElectronicsTransactionCategory.Description));
             Assert.IsTrue(updatedElectronicsTransactionCategory.IsExpenseType);
 
-            //change the category from expense to profit and put description back
+            //put description back
             updatedElectronicsTransactionCategory = transactionCategoryService.UpdateTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id, new TransactionCategoryUpdateDTOIn
             {
                 Name = "Electronics & Stuff",
-                Description = "this is now a profit",
-                IsExpenseType = false
+                Description = "this is now a profit"
             });
             Assert.IsNotNull(updatedElectronicsTransactionCategory);
             Assert.AreEqual(updatedElectronicsTransactionCategory.Name, "Electronics & Stuff");
             Assert.AreEqual(updatedElectronicsTransactionCategory.Description, "this is now a profit");
-            Assert.IsFalse(updatedElectronicsTransactionCategory.IsExpenseType);
+            Assert.IsTrue(updatedElectronicsTransactionCategory.IsExpenseType);
 
             updatedElectronicsTransactionCategory = transactionCategoryService.GetTransactionCategory(user.Id, updatedElectronicsTransactionCategory.Id);
             Assert.IsNotNull(updatedElectronicsTransactionCategory);
             Assert.AreEqual(updatedElectronicsTransactionCategory.Name, "Electronics & Stuff");
             Assert.AreEqual(updatedElectronicsTransactionCategory.Description, "this is now a profit");
-            Assert.IsFalse(updatedElectronicsTransactionCategory.IsExpenseType);
+            Assert.IsTrue(updatedElectronicsTransactionCategory.IsExpenseType);
         }
 
         [TestMethod]
@@ -343,7 +340,6 @@ namespace Misce.WalletManager.Test.ServiceTests
             transactionCategoryService.UpdateTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id, new TransactionCategoryUpdateDTOIn
             {
                 Name = "Electronicz",
-                IsExpenseType = true,
                 Description = "this category is not mine"
             });
         }
@@ -377,8 +373,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //try to update it with a too long name, this should be impossbile
             transactionCategoryService.UpdateTransactionCategory(user.Id, createdElectronicsTransactionCategory.Id, new TransactionCategoryUpdateDTOIn
             {
-                Name = "Electroniczzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
-                IsExpenseType = true
+                Name = "Electroniczzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
             });
         }
 

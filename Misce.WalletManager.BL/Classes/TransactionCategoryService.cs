@@ -118,7 +118,7 @@ namespace Misce.WalletManager.BL.Classes
                 var transactionCategoryToUpdate = transactionCategoryQuery.First();
                 transactionCategoryToUpdate.Name = transactionCategory.Name;
                 transactionCategoryToUpdate.Description = transactionCategory.Description;
-                transactionCategoryToUpdate.IsExpenseCategory = transactionCategory.IsExpenseType;
+                //transactionCategoryToUpdate.IsExpenseCategory = transactionCategory.IsExpenseType;
                 transactionCategoryToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                 //commit changes in the db

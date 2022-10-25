@@ -16,6 +16,8 @@ function TransactionCategoriesManagementModal(props) {
 
     //STATES
 
+    //the modal title
+    const [modalTitle, setModalTitle] = useState({ title: 'Edit categories' });
     //the user's transaction categories to chose from
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the errors on the creation of a transaction category
@@ -66,7 +68,31 @@ function TransactionCategoriesManagementModal(props) {
     }
 
     //this function is assigned to the pencil edit button, it selects a transaction category to update (by showing a completely different "modal subpage")
-    const selectTransactionCategoryToEdit = transactionCategoryId => setTransactionCategoryToEdit({ ...transactionCategoryToEdit, transactionCategoryId: transactionCategoryId });
+    const selectTransactionCategoryToEdit = transactionCategoryId => {
+        //set the modal title with the name of the transaction category
+        transactionCategories.forEach(tc => {
+            if (tc.id === transactionCategoryId)
+                setModalTitle({ ...modalTitle, title: 'Edit ' + tc.name });
+        })
+        //show the transaction category edit subpage
+        setTransactionCategoryToEdit({ ...transactionCategoryToEdit, transactionCategoryId: transactionCategoryId });
+    };
+
+    //this functions removes the selected transaction category id, so the t.c. edit subpage is closed and the modal is back to the first default "page"
+    const backToTransactionCategories = () => {
+        //set the modal title back to default
+        setModalTitle({ ...modalTitle, title: 'Edit categories' });
+        //remove the transaction category to edit
+        setTransactionCategoryToEdit({ ...transactionCategoryToEdit, transactionCategoryId: '' });
+        //show again the transaction categories (maybe they were updated)
+        fetch(getApiBaseUrl() + 'transactioncategories', getGetCommonSettings(props.token))
+            .then(res => {
+                if (res.ok)
+                    res.json().then(data => {
+                        setTransactionCategories(data);
+                    });
+            });
+    }
 
     //RENDERING
 
@@ -74,7 +100,8 @@ function TransactionCategoriesManagementModal(props) {
     return <div className={`misce-modal-container ${props.show ? 'show' : ''}`}>
         <div className="misce-modal">
             <div className="misce-modal-title-container">
-                <p className="misce-modal-title">Edit categories</p>
+                <button className="misce-modal-back-button" type="button" onClick={backToTransactionCategories} hidden={modalTitle.title === 'Edit categories'}></button>
+                <p className="misce-modal-title">{modalTitle.title}</p>
                 <button className="misce-close-button" type="button" onClick={props.closeButtonFunction}></button>
             </div>
             {transactionCategoryToEdit.transactionCategoryId === '' ?

@@ -1,0 +1,40 @@
+.misce-transaction-subcategory {
+    width: 100%;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #3c4042;
+    border: 1px solid transparent;
+    padding: 9px;
+    border-radius: 18px;
+}
+
+.misce-transaction-subcategory:hover {
+    color: #ea80fc;
+    border: 1px solid #ea80fc;
+}
+
+.misce-transaction-subcategory-name {
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding-left: 4px;
+}
+
+.misce-transaction-subcategory-actions {
+    display: flex;
+    gap: 8px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .misce-transaction-subcategory {
+        padding: 10px;
+    }
+
+    .misce-transaction-subcategory-name {
+        font-weight: bold;
+        font-size: 0.9rem;
+        padding-left: 4px;
+    }
+}

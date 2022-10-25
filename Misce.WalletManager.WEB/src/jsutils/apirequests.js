@@ -61,6 +61,15 @@ export function getGetCommonSettings(token) {
     }
 }
 
+export function getTransactionSubCategoriesGetQueryParameters(parameters) {
+    let transformedParameters = parameters.transactionCategoryId != null && parameters.transactionCategoryId != '' ? {
+        transactionCategoryId: parameters.transactionCategoryId
+    } : null;
+    if (transformedParameters == null)
+        return '';
+    return ('?' + new URLSearchParams(transformedParameters));
+}
+
 export function getTransactionCategoriesGetQueryParameters(transactionType) {
     let isExpenseTypeParameter = transactionType != null && transactionType != '' ? {
         isExpenseType: transactionType === 'EXPENSE'
@@ -87,18 +96,6 @@ export function getTransactionsGetQueryParameters(transactionsFilters) {
         parameters.transactionSubCategoryId = transactionsFilters.transactionSubCategoryId;
     if (transactionsFilters.fromDate != null && transactionsFilters.fromDate != '')
         parameters.dateFrom = transactionsFilters.fromDate;
-    //return query
-    return ('?' + new URLSearchParams(parameters));
-}
-
-export function getTransactionSubCategoriesGetQueryParameters(transactionCategoryId) {
-    let parameters = {
-        limit: 1000,
-        page: 0
-    };
-    //transaction category id
-    if (transactionCategoryId != null && transactionCategoryId != '')
-        parameters.transactionCategoryId = transactionCategoryId;
     //return query
     return ('?' + new URLSearchParams(parameters));
 }

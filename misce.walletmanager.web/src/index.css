@@ -87,14 +87,18 @@ body {
 }
 
 .misce-action-button {
-    height: 1.5rem;
-    width: 1.5rem;
+    height: 1.4rem;
+    width: 1.4rem;
     background-color: transparent;
     border: 0;
     background-position: center;
     background-size: contain;
     transition: all 0.3s ease 0s;
     cursor: pointer;
+}
+.misce-action-button.smaller {
+    height: 1.2rem;
+    width: 1.2rem;
 }
 .misce-action-button.misce-edit-button {
     background-image: url('images/edit-icon-gray.png');
@@ -109,9 +113,22 @@ body {
     background-image: url('images/delete-icon-red.png');
 }
 
+.misce-modal-back-button {
+    height: 1.6rem;
+    width: 1.6rem;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.9rem;
+    background-image: url('images/back-icon.png');
+    background-position: center;
+    background-size: contain;
+    margin-right: auto;
+    cursor: pointer;
+}
+
 .misce-close-button {
-    height: 1.8rem;
-    width: 1.8rem;
+    height: 1.7rem;
+    width: 1.7rem;
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 0.9rem;

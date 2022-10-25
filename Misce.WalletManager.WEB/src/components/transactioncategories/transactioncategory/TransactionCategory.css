@@ -5,16 +5,17 @@
     justify-content: space-between;
     background-color: #3c4042;
     border: 1px solid transparent;
-    padding: 12px;
+    padding: 11px;
     border-radius: 18px;
 }
 .misce-transaction-category:hover {
+    color: #ea80fc;
     border: 1px solid #ea80fc;
 }
 
 .misce-transaction-category-name {
     font-weight: bold;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     padding-left: 5px;
 }
 .misce-transaction-category-name.profit {
@@ -32,12 +33,12 @@
 
 @media screen and (max-width: 768px) {
     .misce-transaction-category {
-        padding: 10px;
+        padding: 9px;
     }
 
     .misce-transaction-category-name {
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 1rem;
         padding-left: 4px;
     }
 }

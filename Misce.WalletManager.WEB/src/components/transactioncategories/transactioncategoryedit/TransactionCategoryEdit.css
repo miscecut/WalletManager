@@ -1,0 +1,15 @@
+.misce-transaction-subcategories-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 55vh;
+    overflow-y: auto;
+}
+
+.misce-transaction-subcategories-container-title {
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    margin-block: 5px;
+    font-size: 1.2rem;
+}
