@@ -4,6 +4,7 @@ import './TransactionCategoriesManagementModal.css';
 //components
 import TransactionCategory from './../transactioncategory/TransactionCategory.js';
 import TransactionCategoryCreationForm from './../transactioncategorycreationform/TransactionCategoryCreationForm.js';
+import TransactionCategoryEdit from './../transactioncategoryedit/TransactionCategoryEdit.js';
 //api
 import {
     getApiBaseUrl,
@@ -12,12 +13,17 @@ import {
 } from '../../../jsutils/apirequests.js';
 
 function TransactionCategoriesManagementModal(props) {
+
+    //STATES
+
     //the user's transaction categories to chose from
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the errors on the creation of a transaction category
     const [transactionCreationErrors, setTransactionCreationErrors] = useState([]);
     //the selected transaction category to edit, if this has a value, the modal changes entirely
     const [transactionCategoryToEdit, setTransactionCategoryToEdit] = useState({ transactionCategoryId: '' });
+
+    //EFFECTS
 
     //get the user's transaction categories
     useEffect(() => {
@@ -29,6 +35,8 @@ function TransactionCategoriesManagementModal(props) {
                     });
             });
     }, []);
+
+    //FUNCTIONS
 
     //this function creates a transaction category with specified name and type (expense or not expense)
     const createTransactionCategory = transactionCategoryToCreate => {
@@ -60,6 +68,8 @@ function TransactionCategoriesManagementModal(props) {
     //this function is assigned to the pencil edit button, it selects a transaction category to update (by showing a completely different "modal subpage")
     const selectTransactionCategoryToEdit = transactionCategoryId => setTransactionCategoryToEdit({ ...transactionCategoryToEdit, transactionCategoryId: transactionCategoryId });
 
+    //RENDERING
+
     //render component
     return <div className={`misce-modal-container ${props.show ? 'show' : ''}`}>
         <div className="misce-modal">
@@ -82,9 +92,10 @@ function TransactionCategoriesManagementModal(props) {
                     />
                 </div>
                 :
-                <div className="misce-modal-content">
-                    <p>aaaaa</p>
-                </div>
+                <TransactionCategoryEdit
+                    token={props.token}
+                    transactionCategoryId={transactionCategoryToEdit.transactionCategoryId}
+                />
             }
         </div>
     </div>

@@ -1,0 +1,26 @@
+.misce-transaction-category-edit-form-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 15px;
+    row-gap: 10px;
+    align-items: start;
+}
+
+.label-margin-fix {
+    margin-top: 19px;
+}
+
+.misce-input-container.misce-tc-edit-input-container {
+    grid-column: 1 / 3;
+}
+
+@media screen and (max-width: 768px) {
+    .misce-transaction-category-cration-form-container {
+        grid-template-columns: 1fr;
+    }
+
+    .misce-input-container.misce-tc-edit-input-container {
+        grid-column: 1 / 2;
+    }
+}

@@ -5,15 +5,22 @@ import './TransactionCategoryCreationForm.css';
 import { getErrorMap } from "../../../jsutils/errorhandling.js"
 
 function TransactionCategoryCreationForm(props) {
+
+    //STATE
+
     const [transactionCategoryForm, setTransactionCategoryForm] = useState({
         name: '',
         isExpenseType: false
     });
 
+    //FUNCTIONS
+
     const submitHandler = e => {
         e.preventDefault();
         props.createTransactionCategory(transactionCategoryForm);
     }
+
+    //RENDERING
 
     const errorMap = getErrorMap(props.errors);
 
@@ -36,7 +43,7 @@ function TransactionCategoryCreationForm(props) {
                 <option value="EXPENSE">Expense</option>
             </select>
         </div>
-        <button className="misce-btn misce-btn-add label-margin-fix" type="submit">add <i className="fa-solid fa-plus"></i></button>
+        <button className="misce-btn label-margin-fix" type="submit">add <i className="fa-solid fa-plus"></i></button>
     </form>
 }
 

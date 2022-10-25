@@ -3,12 +3,12 @@ const commonPostHeader = {
     'Content-Type': 'application/json'
 };
 
-function getPostSettings(bodyData, token = null) {
+function getPostSettings(bodyData, token = null, httpMethod = 'POST') {
     let postHeader = commonPostHeader;
     if (token != null)
         postHeader['Authorization'] = 'Bearer ' + token;
     return {
-        method: 'POST',
+        method: httpMethod,
         headers: postHeader,
         body: JSON.stringify(bodyData)
     }
@@ -17,6 +17,14 @@ function getPostSettings(bodyData, token = null) {
 export function getApiBaseUrl() {
     return 'https://localhost:7264/api/'
 };
+
+//PUT requests
+
+export function getTransactionCategoryUpdateSettings(transactionCategoryForm, token) {
+    return getPostSettings({
+        name: transactionCategoryForm.name
+    }, token, 'PUT');
+}
 
 //POST requests
 

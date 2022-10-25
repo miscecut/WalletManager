@@ -2,15 +2,24 @@ import React, { useState } from 'react';
 import { getErrorMap } from "../../jsutils/errorhandling.js"
 
 function LoginForm({ login, loginErrors }) {
+
+    //STATE
+
+    //the login form
     const [details, setDetails] = useState({ username: '', password: '' });
+
+    //FUNCTIONS
 
     const submitHandler = e => {
         e.preventDefault();
         login(details);
     }
 
+    //RENDERING
+
     const errorMap = getErrorMap(loginErrors);
 
+    //render component
     return <form onSubmit={submitHandler} className="misce-central-form-container">
             <h1 className="misce-login-title">Welcome</h1>
             <div className="misce-input-container">
