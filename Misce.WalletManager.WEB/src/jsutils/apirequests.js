@@ -50,6 +50,13 @@ export function getTransactionCategoryCreatePostSettings(transactionCategoryForm
     }, token);
 }
 
+export function getTransactionSubCategoryCreatePostSettings(transactionSubCategoryForm, token) {
+    return getPostSettings({
+        name: transactionSubCategoryForm.name,
+        transactionCategoryId: transactionSubCategoryForm.transactionCategoryId,
+    }, token);
+}
+
 //GET requests
 
 export function getGetCommonSettings(token) {

@@ -10,6 +10,7 @@ import NoElementsCard from './../../commoncomponents/noelementscard/NoElementsCa
 import {
     getTransactionCategoryUpdateSettings,
     getTransactionSubCategoriesGetQueryParameters,
+    getTransactionSubCategoryCreatePostSettings,
     getGetCommonSettings,
     getApiBaseUrl
 } from "../../../jsutils/apirequests.js";
@@ -51,6 +52,35 @@ function TransactionCategoryEdit({ token, transactionCategoryId }) {
             });
     }
 
+    //this function creates a subcategory under the category to edit
+    const createTransactionSubCategory = transactionSubCategory => {
+        //the transaction category id is added to the form
+        transactionSubCategory.transactionCategoryId = transactionCategoryId;
+        //the transaction subcategory gets created
+        fetch(getApiBaseUrl() + 'transactionsubcategories', getTransactionSubCategoryCreatePostSettings(transactionSubCategory, token))
+            .then(res => {
+                //if the operation was succesfull...
+                if (res.ok)
+                    res.json().then(() => {
+                        //...fetch the transaction subcategories again to see the new transaction subcategory
+                        fetch(getApiBaseUrl() + 'transactionsubcategories' + getTransactionSubCategoriesGetQueryParameters({
+                            transactionCategoryId: transactionCategoryId
+                        }), getGetCommonSettings(token))
+                            .then(res => {
+                                if (res.ok) {
+                                    res.json().then(data => setTransactionSubCategories(data));
+                                    if (transactionSubCategoryCreationErrors.length !== 0)
+                                        setTransactionSubCategoryCreationErrors([]);
+                                }
+                            });
+                    });
+                else if (res.status == 422)
+                    res.json().then(data => {
+                        setTransactionSubCategoryCreationErrors(data.errors);
+                    });
+            });
+    }
+
     //RENDERING
 
     //component render
@@ -75,6 +105,7 @@ function TransactionCategoryEdit({ token, transactionCategoryId }) {
             ''
         }
         <TransactionSubCategoryCreationForm
+            createTransactionSubCategory={createTransactionSubCategory}
             errors={transactionSubCategoryCreationErrors}
         />
     </div>

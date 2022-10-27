@@ -23,7 +23,7 @@ function TransactionSubCategoryCreationForm(props) {
 
     //render component
     return <form onSubmit={submitHandler} className="misce-transaction-subcategory-cration-form-container">
-        <div className="misce-input-container">
+        <div className="misce-input-container two-cols-container">
             <label className="misce-input-label" htmlFor="name">Name:</label>
             <input
                 className={`misce-input ${errorMap['name'] != null ? 'misce-input-error' : ''}`}

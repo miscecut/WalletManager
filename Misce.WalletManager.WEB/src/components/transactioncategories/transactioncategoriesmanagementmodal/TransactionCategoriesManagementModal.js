@@ -61,7 +61,7 @@ function TransactionCategoriesManagementModal(props) {
                                     });
                             });
                     });
-                else if (res.status == 422)
+                else if (res.status === 422)
                     res.json().then(data => {
                         setTransactionCreationErrors(data.errors);
                     });
