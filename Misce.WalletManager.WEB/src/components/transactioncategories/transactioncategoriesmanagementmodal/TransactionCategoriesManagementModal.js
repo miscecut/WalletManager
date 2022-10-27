@@ -11,6 +11,7 @@ import {
     getGetCommonSettings,
     getTransactionCategoryCreatePostSettings
 } from '../../../jsutils/apirequests.js';
+import NoElementsCard from '../../commoncomponents/noelementscard/NoElementsCard';
 
 function TransactionCategoriesManagementModal(props) {
 
@@ -106,13 +107,21 @@ function TransactionCategoriesManagementModal(props) {
             </div>
             {transactionCategoryToEdit.transactionCategoryId === '' ?
                 <div className="misce-modal-content">
-                    <div className="misce-transaction-categories-container">
-                        {transactionCategories.map(tc => <TransactionCategory key={tc.id}
-                            transactionCategory={tc}
-                            editClick={selectTransactionCategoryToEdit}
-                        />)}
-                    </div>
-                    <hr className="misce-wide-hr"></hr>
+                    {transactionCategories.length !== 0 ?
+                        <div className="misce-transaction-categories-container">
+                            {transactionCategories.map(tc => <TransactionCategory key={tc.id}
+                                transactionCategory={tc}
+                                editClick={selectTransactionCategoryToEdit}
+                            />)}
+                        </div>
+                        :
+                        <NoElementsCard message="No categories found" />
+                    }
+                    {transactionCategories.length !== 0 ?
+                        <hr className="misce-wide-hr"></hr>
+                        :
+                        ''
+                    }
                     <TransactionCategoryCreationForm
                         errors={transactionCreationErrors}
                         createTransactionCategory={createTransactionCategory}

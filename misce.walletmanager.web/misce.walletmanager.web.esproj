@@ -12,6 +12,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\components\commoncomponents\noelementscard\" />
     <Folder Include="src\components\navbar\" />
     <Folder Include="src\components\loginform\" />
     <Folder Include="src\components\dashboard\" />

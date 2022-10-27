@@ -5,6 +5,7 @@ import './TransactionCategoryEdit.css';
 import TransactionCategoryEditForm from './../transactioncategoryeditform/TransactionCategoryEditForm.js';
 import TransactionSubCategory from './../transactionsubcategories/transactionsubcategory/TransactionSubCategory.js';
 import TransactionSubCategoryCreationForm from './../transactionsubcategories/transactionsubcategorycreationform/TransactionSubCategoryCreationForm.js';
+import NoElementsCard from './../../commoncomponents/noelementscard/NoElementsCard.js';
 //utils
 import {
     getTransactionCategoryUpdateSettings,
@@ -62,9 +63,17 @@ function TransactionCategoryEdit({ token, transactionCategoryId }) {
         />
         <div className="misce-transaction-subcategories-container">
             <p className="misce-transaction-subcategories-container-title">Edit subcategories</p>
-            {transactionSubCategories.map(tsc => <TransactionSubCategory transactionSubCategory={tsc} />)}
+            {transactionSubCategories.length !== 0 ?
+                transactionSubCategories.map(tsc => <TransactionSubCategory transactionSubCategory={tsc} />)
+                :
+                <NoElementsCard message="No subcategories found" />
+            }
         </div>
-        <p className="misce-transaction-subcategories-container-title">Add subcategory</p>
+        {transactionSubCategories.length !== 0 ?
+            <hr className="wide-hr"></hr>
+            :
+            ''
+        }
         <TransactionSubCategoryCreationForm
             errors={transactionSubCategoryCreationErrors}
         />
