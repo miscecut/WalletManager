@@ -18,8 +18,20 @@
 }
 .misce-transactions-section-header-title {
     color: #c3c3c3;
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding-inline: 10px;
+    display: flex;
+    white-space: nowrap;
+}
+
+p.tot-profit {
+    color: #03dac6;
+    padding-left: 15px;
+}
+
+p.tot-expense {
+    color: #ff6d74;
+    padding-left: 15px;
 }
 
 @media screen and (max-width: 1400px) {
