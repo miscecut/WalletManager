@@ -92,7 +92,9 @@ function TransactionsPage(props) {
             setFilters({ ...filters, transactionSubCategoryId: '' });
         }
         else {
-            fetch(getApiBaseUrl() + 'transactionsubcategories' + getTransactionSubCategoriesGetQueryParameters(filters.transactionCategoryId), getGetCommonSettings(props.token))
+            fetch(getApiBaseUrl() + 'transactionsubcategories' + getTransactionSubCategoriesGetQueryParameters({
+                transactionCategoryId: filters.transactionCategoryId
+            }), getGetCommonSettings(props.token))
                 .then(res => {
                     if (res.ok)
                         res.json().then(data => setTransactionSubCategories(data));

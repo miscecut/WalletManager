@@ -94,7 +94,7 @@ function TransactionCategoryEdit({ token, transactionCategoryId }) {
         <div className="misce-transaction-subcategories-container">
             <p className="misce-transaction-subcategories-container-title">Edit subcategories</p>
             {transactionSubCategories.length !== 0 ?
-                transactionSubCategories.map(tsc => <TransactionSubCategory transactionSubCategory={tsc} />)
+                transactionSubCategories.map(tsc => <TransactionSubCategory key={tsc.id} transactionSubCategory={tsc} />)
                 :
                 <NoElementsCard message="No subcategories found" />
             }

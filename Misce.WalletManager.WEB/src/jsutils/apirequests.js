@@ -79,7 +79,7 @@ export function getTransactionSubCategoriesGetQueryParameters(parameters) {
 
 export function getTransactionCategoriesGetQueryParameters(transactionType) {
     let isExpenseTypeParameter = transactionType != null && transactionType != '' ? {
-        isExpenseType: transactionType === 'EXPENSE'
+        isExpenseType: transactionType === '0'
     } : null;
     if (isExpenseTypeParameter == null)
         return '';
