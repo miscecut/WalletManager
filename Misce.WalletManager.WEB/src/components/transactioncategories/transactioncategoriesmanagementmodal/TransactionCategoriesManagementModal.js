@@ -5,13 +5,13 @@ import './TransactionCategoriesManagementModal.css';
 import TransactionCategory from './../transactioncategory/TransactionCategory.js';
 import TransactionCategoryCreationForm from './../transactioncategorycreationform/TransactionCategoryCreationForm.js';
 import TransactionCategoryEdit from './../transactioncategoryedit/TransactionCategoryEdit.js';
+import NoElementsCard from '../../commoncomponents/noelementscard/NoElementsCard';
 //api
 import {
     getApiBaseUrl,
     getGetCommonSettings,
     getTransactionCategoryCreatePostSettings
 } from '../../../jsutils/apirequests.js';
-import NoElementsCard from '../../commoncomponents/noelementscard/NoElementsCard';
 
 function TransactionCategoriesManagementModal(props) {
 
