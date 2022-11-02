@@ -24,7 +24,7 @@ function TransactionCreateModal(props) {
             title: '',
             accountFromId: '',
             accountToId: '',
-            v: '0', //expense
+            transactionTypeId: '0', //expense
             transactionCategoryId: '',
             transactionSubCategoryId: '',
             description: '',
@@ -117,9 +117,9 @@ function TransactionCreateModal(props) {
             </div>
             <div className="misce-modal-content">
                 <div className="misce-transaction-type-buttons-container">
-                    <button type="button" className={`misce-btn misce-btn-profit ${transaction.transactionTypeId === '1' ? 'active' : ''}`}>profit</button>
-                    <button type="button" className={`misce-btn misce-btn-expense ${transaction.transactionTypeId === '0' ? 'active' : ''}`}>expense</button>
-                    <button type="button" className={`misce-btn ${transaction.transactionTypeId === '2' ? 'active' : ''}`}>transfer</button>
+                    <button type="button" className={`misce-btn misce-btn-profit ${transaction.transactionTypeId === '1' ? 'active' : ''}`} onClick={e => setTransaction({ ...transaction, transactionTypeId: '1' })}>profit</button>
+                    <button type="button" className={`misce-btn misce-btn-expense ${transaction.transactionTypeId === '0' ? 'active' : ''}`} onClick={e => setTransaction({ ...transaction, transactionTypeId: '0' })}>expense</button>
+                    <button type="button" className={`misce-btn ${transaction.transactionTypeId === '2' ? 'active' : ''}`} onClick={e => setTransaction({ ...transaction, transactionTypeId: '2' })}>transfer</button>
                 </div>
             </div>
         </div>
