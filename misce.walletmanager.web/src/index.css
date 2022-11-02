@@ -80,6 +80,12 @@ body {
     color: white;
     background-color: #b64fc8;
 }
+.misce-btn.misce-btn-profit.active, .misce-btn.misce-btn-profit:hover {
+    background-color: #03dac6;
+}
+.misce-btn.misce-btn-expense.active, .misce-btn.misce-btn-expense:hover {
+    background-color: #ff6d74;
+}
 .misce-btn:disabled:hover {
     cursor: default;
     color: #3c4042;

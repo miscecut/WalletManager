@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
+//css
+import './TransactionCreateModal.css';
 //api
 import {
     getApiBaseUrl,
-    getGetCommonSettings
+    getGetCommonSettings,
+    getTransactionCategoriesGetQueryParameters,
+    getTransactionSubCategoriesGetQueryParameters
 } from '../../jsutils/apirequests.js';
 
 //the transaction createion/update form
@@ -20,6 +24,8 @@ function TransactionCreateModal(props) {
             title: '',
             accountFromId: '',
             accountToId: '',
+            v: '0', //expense
+            transactionCategoryId: '',
             transactionSubCategoryId: '',
             description: '',
             dateTime: new Date()
@@ -28,13 +34,18 @@ function TransactionCreateModal(props) {
 
     //STATE
 
-    //the transaction type to be updated/created
-    const [transactionType, setTransactionType] = useState({ transactionTypeId: 0 });
     //the transaction form to be passed to the api
     const [transaction, setTransaction] = useState(getEmptyTransactionForm())
+    //the user's accounts
+    const [accounts, setAccounts] = useState([]);
+    //the user's transaction categories
+    const [transactionCategories, setTransactionCategories] = useState([]);
+    //the user's transaction subcategories
+    const [transactionSubCategories, setTransactionSubCategories] = useState([]);
 
     //EFFECTS
 
+    //load transaction's data at modal startup (or empty the form)
     useEffect(() => {
         //update
         if (props.transactionId != null) {
@@ -48,12 +59,52 @@ function TransactionCreateModal(props) {
                 });
         }
         //create
-        else {
+        else
             setTransaction(getEmptyTransactionForm());
-            if (transactionType.transactionTypeId !== 0)
-                setTransactionType({ ...transactionType, transactionTypeId: 0 });
-        }
     }, [props.transactionId]);
+
+    //load the user's transaction categories depending on the transaction type
+    useEffect(() => {
+        //if 'Tranfer' was selected, there is no point in showing the transaction category select
+        if (transaction.transactionTypeId === '2') {
+            setTransactionCategories([]);
+            setTransaction({ ...transaction, transactionSubCategoryId: '' });
+        }
+        else {
+            fetch(getApiBaseUrl() + 'transactioncategories' + getTransactionCategoriesGetQueryParameters(transaction.transactionTypeId), getGetCommonSettings(props.token))
+                .then(res => {
+                    if (res.ok)
+                        res.json().then(data => {
+                            setTransactionCategories(data);
+                            setTransaction({
+                                ...transaction,
+                                transactionCategoryId: '',
+                                transactionSubCategoryId: '',
+                                accountFromId: transaction.transactionTypeId === '1' ? '' : transaction.accountFromId,
+                                accountToId: transaction.transactionTypeId === '0' ? '' : transaction.accountToId
+                            });
+                        });
+                });
+        }
+    }, [transaction.transactionTypeId]);
+
+    //load the user's transaction sub categories under the selected transaction category
+    useEffect(() => {
+        //if no transaction category was selected, there is no point in showing the transaction sub category select
+        if (transaction.transactionCategoryId === '') {
+            setTransactionSubCategories([]);
+            setTransaction({ ...transaction, transactionSubCategoryId: '' });
+        }
+        else {
+            fetch(getApiBaseUrl() + 'transactionsubcategories' + getTransactionSubCategoriesGetQueryParameters({
+                transactionCategoryId: transaction.transactionCategoryId
+            }), getGetCommonSettings(props.token))
+                .then(res => {
+                    if (res.ok)
+                        res.json().then(data => setTransactionSubCategories(data));
+                });
+        }
+    }, [transaction.transactionCategoryId]);
 
     //RENDERING
 
@@ -65,7 +116,10 @@ function TransactionCreateModal(props) {
                 <button className="misce-close-button" type="button" onClick={props.closeButtonFunction}></button>
             </div>
             <div className="misce-modal-content">
-                <div className="misce-transaction-types-container">
+                <div className="misce-transaction-type-buttons-container">
+                    <button type="button" className={`misce-btn misce-btn-profit ${transaction.transactionTypeId === '1' ? 'active' : ''}`}>profit</button>
+                    <button type="button" className={`misce-btn misce-btn-expense ${transaction.transactionTypeId === '0' ? 'active' : ''}`}>expense</button>
+                    <button type="button" className={`misce-btn ${transaction.transactionTypeId === '2' ? 'active' : ''}`}>transfer</button>
                 </div>
             </div>
         </div>

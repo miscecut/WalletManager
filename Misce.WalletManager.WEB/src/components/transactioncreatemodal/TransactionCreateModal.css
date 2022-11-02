@@ -1,4 +1,13 @@
-.misce-transaction-types-container {
+.misce-transaction-type-buttons-container {
     display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 15px;
+    row-gap: 10px;
+    margin-inline: 35px;
+}
 
+@media screen and (max-width: 768px) {
+    .misce-transaction-type-buttons-container {
+        grid-template-columns: 1fr;
+    }
 }
