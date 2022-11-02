@@ -25,7 +25,7 @@ function TransactionCategoryCreationForm(props) {
     const errorMap = getErrorMap(props.errors);
 
     //render component
-    return <form onSubmit={submitHandler} className="misce-transaction-category-cration-form-container">
+    return <form onSubmit={submitHandler} className="misce-transaction-category-creation-form-container">
         <div className="misce-input-container">
             <label className="misce-input-label" htmlFor="name">Name:</label>
             <input

@@ -1,4 +1,4 @@
-.misce-transaction-category-cration-form-container {
+.misce-transaction-category-creation-form-container {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -8,7 +8,7 @@
 }
 
 @media screen and (max-width: 768px) {
-    .misce-transaction-category-cration-form-container {
+    .misce-transaction-category-creation-form-container {
         grid-template-columns: 1fr;
     }
 }

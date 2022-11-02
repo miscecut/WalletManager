@@ -184,6 +184,8 @@ function TransactionsPage(props) {
         </div>
         <TransactionCreateModal
             token={props.token}
+            accounts={accounts}
+            errors={[]}
             show={modals.transactionCreateModalIsOpen}
             closeButtonFunction={closeTransactionCreateModal}
         />

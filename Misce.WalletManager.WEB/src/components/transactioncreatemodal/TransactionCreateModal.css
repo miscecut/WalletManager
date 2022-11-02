@@ -4,10 +4,19 @@
     column-gap: 15px;
     row-gap: 10px;
     margin-inline: 35px;
+    margin-block: 15px;
+}
+
+.misce-transaction-form-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 15px;
+    row-gap: 10px;
 }
 
 @media screen and (max-width: 768px) {
     .misce-transaction-type-buttons-container {
         grid-template-columns: 1fr;
+        margin-block: 10px;
     }
 }

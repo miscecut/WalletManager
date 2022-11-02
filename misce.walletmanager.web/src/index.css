@@ -191,6 +191,10 @@ body {
     outline: 2px solid #ffb2ff;
 }
 
+.misce-input:disabled, .misce-select:disabled {
+    opacity: 0.2;
+}
+
 .misce-input-error, .misce-input-error:focus {
     outline: 2px solid #ff6d74;
     padding-right: calc(1.5em + .75rem);
