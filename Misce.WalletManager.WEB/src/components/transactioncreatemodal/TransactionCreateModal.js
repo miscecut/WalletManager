@@ -30,7 +30,8 @@ function TransactionCreateModal(props) {
             transactionCategoryId: '',
             transactionSubCategoryId: '',
             description: '',
-            dateTime: new Date().toJSON().slice(0, 19)
+            dateTime: new Date().toJSON().slice(0, 19),
+            amount: 0.0
         };
     }
 
@@ -42,6 +43,14 @@ function TransactionCreateModal(props) {
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the user's transaction subcategories
     const [transactionSubCategories, setTransactionSubCategories] = useState([]);
+
+    //FUNCTIONS 2
+
+    const submitHandler = e => {
+        e.preventDefault();
+        //call the register api
+        props.transactionSubmitFunction(transaction);
+    }
 
     //EFFECTS
 
@@ -123,46 +132,62 @@ function TransactionCreateModal(props) {
                     <button type="button" className={`misce-btn misce-btn-expense ${transaction.transactionTypeId === '0' ? 'active' : ''}`} onClick={e => setTransaction({ ...transaction, transactionTypeId: '0' })}>expense</button>
                     <button type="button" className={`misce-btn ${transaction.transactionTypeId === '2' ? 'active' : ''}`} onClick={e => setTransaction({ ...transaction, transactionTypeId: '2' })}>transfer</button>
                 </div>
-                <div className="misce-transaction-form-container">
+                <form className="misce-transaction-form-container" onSubmit={submitHandler}>
                     <div className="misce-input-container">
                         <label className="misce-input-label" htmlFor="dateandtime">Datetime:</label>
-                        <input className={`misce-input ${errorMap['datetime'] != null ? 'misce-input-error' : ''}`} type="datetime-local" name="dateandtime" id="dateandtime" onChange={e => setTransaction({ ...transaction, dateTime: e.target.value })} value={transaction.dateTime} required></input>
-                        <p className="misce-input-error-message">{errorMap['password']}</p>
+                        <input className={`misce-input ${errorMap['dateTime'] != null ? 'misce-input-error' : ''}`} type="datetime-local" name="dateandtime" id="dateandtime" onChange={e => setTransaction({ ...transaction, dateTime: e.target.value })} value={transaction.dateTime} required></input>
+                        <p className="misce-input-error-message">{errorMap['dateTime']}</p>
                     </div>
                     <div className="misce-input-container">
                         <label className="misce-input-label" htmlFor="title">Title:</label>
                         <input className={`misce-input ${errorMap['title'] != null ? 'misce-input-error' : ''}`} type="text" name="title" id="title" onChange={e => setTransaction({ ...transaction, title: e.target.value })} value={transaction.title}></input>
-                        <p className="misce-input-error-message">{errorMap['password']}</p>
+                        <p className="misce-input-error-message">{errorMap['title']}</p>
                     </div>
                     <div className="misce-input-container">
                         <label className="misce-input-label">From account:</label>
-                        <select className="misce-select" value={transaction.accountFromId} onChange={e => setTransaction({ ...transaction, accountFromId: e.target.value })} disabled={transaction.transactionTypeId === '1'}>
+                        <select className={`misce-select ${errorMap['fromAccountId'] != null ? 'misce-input-error' : ''}`} value={transaction.accountFromId} onChange={e => setTransaction({ ...transaction, accountFromId: e.target.value })} disabled={transaction.transactionTypeId === '1'}>
                             <option value=""></option>
                             {props.accounts.map(account => <option key={account.id} className="misce-option" value={account.id}>{account.name}</option>)}
                         </select>
+                        <p className="misce-input-error-message">{errorMap['fromAccountId']}</p>
                     </div>
                     <div className="misce-input-container">
                         <label className="misce-input-label">To account:</label>
-                        <select className="misce-select" value={transaction.accountToId} onChange={e => setTransaction({ ...transaction, accountToId: e.target.value })} disabled={transaction.transactionTypeId === '0'}>
+                        <select className={`misce-select ${errorMap['toAccountId'] != null ? 'misce-input-error' : ''}`} value={transaction.accountToId} onChange={e => setTransaction({ ...transaction, accountToId: e.target.value })} disabled={transaction.transactionTypeId === '0'}>
                             <option value=""></option>
                             {props.accounts.map(account => <option key={account.id} className="misce-option" value={account.id}>{account.name}</option>)}
                         </select>
+                        <p className="misce-input-error-message">{errorMap['toAccountId']}</p>
                     </div>
                     <div className="misce-input-container">
-                        <label className="misce-input-label">Transaction category:</label>
+                        <label className="misce-input-label">Category:</label>
                         <select className="misce-select" value={transaction.transactionCategoryId} onChange={e => setTransaction({ ...transaction, transactionCategoryId: e.target.value })} disabled={transaction.transactionTypeId === '2'}>
                             <option value=""></option>
                             {transactionCategories.map(tc => <option key={tc.id} className="misce-option" value={tc.id}>{tc.name}</option>)}
                         </select>
                     </div>
                     <div className="misce-input-container">
-                        <label className="misce-input-label">Transaction subcategory:</label>
+                        <label className="misce-input-label">Subcategory:</label>
                         <select className="misce-select" value={transaction.transactionSubCategoryId} onChange={e => setTransaction({ ...transaction, transactionSubCategoryId: e.target.value })} disabled={transaction.transactionTypeId === '2'}>
                             <option value=""></option>
                             {transactionSubCategories.map(tsc => <option key={tsc.id} className="misce-option" value={tsc.id}>{tsc.name}</option>)}
                         </select>
+                        <p className="misce-input-error-message">{errorMap['transactionSubCategoryId']}</p>
                     </div>
-                </div>
+                    <div className="misce-input-container transaction-description">
+                        <label className="misce-input-label" htmlFor="description">Description:</label>
+                        <input className={`misce-input ${errorMap['description'] != null ? 'misce-input-error' : ''}`} type="text" name="description" id="description" onChange={e => setTransaction({ ...transaction, description: e.target.value })} value={transaction.description}></input>
+                        <p className="misce-input-error-message">{errorMap['description']}</p>
+                    </div>
+                    <div className="misce-input-container">
+                        <label className="misce-input-label" htmlFor="amount">Amount:</label>
+                        <input min="0" step=".01" className={`misce-input ${errorMap['amount'] != null ? 'misce-input-error' : ''}`} type="number" name="amount" id="amount" onChange={e => setTransaction({ ...transaction, amount: e.target.value })} value={transaction.amount} required></input>
+                        <p className="misce-input-error-message">{errorMap['amount']}</p>
+                    </div>
+                    <div className="misce-input-container label-margin-fix">
+                        <button className="misce-btn" type="submit">ADD</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

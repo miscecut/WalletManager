@@ -14,9 +14,21 @@
     row-gap: 10px;
 }
 
+.misce-input-container.transaction-description {
+    grid-column: 1 / 3;
+}
+
 @media screen and (max-width: 768px) {
     .misce-transaction-type-buttons-container {
         grid-template-columns: 1fr;
         margin-block: 10px;
+    }
+
+    .misce-transaction-form-container {
+        grid-template-columns: 1fr;
+    }
+
+    .misce-input-container.transaction-description {
+        grid-column: 1 / 2;
     }
 }

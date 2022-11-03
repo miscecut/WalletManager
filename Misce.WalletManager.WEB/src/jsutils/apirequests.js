@@ -4,6 +4,7 @@ const commonPostHeader = {
 };
 
 function getPostSettings(bodyData, token = null, httpMethod = 'POST') {
+    console.log(bodyData);
     let postHeader = commonPostHeader;
     if (token != null)
         postHeader['Authorization'] = 'Bearer ' + token;
@@ -41,6 +42,18 @@ export function getRegisterPostSettings(registerForm) {
         password: registerForm.password,
         confirmPassword: registerForm.confirmPassword
     });
+}
+
+export function getTransactionCreatePostSettings(transactionForm, token) {
+    return getPostSettings({
+        title: transactionForm.title,
+        transactionSubCategoryId: transactionForm.transactionSubCategoryId === '' ? null : transactionForm.transactionSubCategoryId,
+        amount: 3.3,
+        fromAccountId: transactionForm.accountFromId === '' ? null : transactionForm.accountFromId,
+        toAccountId: transactionForm.accountToId === '' ? null : transactionForm.accountToId,
+        description: transactionForm.description,
+        dateTime: transactionForm.dateTime
+    }, token);
 }
 
 export function getTransactionCategoryCreatePostSettings(transactionCategoryForm, token) {

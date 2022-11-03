@@ -73,6 +73,9 @@ namespace Misce.WalletManager.API.Controllers
             {
                 try
                 {
+                    if (transactionCategory == null)
+                        return BadRequest();
+
                     var createdTransactionCategory = _transactionCategoryService.CreateTransactionCategory(userId.Value, transactionCategory);
 
                     return CreatedAtAction(

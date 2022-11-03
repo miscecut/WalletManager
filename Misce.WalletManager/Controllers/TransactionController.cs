@@ -98,6 +98,9 @@ namespace Misce.WalletManager.API.Controllers
             {
                 try
                 {
+                    if (transaction == null)
+                        return BadRequest();
+
                     var createdTransaction = _transactionService.CreateTransaction(userId.Value, transaction);
 
                     return CreatedAtAction(

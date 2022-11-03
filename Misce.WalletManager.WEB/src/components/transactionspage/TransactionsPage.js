@@ -11,10 +11,14 @@ import {
     getApiBaseUrl,
     getGetCommonSettings,
     getTransactionCategoriesGetQueryParameters,
-    getTransactionSubCategoriesGetQueryParameters
+    getTransactionSubCategoriesGetQueryParameters,
+    getTransactionCreatePostSettings
 } from './../../jsutils/apirequests.js';
 
 function TransactionsPage(props) {
+
+    //STATE
+
     //set one month ago as default fromDate filter value
     let now = new Date();
     let theFirstOfTheMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -42,12 +46,41 @@ function TransactionsPage(props) {
         transactionCreateModalIsOpen: false,
         editCategoriesModalIsOpen: false
     });
+    //the errors on the creation of a transaction
+    const [transactionCreationErrors, setTransactionCreationErrors] = useState([]);
+
+    //FUNCTIONS
 
     //this function closes the transaction create modal
     const closeTransactionCreateModal = () => setModals({ ...modals, transactionCreateModalIsOpen: false });
 
     //this function closes the transaction categories management modal
     const closeEditCategoriesModal = () => setModals({ ...modals, editCategoriesModalIsOpen: false });
+
+    //create a new transfaction
+    const createTransaction = transaction => {
+        //the transaction category gets created
+        fetch(getApiBaseUrl() + 'transactions', getTransactionCreatePostSettings(transaction, props.token))
+            .then(res => {
+                //if the operation was succesfull...
+                if (res.status === 201)
+                    res.json().then(() => {
+                        //...close the modal
+                        closeTransactionCreateModal();
+                        //and show the transactions again
+                        //TODO
+                        //clean errors, if there are
+                        if (transactionCreationErrors.length != 0)
+                            setTransactionCreationErrors([]);
+                    });
+                else if (res.status === 422)
+                    res.json().then(data => {
+                        setTransactionCreationErrors(data.errors);
+                    });
+            });
+    }
+
+    //EFFECTS
 
     //get the user's account, this function is called only at the page startup
     useEffect(() => {
@@ -101,6 +134,8 @@ function TransactionsPage(props) {
                 });
         }
     }, [filters.transactionCategoryId]);
+
+    //RENDERING
 
     //component render
     return <div className="misce-transactions-page-container">
@@ -184,8 +219,9 @@ function TransactionsPage(props) {
         </div>
         <TransactionCreateModal
             token={props.token}
+            transactionSubmitFunction={createTransaction}
             accounts={accounts}
-            errors={[]}
+            errors={transactionCreationErrors}
             show={modals.transactionCreateModalIsOpen}
             closeButtonFunction={closeTransactionCreateModal}
         />
