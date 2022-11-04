@@ -118,6 +118,7 @@ function TransactionCreateModal(props) {
     //RENDERING
 
     const errorMap = getErrorMap(props.errors);
+    console.log(errorMap);
 
     //render component
     return <div className={`misce-modal-container ${props.show ? 'show' : ''}`}>
@@ -145,19 +146,19 @@ function TransactionCreateModal(props) {
                     </div>
                     <div className="misce-input-container">
                         <label className="misce-input-label">From account:</label>
-                        <select className={`misce-select ${errorMap['fromAccountId'] != null ? 'misce-input-error' : ''}`} value={transaction.accountFromId} onChange={e => setTransaction({ ...transaction, accountFromId: e.target.value })} disabled={transaction.transactionTypeId === '1'}>
+                        <select className={`misce-select ${errorMap['fromaccountid'] != null ? 'misce-input-error' : ''}`} value={transaction.accountFromId} onChange={e => setTransaction({ ...transaction, accountFromId: e.target.value })} disabled={transaction.transactionTypeId === '1'}>
                             <option value=""></option>
                             {props.accounts.map(account => <option key={account.id} className="misce-option" value={account.id}>{account.name}</option>)}
                         </select>
-                        <p className="misce-input-error-message">{errorMap['fromAccountId']}</p>
+                        <p className="misce-input-error-message">{errorMap['fromaccountid']}</p>
                     </div>
                     <div className="misce-input-container">
                         <label className="misce-input-label">To account:</label>
-                        <select className={`misce-select ${errorMap['toAccountId'] != null ? 'misce-input-error' : ''}`} value={transaction.accountToId} onChange={e => setTransaction({ ...transaction, accountToId: e.target.value })} disabled={transaction.transactionTypeId === '0'}>
+                        <select className={`misce-select ${errorMap['toaccountid'] != null ? 'misce-input-error' : ''}`} value={transaction.accountToId} onChange={e => setTransaction({ ...transaction, accountToId: e.target.value })} disabled={transaction.transactionTypeId === '0'}>
                             <option value=""></option>
                             {props.accounts.map(account => <option key={account.id} className="misce-option" value={account.id}>{account.name}</option>)}
                         </select>
-                        <p className="misce-input-error-message">{errorMap['toAccountId']}</p>
+                        <p className="misce-input-error-message">{errorMap['toaccountid']}</p>
                     </div>
                     <div className="misce-input-container">
                         <label className="misce-input-label">Category:</label>

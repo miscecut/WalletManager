@@ -48,7 +48,7 @@ export function getTransactionCreatePostSettings(transactionForm, token) {
     return getPostSettings({
         title: transactionForm.title,
         transactionSubCategoryId: transactionForm.transactionSubCategoryId === '' ? null : transactionForm.transactionSubCategoryId,
-        amount: 3.3,
+        amount: parseFloat(transactionForm.amount),
         fromAccountId: transactionForm.accountFromId === '' ? null : transactionForm.accountFromId,
         toAccountId: transactionForm.accountToId === '' ? null : transactionForm.accountToId,
         description: transactionForm.description,

@@ -10,7 +10,7 @@ namespace Misce.WalletManager.DTO.DTO.Transaction
         [MaxLength(500, ErrorMessage = "The transaction description is too long")]
         public string? Description { get; init; }
         [Required(ErrorMessage = "The transaction amount must be provided")]
-        [Range(0, int.MaxValue, ErrorMessage = "The transaction amount must be positive")]
+        [Range(0.01, int.MaxValue, ErrorMessage = "The transaction amount must be positive")]
         [Currency]
         public decimal? Amount { get; init; }
         [Required(ErrorMessage = "The transaction datetime must be provided")]

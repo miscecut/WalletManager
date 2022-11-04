@@ -12,7 +12,7 @@ namespace Misce.WalletManager.DTO.CustomValidationRules
             var toAccountId = (Guid?)validationContext.ObjectType.GetProperty("ToAccountId")?.GetValue(validationContext.ObjectInstance, null);
 
             if (!fromAccountId.HasValue && !toAccountId.HasValue)
-                return new ValidationResult("The transaction has to be from or to an account");
+                return new ValidationResult("The transaction has to be from or to an account", new List<string> { "FromAccountId" });
 
             return ValidationResult.Success;
         }

@@ -11,7 +11,7 @@ namespace Misce.WalletManager.DTO.CustomValidationRules
             var toAccountId = (Guid?) validationContext.ObjectType.GetProperty("ToAccountId")?.GetValue(validationContext.ObjectInstance, null);
 
             if (fromAccountId.HasValue && toAccountId.HasValue && ((Guid?) value).HasValue)
-                return new ValidationResult("Tha transfer transactions cannot have a transaction category");
+                return new ValidationResult("Tha transfer transactions cannot have a transaction category", new List<string> { "TransactionSubCategoryId" });
 
             return ValidationResult.Success;
         }
