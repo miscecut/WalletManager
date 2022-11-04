@@ -5,6 +5,7 @@ using Misce.WalletManager.DTO.DTO.Transaction;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
 using Misce.WalletManager.DTO.DTO.User;
+using Misce.WalletManager.DTO.Enums;
 
 namespace Misce.WalletManager.Test.ServiceTests
 {
@@ -452,6 +453,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //finally, create 2 transactions under the electronics category
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.EXPENSE,
                 FromAccountId = createdAccount.Id,
                 Title = "GTX 3070",
                 Amount = 532.9M,
@@ -460,6 +462,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.EXPENSE,
                 FromAccountId = createdAccount.Id,
                 Title = "New battery",
                 Amount = 101.24M,
@@ -468,6 +471,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             });
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.EXPENSE,
                 FromAccountId = createdAccount.Id,
                 Title = "New shoes",
                 Amount = 49,

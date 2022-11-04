@@ -46,11 +46,12 @@ export function getRegisterPostSettings(registerForm) {
 
 export function getTransactionCreatePostSettings(transactionForm, token) {
     return getPostSettings({
+        transactionType: transactionForm.transactionType ? null : parseInt(transactionForm.transactionType),
         title: transactionForm.title,
-        transactionSubCategoryId: transactionForm.transactionSubCategoryId === '' ? null : transactionForm.transactionSubCategoryId,
+        transactionSubCategoryId: transactionForm.transactionSubCategoryId ? null : transactionForm.transactionSubCategoryId,
         amount: parseFloat(transactionForm.amount),
-        fromAccountId: transactionForm.accountFromId === '' ? null : transactionForm.accountFromId,
-        toAccountId: transactionForm.accountToId === '' ? null : transactionForm.accountToId,
+        fromAccountId: transactionForm.accountFromId ? null : transactionForm.accountFromId,
+        toAccountId: transactionForm.accountToId ? null : transactionForm.accountToId,
         description: transactionForm.description,
         dateTime: transactionForm.dateTime
     }, token);

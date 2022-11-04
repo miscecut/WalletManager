@@ -3,6 +3,7 @@ using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.DTO.DTO.Account;
 using Misce.WalletManager.DTO.DTO.Transaction;
 using Misce.WalletManager.DTO.DTO.User;
+using Misce.WalletManager.DTO.Enums;
 
 namespace Misce.WalletManager.Test.ServiceTests
 {
@@ -112,6 +113,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //create an expense to decrease the total amount of the user's wallet
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.EXPENSE,
                 FromAccountId = createdUserWallet.Id,
                 Amount = 1.19M,
                 Title = "Onions",
@@ -122,6 +124,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //create a profit to decrease the total amount of the user's wallet
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.PROFIT,
                 ToAccountId = createdUserWallet.Id,
                 Amount = 20,
                 Title = "Random money",
@@ -199,6 +202,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //create an expense to decrease the total amount of the user's wallet
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.EXPENSE,
                 FromAccountId = createdUserWallet.Id,
                 Amount = 13.2M,
                 Title = "Stuff",
@@ -210,6 +214,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //create a profit to decrease the total amount of the user's wallet
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.EXPENSE,
                 FromAccountId = createdUserWallet.Id,
                 Amount = 20,
                 Title = "Random expense",
@@ -380,6 +385,7 @@ namespace Misce.WalletManager.Test.ServiceTests
             //create an expense to decrease the total amount of the user's wallet
             transactionService.CreateTransaction(user.Id, new TransactionCreationDTOIn
             {
+                TransactionType = TransactionType.EXPENSE,
                 FromAccountId = createdUserWallet.Id,
                 Amount = 1.19M,
                 Title = "Onions",
