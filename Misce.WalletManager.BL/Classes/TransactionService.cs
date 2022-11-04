@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Misce.WalletManager.BL.Enums;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
@@ -7,6 +6,7 @@ using Misce.WalletManager.DTO.DTO.AccountType;
 using Misce.WalletManager.DTO.DTO.Transaction;
 using Misce.WalletManager.DTO.DTO.TransactionCategory;
 using Misce.WalletManager.DTO.DTO.TransactionSubCategory;
+using Misce.WalletManager.DTO.Enums;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
 

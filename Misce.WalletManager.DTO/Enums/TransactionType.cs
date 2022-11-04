@@ -1,4 +1,4 @@
-﻿namespace Misce.WalletManager.BL.Enums
+﻿namespace Misce.WalletManager.DTO.Enums
 {
     public enum TransactionType
     {

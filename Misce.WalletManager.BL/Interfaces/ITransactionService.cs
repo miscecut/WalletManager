@@ -1,5 +1,5 @@
-﻿using Misce.WalletManager.BL.Enums;
-using Misce.WalletManager.DTO.DTO.Transaction;
+﻿using Misce.WalletManager.DTO.DTO.Transaction;
+using Misce.WalletManager.DTO.Enums;
 
 namespace Misce.WalletManager.BL.Interfaces
 {

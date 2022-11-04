@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Misce.WalletManager.BL.Classes.ErrorMessages;
 using Misce.WalletManager.BL.Classes.Utils;
-using Misce.WalletManager.BL.Enums;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Transaction;
-using System.Diagnostics;
+using Misce.WalletManager.DTO.Enums;
 using System.Security.Claims;
 using System.Text.Json;
 
