@@ -118,7 +118,6 @@ function TransactionCreateModal(props) {
     //RENDERING
 
     const errorMap = getErrorMap(props.errors);
-    console.log(errorMap);
 
     //render component
     return <div className={`misce-modal-container ${props.show ? 'show' : ''}`}>
