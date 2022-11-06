@@ -1,28 +1,28 @@
 .misce-transaction-category {
     width: 100%;
     display: flex;
+    color: white;
     align-items: center;
     justify-content: space-between;
     background-color: #3c4042;
     border: 1px solid transparent;
-    padding: 11px;
+    padding: 9px;
     border-radius: 18px;
 }
-.misce-transaction-category:hover {
-    color: #ea80fc;
-    border: 1px solid #ea80fc;
+
+.misce-transaction-category.profit:hover {
+    color: #03dac6;
+    border: 1px solid #03dac6;
+}
+.misce-transaction-category.expense:hover {
+    color: #ff6d74;
+    border: 1px solid #ff6d74;
 }
 
 .misce-transaction-category-name {
     font-weight: bold;
-    font-size: 1.2rem;
-    padding-left: 5px;
-}
-.misce-transaction-category-name.profit {
-    color: #03dac6;
-}
-.misce-transaction-category-name.expense {
-    color: #ff6d74;
+    font-size: 1.1rem;
+    padding-left: 4px;
 }
 
 .misce-transaction-category-actions {
@@ -33,12 +33,12 @@
 
 @media screen and (max-width: 768px) {
     .misce-transaction-category {
-        padding: 9px;
+        padding: 10px;
     }
 
     .misce-transaction-category-name {
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 0.9rem;
         padding-left: 4px;
     }
 }
