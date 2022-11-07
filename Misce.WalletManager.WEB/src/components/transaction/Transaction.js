@@ -30,9 +30,8 @@ function Transaction({ transaction }) {
     }
 
     return <div className="misce-hover-purple misce-transaction-card">
-            <div className={`misce-transaction-card-icon ${transactionType}`}></div>
-            <div className="misce-transaction-card-content">
-            <p className="misce-transaction-card-title">{transaction.title}</p>
+        <div className="misce-transaction-card-content">
+            <p className={`misce-transaction-card-title ${transaction.title ? '' : 'untitled'}`}><div className={`misce-transaction-card-icon ${transactionType}`}></div> {transaction.title ? transaction.title : 'Untitled'}</p>
                 <p className="misce-transaction-card-subtitle"><img className="misce-transaction-card-subtitle-icon" src={TransactionCategoryIcon}></img> {transaction.transactionSubCategory != null ? transaction.transactionSubCategory.name : <i>No category</i>}</p>
                 {getTransactionCardSubTitle()}
                 <p className="misce-transaction-card-subtitle"><img className="misce-transaction-card-subtitle-icon" src={CalendarIcon}></img> {transaction.dateTime}</p>
@@ -44,5 +43,3 @@ function Transaction({ transaction }) {
 }
 
 export default Transaction;
-
-//<p className="misce-transaction-card-description">{transaction.description == null || transaction.description == '' ? <i>No description</i> : transaction.description}</p> 
