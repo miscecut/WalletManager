@@ -308,7 +308,6 @@ namespace Misce.WalletManager.BL.Classes
                         transactionToUpdate.Description = transaction.Description;
                         transactionToUpdate.Amount = transaction.Amount.GetValueOrDefault();
                         transactionToUpdate.DateTime = transaction.DateTime.GetValueOrDefault().ToUniversalTime();
-                        transactionToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                         //commit changes in the db
                         _walletManagerContext.SaveChanges();

@@ -226,7 +226,6 @@ namespace Misce.WalletManager.BL.Classes
                     accountToUpdate.Description = account.Description;
                     accountToUpdate.IsActive = account.IsActive.GetValueOrDefault();
                     accountToUpdate.InitialAmount = account.InitialAmount.GetValueOrDefault();
-                    accountToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                     //commit changes in the db
                     _walletManagerContext.SaveChanges();

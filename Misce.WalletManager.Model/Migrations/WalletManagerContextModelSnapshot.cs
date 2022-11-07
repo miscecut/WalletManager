@@ -32,6 +32,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -45,6 +46,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -71,6 +73,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -78,6 +81,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -100,6 +104,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateTime")
@@ -113,6 +118,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("SubCategoryId")
@@ -148,6 +154,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -158,6 +165,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -185,6 +193,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -192,6 +201,7 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -213,12 +223,14 @@ namespace Misce.WalletManager.DAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDateTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastLoginDateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("LastModifiedDateTime")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")

@@ -134,7 +134,6 @@ namespace Misce.WalletManager.BL.Classes
                     transactionSubCategoryToUpdate.Name = transactionSubCategory.Name;
                     transactionSubCategoryToUpdate.Description = transactionSubCategory.Description;
                     transactionSubCategoryToUpdate.Category = transactionCategory;
-                    transactionSubCategoryToUpdate.LastModifiedDateTime = DateTime.UtcNow;
 
                     //commit changes in the db
                     _walletManagerContext.SaveChanges();
