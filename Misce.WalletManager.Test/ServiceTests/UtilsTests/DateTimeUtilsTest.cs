@@ -81,5 +81,65 @@ namespace Misce.WalletManager.Test.ServiceTests.UtilsTests
             Assert.AreEqual(changedDate.Minute, 59);
             Assert.AreEqual(changedDate.Second, 59);
         }
+
+        [TestMethod]
+        public void TestGetNextDateTime()
+        {
+            //DAY
+
+            var nextDateTime = DateTimeUtils.GetNextValue(new DateTime(2022, 11, 30, 23, 59, 59), GroupByPeriod.DAY);
+            Assert.AreEqual(nextDateTime.Year, 2022);
+            Assert.AreEqual(nextDateTime.Month, 12);
+            Assert.AreEqual(nextDateTime.Day, 1); //the next day
+            Assert.AreEqual(nextDateTime.Hour, 23);
+            Assert.AreEqual(nextDateTime.Minute, 59);
+            Assert.AreEqual(nextDateTime.Second, 59);
+
+            //WEEK
+
+            nextDateTime = DateTimeUtils.GetNextValue(new DateTime(2022, 12, 11, 23, 59, 59), GroupByPeriod.WEEK);
+            Assert.AreEqual(nextDateTime.Year, 2022);
+            Assert.AreEqual(nextDateTime.Month, 12);
+            Assert.AreEqual(nextDateTime.Day, 18); //the next sunday
+            Assert.AreEqual(nextDateTime.Hour, 23);
+            Assert.AreEqual(nextDateTime.Minute, 59);
+            Assert.AreEqual(nextDateTime.Second, 59);
+
+            //MONTH
+
+            nextDateTime = DateTimeUtils.GetNextValue(new DateTime(2022, 6, 30, 23, 59, 59), GroupByPeriod.MONTH);
+            Assert.AreEqual(nextDateTime.Year, 2022);
+            Assert.AreEqual(nextDateTime.Month, 7);
+            Assert.AreEqual(nextDateTime.Day, 31); //the next last day of the month
+            Assert.AreEqual(nextDateTime.Hour, 23);
+            Assert.AreEqual(nextDateTime.Minute, 59);
+            Assert.AreEqual(nextDateTime.Second, 59);
+
+            nextDateTime = DateTimeUtils.GetNextValue(new DateTime(2022, 1, 31, 23, 59, 59), GroupByPeriod.MONTH);
+            Assert.AreEqual(nextDateTime.Year, 2022);
+            Assert.AreEqual(nextDateTime.Month, 2);
+            Assert.AreEqual(nextDateTime.Day, 28); //the next last day of the month
+            Assert.AreEqual(nextDateTime.Hour, 23);
+            Assert.AreEqual(nextDateTime.Minute, 59);
+            Assert.AreEqual(nextDateTime.Second, 59);
+
+            nextDateTime = DateTimeUtils.GetNextValue(new DateTime(2022, 7, 31, 23, 59, 59), GroupByPeriod.MONTH);
+            Assert.AreEqual(nextDateTime.Year, 2022);
+            Assert.AreEqual(nextDateTime.Month, 8);
+            Assert.AreEqual(nextDateTime.Day, 31); //the next last day of the month
+            Assert.AreEqual(nextDateTime.Hour, 23);
+            Assert.AreEqual(nextDateTime.Minute, 59);
+            Assert.AreEqual(nextDateTime.Second, 59);
+
+            //YEAR
+
+            nextDateTime = DateTimeUtils.GetNextValue(new DateTime(2021, 12, 31, 23, 59, 59), GroupByPeriod.YEAR);
+            Assert.AreEqual(nextDateTime.Year, 2022); //the next last day of the year
+            Assert.AreEqual(nextDateTime.Month, 12);
+            Assert.AreEqual(nextDateTime.Day, 31);
+            Assert.AreEqual(nextDateTime.Hour, 23);
+            Assert.AreEqual(nextDateTime.Minute, 59);
+            Assert.AreEqual(nextDateTime.Second, 59);
+        }
     }
 }

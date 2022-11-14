@@ -28,5 +28,28 @@ namespace Misce.WalletManager.BL.Classes.Utils
 
             return dateTime;
         }
+
+        public static DateTime GetNextValue(DateTime dateTime, GroupByPeriod period)
+        {
+            var nextDateTime = dateTime;
+            switch (period)
+            {
+                case GroupByPeriod.DAY: //the next day
+                    nextDateTime = dateTime.AddDays(1);
+                    break;
+                case GroupByPeriod.WEEK: //the same day of the week next week
+                    nextDateTime = dateTime.AddDays(7);
+                    break;
+                case GroupByPeriod.MONTH: //the last day of next month
+                    nextDateTime = dateTime.AddMonths(1);
+                    var lastDayNumberInMonth = DateTime.DaysInMonth(nextDateTime.Year, nextDateTime.Month);
+                    nextDateTime = new DateTime(nextDateTime.Year, nextDateTime.Month, lastDayNumberInMonth, nextDateTime.Hour, nextDateTime.Minute, nextDateTime.Second); //adjust day to the last one of the month
+                    break;
+                case GroupByPeriod.YEAR: //the 31st of december, next year
+                    nextDateTime = new DateTime(dateTime.Year + 1, 12, 31, dateTime.Hour, dateTime.Minute, dateTime.Second);
+                    break;
+            }
+            return nextDateTime;
+        }
     }
 }

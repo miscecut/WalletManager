@@ -5,6 +5,7 @@ using Misce.WalletManager.BL.Classes.Utils;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
+using Misce.WalletManager.DTO.Enums;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -57,6 +58,20 @@ namespace Misce.WalletManager.API.Controllers
             {
                 var accounts = _accountService.GetAccounts(userId.Value, accountTypeId, active);
                 return Ok(accounts);
+            }
+
+            return Unauthorized();
+        }
+
+        [HttpGet("history")]
+        public IActionResult GetAccountAmountHistory(Guid? accountTypeId = null, bool? active = null, GroupByPeriod period = GroupByPeriod.MONTH)
+        {
+            var userId = Utils.GetUserId(HttpContext.User.Identity as ClaimsIdentity);
+
+            if (userId.HasValue)
+            {
+                var accountsHistory = _accountService.GetAccountsWithAmountHistory(userId.Value, active, period);
+                return Ok(accountsHistory);
             }
 
             return Unauthorized();

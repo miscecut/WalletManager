@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Misce.WalletManager.BL.Classes.Utils;
 using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
@@ -6,7 +7,6 @@ using Misce.WalletManager.DTO.DTO.AccountType;
 using Misce.WalletManager.DTO.Enums;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
-using System;
 
 namespace Misce.WalletManager.BL.Classes
 {
@@ -273,34 +273,102 @@ namespace Misce.WalletManager.BL.Classes
         public IEnumerable<AccountWithAmountHistoryDTOOut> GetAccountsWithAmountHistory(Guid userId, bool? active = null, GroupByPeriod groupByPeriod = GroupByPeriod.MONTH)
         {
             //get the user accounts
-            var accounts = GetAccounts(userId, active: active);
+            var accountsQuery = from account in _walletManagerContext.Accounts
+                                where account.User.Id == userId
+                                select account;
+            //apply filters
+            if (active != null)
+                accountsQuery.Where(a => a.IsActive == active);
+
+            var accounts = accountsQuery.ToList();
 
             //get all the user's transactions
-            var transactionsQuery = from transaction in _walletManagerContext.Transactions
-                                    orderby transaction.DateTime ascending
-                                    select transaction;
-            var transactions = transactionsQuery.ToList();
+            var transactions = new TransactionService(_walletManagerContext).GetTransactions(userId, int.MaxValue, 0);
 
-            //create the response
-            var accountsWithAmountHistory = accounts.Select(a => new AccountWithAmountHistoryDTOOut
-            {
-                Id = a.Id,
-                InitialAmount = a.InitialAmount,
-                AccountType = a.AccountType,
-                ActualAmount = a.ActualAmount,
-                IsActive = a.IsActive,
-                Description = a.Description,
-                Name = a.Name
-            });
-            //create the map
-            var accountAmountHistoryMap = new Dictionary<Guid, IDictionary<DateTime, decimal>>();
-            //and populate it with every account id
-            foreach (var account in accounts) 
-            {
-                accountAmountHistoryMap[account.Id] = new Dictionary<DateTime, decimal>();
+            //create the amounts map: ACCOUNT ID => list of maps DateTime => (profit - loss on that account)
+            var profitLossMap = new Dictionary<Guid, IDictionary<DateTime, decimal>>();
+            foreach (var account in accounts)
+                profitLossMap[account.Id] = new Dictionary<DateTime, decimal>();
 
+            //fill the profit/loss map
+            foreach(var transaction in transactions)
+            {
+                var dateTimeForMap = DateTimeUtils.GetDateTimeForAmountHistory(transaction.DateTime, groupByPeriod);
+                var fromAccountId = transaction.FromAccount?.Id;
+                var toAccountId = transaction.ToAccount?.Id;
+
+                //sign the loss, if there is
+                if(fromAccountId.HasValue)
+                {
+                    //init amount if not present
+                    if (!profitLossMap[fromAccountId.Value].ContainsKey(dateTimeForMap))
+                        profitLossMap[fromAccountId.Value][dateTimeForMap] = 0;
+                    //subtract the amount
+                    profitLossMap[fromAccountId.Value][dateTimeForMap] = profitLossMap[fromAccountId.Value][dateTimeForMap] - transaction.Amount;
+                }
+
+                //sign the profit, if there is
+                if (toAccountId.HasValue)
+                {
+                    //init amount if not present
+                    if (!profitLossMap[toAccountId.Value].ContainsKey(dateTimeForMap))
+                        profitLossMap[toAccountId.Value][dateTimeForMap] = 0;
+                    //add the amount
+                    profitLossMap[toAccountId.Value][dateTimeForMap] = profitLossMap[toAccountId.Value][dateTimeForMap] + transaction.Amount;
+                }
             }
-            return null;
+
+            //this map will contain ACCOUNT ID => map of DateTime => amount of the account at that date
+            var accountHistoryMap = new Dictionary<Guid, Dictionary<DateTime, decimal>>();
+            //this list will be the response
+            var amountHistoryList = new List<AccountWithAmountHistoryDTOOut>(accounts.Count());
+            //for each account, starting from its creation date, for every period, sign the actual amount
+            foreach (var account in accounts)
+            {
+                //retrieve the account's profit/loss map
+                var accountAmountMap = profitLossMap[account.Id];
+                //init the accountHistoryMap
+                accountHistoryMap[account.Id] = new Dictionary<DateTime, decimal>();
+                //start from the date the account was created and finish in the period which comprehends today
+                var startingDate = DateTimeUtils.GetDateTimeForAmountHistory(account.CreatedDateTime, groupByPeriod);
+                var endingDate = DateTimeUtils.GetDateTimeForAmountHistory(DateTime.Now, groupByPeriod);
+                //sign the initial amount
+                var amount = account.InitialAmount;
+
+                //cicle through every date from start to end (jumping by week or day or month etc.)
+                for(var date = startingDate; date <= endingDate; date = DateTimeUtils.GetNextValue(date, groupByPeriod))
+                {
+                    //retrieve the profit - loss amount of that period
+                    var transactionsIntheCurrentPeriod = accountAmountMap[date];
+                    //update the current amount
+                    amount += transactionsIntheCurrentPeriod;
+                    //and sign it in the new map
+                    accountHistoryMap[account.Id][date] = amount;
+                }
+
+                //once the account amount map is filled, create the objects to give in response
+                amountHistoryList.Add(new AccountWithAmountHistoryDTOOut
+                {
+                    Id = account.Id,
+                    IsActive = account.IsActive,
+                    Name = account.Name,
+                    ActualAmount = amount,
+                    InitialAmount = account.InitialAmount,
+                    Description = account.Description,
+                    AccountAmountHistory = accountHistoryMap[account.Id].Keys.ToList().Select(date => new AccountAmountHistory
+                    {
+                        AtDate = date,
+                        Amount = accountHistoryMap[account.Id][date]
+                    }).ToArray(),
+                    AccountType = new AccountTypeDTOOut
+                    {
+                        Id = account.AccountType.Id,
+                        Name = account.AccountType.Name,
+                    }
+                });
+            }
+
+            return amountHistoryList;
         }
 
         #endregion
