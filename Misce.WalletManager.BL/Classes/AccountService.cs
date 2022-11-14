@@ -3,8 +3,10 @@ using Misce.WalletManager.BL.Exceptions;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.DTO.DTO.Account;
 using Misce.WalletManager.DTO.DTO.AccountType;
+using Misce.WalletManager.DTO.Enums;
 using Misce.WalletManager.Model.Data;
 using Misce.WalletManager.Model.Models;
+using System;
 
 namespace Misce.WalletManager.BL.Classes
 {
@@ -266,6 +268,39 @@ namespace Misce.WalletManager.BL.Classes
             }
             else
                 throw new ElementNotFoundException();
+        }
+
+        public IEnumerable<AccountWithAmountHistoryDTOOut> GetAccountsWithAmountHistory(Guid userId, bool? active = null, GroupByPeriod groupByPeriod = GroupByPeriod.MONTH)
+        {
+            //get the user accounts
+            var accounts = GetAccounts(userId, active: active);
+
+            //get all the user's transactions
+            var transactionsQuery = from transaction in _walletManagerContext.Transactions
+                                    orderby transaction.DateTime ascending
+                                    select transaction;
+            var transactions = transactionsQuery.ToList();
+
+            //create the response
+            var accountsWithAmountHistory = accounts.Select(a => new AccountWithAmountHistoryDTOOut
+            {
+                Id = a.Id,
+                InitialAmount = a.InitialAmount,
+                AccountType = a.AccountType,
+                ActualAmount = a.ActualAmount,
+                IsActive = a.IsActive,
+                Description = a.Description,
+                Name = a.Name
+            });
+            //create the map
+            var accountAmountHistoryMap = new Dictionary<Guid, IDictionary<DateTime, decimal>>();
+            //and populate it with every account id
+            foreach (var account in accounts) 
+            {
+                accountAmountHistoryMap[account.Id] = new Dictionary<DateTime, decimal>();
+
+            }
+            return null;
         }
 
         #endregion

@@ -141,6 +141,7 @@ function TransactionsPage(props) {
     return <div className="misce-transactions-page-container">
         <div className="misce-card misce-transactions-content">
             <TransactionsContainer
+                groupBy={filters.groupBy}
                 token={props.token}
                 transactionType={filters.transactionType}
                 fromDate={filters.fromDate}
@@ -157,6 +158,7 @@ function TransactionsPage(props) {
                 <label className="misce-input-label">Group transactions:</label>
                 <select className="misce-select" value={filters.groupBy} onChange={e => setFilters({ ...filters, groupBy: e.target.value })}>
                     <option value="DAYS">By day</option>
+                    <option value="MONTHS">By month</option>
                 </select>
             </div>
             <div className="misce-input-container">
