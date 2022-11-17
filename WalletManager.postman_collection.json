@@ -68,7 +68,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"accountTypeId\": \"72f96a1b-df0f-48f1-a6fe-73027b19aa6c\",\r\n    \"initialAmount\": 100,\r\n    \"name\": \"Banca Popolare di Cremona\",\r\n    \"isActive\": true\r\n}",
+							"raw": "{\r\n    \"accountTypeId\": \"f48968a4-d8d0-4c35-bcc7-4225f2d147b4\",\r\n    \"initialAmount\": 100,\r\n    \"name\": \"Banca Popolare di Cremona\",\r\n    \"isActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -136,6 +136,33 @@
 								"api",
 								"accounts",
 								"bd7f23e1-6566-4be0-9882-ac00b6012f28"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/accounts/history",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7264/api/accounts/history?period=0",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7264",
+							"path": [
+								"api",
+								"accounts",
+								"history"
+							],
+							"query": [
+								{
+									"key": "period",
+									"value": "0"
+								}
 							]
 						}
 					},
@@ -700,7 +727,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6Ijg2OTRkNjNiLTkyMjYtNDdhYi1iMDA0LTY5NGZhZmM2NmYxMiIsImV4cCI6MTY2NjM3MDA0NiwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.HWW312dAC0k-eF2lU8cZWEf3d3Tl4sdWcF63CwE9hN4",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjE4N2Y4MjlmLTM1NDMtNDJiNi1kNzkyLTA4ZGFjMDlmNTk4MCIsImV4cCI6MTY2ODQ0NTIxOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2NCIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjcyNjQifQ.kS-DN_c1Zfof4tQvuGscTcPaqQw6Ou7sj-i6xAnT00I",
 				"type": "string"
 			}
 		]

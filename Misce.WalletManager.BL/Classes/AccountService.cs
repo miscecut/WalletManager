@@ -280,7 +280,7 @@ namespace Misce.WalletManager.BL.Classes
             if (active != null)
                 accountsQuery.Where(a => a.IsActive == active);
 
-            var accounts = accountsQuery.ToList();
+            var accounts = accountsQuery.Include(a => a.AccountType).ToList();
 
             //get all the user's transactions
             var transactions = new TransactionService(_walletManagerContext).GetTransactions(userId, int.MaxValue, 0);
@@ -339,6 +339,8 @@ namespace Misce.WalletManager.BL.Classes
                 for(var date = startingDate; date <= endingDate; date = DateTimeUtils.GetNextValue(date, groupByPeriod))
                 {
                     //retrieve the profit - loss amount of that period
+                    if (!accountAmountMap.ContainsKey(date))
+                        accountAmountMap[date] = 0;
                     var transactionsIntheCurrentPeriod = accountAmountMap[date];
                     //update the current amount
                     amount += transactionsIntheCurrentPeriod;
