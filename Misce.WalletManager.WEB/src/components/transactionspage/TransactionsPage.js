@@ -57,7 +57,7 @@ function TransactionsPage(props) {
     //this function closes the transaction categories management modal
     const closeEditCategoriesModal = () => setModals({ ...modals, editCategoriesModalIsOpen: false });
 
-    //create a new transfaction
+    //create a new transaction
     const createTransaction = transaction => {
         //the transaction category gets created
         fetch(getApiBaseUrl() + 'transactions', getTransactionCreatePostSettings(transaction, props.token))

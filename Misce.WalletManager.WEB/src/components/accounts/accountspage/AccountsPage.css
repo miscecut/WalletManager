@@ -1,0 +1,21 @@
+.misce-accounts-page-container {
+    width: 70%;
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 1200px) {
+    .misce-accounts-page-container {
+        width: 80%;
+        gap: 10px;
+        margin: 10px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .misce-accounts-page-container {
+        width: 100%;
+    }
+}

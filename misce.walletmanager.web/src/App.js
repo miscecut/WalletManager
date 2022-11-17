@@ -5,6 +5,7 @@ import RegisterForm from './components/registerform/RegisterForm.js';
 import LoginForm from './components/loginform/LoginForm.js';
 import Dashboard from './components/dashboard/Dashboard.js';
 import TransactionsPage from './components/transactionspage/TransactionsPage.js';
+import AccountsPage from './components/accounts/accountspage/AccountsPage.js';
 //api
 import { getApiBaseUrl, getLoginPostSettings, getRegisterPostSettings } from './jsutils/apirequests.js';
 
@@ -81,6 +82,8 @@ function App() {
             return <RegisterForm register={register} registrationErrors={activePage.errors} />
         if (pageName === 'TRANSACTIONS')
             return <TransactionsPage token={user.token} />
+        if (pageName === 'ACCOUNTS')
+            return <AccountsPage token={user.token} />
         return <Dashboard />
     }
 
