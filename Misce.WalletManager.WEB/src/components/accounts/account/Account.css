@@ -1,0 +1,65 @@
+.misce-account-card {
+    width: 100%;
+    background-color: #3c4042;
+    padding: 10px;
+    border: 1px solid #24282a;
+    border-radius: 18px;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
+}
+.misce-account-card:hover {
+    border: 1px solid #ea80fc;
+}
+
+.misce-account-card-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 15px;
+}
+
+.misce-account-name {
+    color: white;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+.misce-account-name.inactive {
+    color: #c3c3c3;
+}
+
+.misce-account-amount {
+    font-weight: bold;
+    font-size: 1.6rem;
+}
+.misce-account-amount.positive {
+    color: #03dac6;
+}
+.misce-account-amount.negative {
+    color: #ff6d74;
+}
+
+.misce-account-card-icon {
+    width: 4rem;
+    height: 4rem;
+    background: #ea80fc;
+    border-radius: 2rem;
+    background-size: contain;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+.misce-account-card-icon.inactive {
+    background: #c3c3c3;
+    background-size: contain;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+}
+.misce-account-card-icon.cash {
+    background-image: url('../../../images/accounticons/cash-icon.png');
+}
+.misce-account-card-icon.bank-account {
+    background-image: url('../../../images/accounticons/bank-icon.png');
+}
+.misce-account-card-icon.credit-card {
+    background-image: url('../../../images/accounticons/bank-icon.png');
+}

@@ -13,6 +13,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\components\accounts\accountspage\" />
+    <Folder Include="src\components\accounts\account\" />
     <Folder Include="src\components\commoncomponents\noelementscard\" />
     <Folder Include="src\components\navbar\" />
     <Folder Include="src\components\loginform\" />
