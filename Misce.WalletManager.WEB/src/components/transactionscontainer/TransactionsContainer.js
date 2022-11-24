@@ -30,7 +30,7 @@ function TransactionsContainer(props) {
                 if (res.ok)
                     res.json().then(data => setTransactions(data));
             });
-    }, [props.transactionType, props.fromAccountId, props.toAccountId, props.transactionCategoryId, props.transactionSubCategoryId, props.fromDate]);
+    }, [props.transactionType, props.fromAccountId, props.toAccountId, props.transactionCategoryId, props.transactionSubCategoryId, props.fromDate, props.forceUpdate]);
 
     //FUNCTIONS
 

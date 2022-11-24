@@ -41,6 +41,12 @@ function TransactionsPage(props) {
         fromAccountId: '',
         toAccountId: ''
     });
+    //this state is used to force the update of the transactions, categories or subcategories (in order to force the update, theese counters must be increased)
+    const [forceUpdate, setForceUpdate] = useState({
+        transactions: 0,
+        transactionCategories: 0,
+        transactionSubCategories: 0
+    });
     //modals state
     const [modals, setModals] = useState({
         transactionCreateModalIsOpen: false,
@@ -67,8 +73,8 @@ function TransactionsPage(props) {
                     res.json().then(() => {
                         //...close the modal
                         closeTransactionCreateModal();
-                        //and show the transactions again
-                        //TODO
+                        //and show the transactions again by force their refresh
+                        setForceUpdate({ ...forceUpdate, transactions: forceUpdate.transactions + 1 });
                         //clean errors, if there are
                         if (transactionCreationErrors.length != 0)
                             setTransactionCreationErrors([]);
@@ -149,6 +155,7 @@ function TransactionsPage(props) {
                 toAccountId={filters.toAccountId}
                 transactionCategoryId={filters.transactionCategoryId}
                 transactionSubCategoryId={filters.transactionSubCategoryId}
+                forceUpdate={forceUpdate.transactions} //when this changes, the transactions are updated every time
             />
         </div>
         <div className="misce-card misce-transactions-filters">
