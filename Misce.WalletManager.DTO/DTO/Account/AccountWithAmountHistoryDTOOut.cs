@@ -7,7 +7,7 @@
 
     public record AccountAmountHistory
     {
-        public DateTime AtDate { get; init; }
+        public string AtDate { get; init; }
         public decimal Amount { get; init; }
     }
 }

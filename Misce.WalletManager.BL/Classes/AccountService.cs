@@ -359,7 +359,7 @@ namespace Misce.WalletManager.BL.Classes
                     Description = account.Description,
                     AccountAmountHistory = accountHistoryMap[account.Id].Keys.ToList().Select(date => new AccountAmountHistory
                     {
-                        AtDate = date,
+                        AtDate = ConvertToString(date, groupByPeriod),
                         Amount = accountHistoryMap[account.Id][date]
                     }).ToArray(),
                     AccountType = new AccountTypeDTOOut
@@ -376,6 +376,44 @@ namespace Misce.WalletManager.BL.Classes
         #endregion
 
         #region Private Methods
+
+        private string ConvertToString(DateTime dateTime, GroupByPeriod groupByPeriod)
+        {
+            if (groupByPeriod == GroupByPeriod.MONTH)
+                return $"{GetMonthName(dateTime.Month)} {dateTime.Year}";
+            if(groupByPeriod == GroupByPeriod.YEAR)
+                return $"{dateTime.Year}";
+            if(groupByPeriod == GroupByPeriod.DAY)
+                return $"{dateTime.Day} {GetMonthName(dateTime.Month)} {dateTime.Year}";
+            return dateTime.ToString();
+        }
+
+        private string GetMonthName(int month)
+        {
+            if (month == 1)
+                return "JAN";
+            if (month == 2)
+                return "FEB";
+            if (month == 3)
+                return "MAR";
+            if (month == 4)
+                return "APR";
+            if (month == 5)
+                return "MAY";
+            if (month == 6)
+                return "JUN";
+            if (month == 7)
+                return "JUL";
+            if (month == 8)
+                return "AUG";
+            if (month == 9)
+                return "SEP";
+            if (month == 10)
+                return "OCT";
+            if (month == 11)
+                return "NOV";
+            return "DIC";
+        }
 
         private User? GetUser(Guid id)
         {
