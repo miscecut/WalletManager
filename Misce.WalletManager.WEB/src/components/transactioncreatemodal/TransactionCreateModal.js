@@ -20,6 +20,8 @@ function TransactionCreateModal(props) {
     //FUNCTIONS
 
     //returns an empty transaction form
+    const nowUTC = new Date();
+    const now = new Date(nowUTC.getTime() - nowUTC.getTimezoneOffset() * 60000); //correct time to pass to the datetime-locale input
     const getEmptyTransactionForm = () => {
         return {
             id: '', //uneusefull if a transaction must be created
@@ -30,7 +32,7 @@ function TransactionCreateModal(props) {
             transactionCategoryId: '',
             transactionSubCategoryId: '',
             description: '',
-            dateTime: new Date().toJSON().slice(0, 19),
+            dateTime: now.toJSON().slice(0, 19),
             amount: 0.0
         };
     }
