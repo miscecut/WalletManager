@@ -64,7 +64,12 @@ function TransactionsContainer(props) {
                 });
 
             //at this point, all the transactions are divided, the section jsxs must be created
-            transactionSections = Object.keys(dividedTransactions).map(sectionTitle => <TransactionsSection key={sectionTitle} transactions={dividedTransactions[sectionTitle]} title={sectionTitle}/>)
+            transactionSections = Object.keys(dividedTransactions).map(sectionTitle => <TransactionsSection
+                key={sectionTitle}
+                transactions={dividedTransactions[sectionTitle]}
+                title={sectionTitle}
+                openTransactionUpdateModal={props.openTransactionUpdateModal} //the function that opens the transaction edit modal
+            />)
             return transactionSections;
         }
     }

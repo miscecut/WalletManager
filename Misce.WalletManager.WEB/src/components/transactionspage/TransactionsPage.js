@@ -30,6 +30,8 @@ function TransactionsPage(props) {
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the available transaction subcategories to chose from
     const [transactionSubCategories, setTransactionSubCategories] = useState([]);
+    //this state contains the selected transaction id of the transaction to update, at startup it's empty
+    const [transactionIdToUpdate, setTransactionIdToUpdate] = useState({ transactionId: '' });
     //groupBy: 'DAYS', 'WEEKS', 'MONTHS'
     //transactionType: '', 'PROFIT', 'EXPENSE', 'TRANSFER'
     const [filters, setFilters] = useState({
@@ -52,16 +54,28 @@ function TransactionsPage(props) {
         transactionCreateModalIsOpen: false,
         editCategoriesModalIsOpen: false
     });
-    //the errors on the creation of a transaction
+    //the errors on the creation or update of a transaction
     const [transactionCreationErrors, setTransactionCreationErrors] = useState([]);
 
     //FUNCTIONS
+
+    //this function opens the transaction crate/update modal with an empty form
+    const openTransactionCreateModal = () => {
+        setTransactionIdToUpdate({ ...transactionIdToUpdate, transactionId: '' });
+        setModals({ ...modals, transactionCreateModalIsOpen: true });
+    }
 
     //this function closes the transaction create modal
     const closeTransactionCreateModal = () => setModals({ ...modals, transactionCreateModalIsOpen: false });
 
     //this function closes the transaction categories management modal
     const closeEditCategoriesModal = () => setModals({ ...modals, editCategoriesModalIsOpen: false });
+
+    //select and show a transaction which can be updated
+    const openTransactionUpdateModal = transactionId => {
+        setTransactionIdToUpdate({ ...transactionIdToUpdate, transactionId: transactionId });
+        setModals({ ...modals, transactionCreateModalIsOpen: true });
+    }
 
     //create a new transaction
     const createTransaction = transaction => {
@@ -156,10 +170,11 @@ function TransactionsPage(props) {
                 transactionCategoryId={filters.transactionCategoryId}
                 transactionSubCategoryId={filters.transactionSubCategoryId}
                 forceUpdate={forceUpdate.transactions} //when this changes, the transactions are updated every time
+                openTransactionUpdateModal={openTransactionUpdateModal} //the function that opens the edit transaction modal
             />
         </div>
         <div className="misce-card misce-transactions-filters">
-            <button className="misce-btn w-100" type="button" onClick={() => setModals({ ...modals, transactionCreateModalIsOpen: true })}>add transaction</button>
+            <button className="misce-btn w-100" type="button" onClick={openTransactionCreateModal}>add transaction</button>
             <button className="misce-btn w-100" type="button" onClick={() => setModals({ ...modals, editCategoriesModalIsOpen: true })}>edit categories</button>
             <div className="misce-input-container">
                 <label className="misce-input-label">Group transactions:</label>
@@ -233,6 +248,7 @@ function TransactionsPage(props) {
             errors={transactionCreationErrors}
             show={modals.transactionCreateModalIsOpen}
             closeButtonFunction={closeTransactionCreateModal}
+            transactionId={transactionIdToUpdate.transactionId}
         />
         <TransactionCategoriesManagementModal
             token={props.token}

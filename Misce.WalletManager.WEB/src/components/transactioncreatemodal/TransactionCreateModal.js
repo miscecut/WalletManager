@@ -65,7 +65,7 @@ function TransactionCreateModal(props) {
                 .then(res => {
                     if (res.ok)
                         res.json().then(data => {
-                            console.log(data);
+                            
                         });
                 });
         }

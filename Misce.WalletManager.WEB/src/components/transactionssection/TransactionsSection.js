@@ -6,7 +6,7 @@ import Transaction from './../transaction/Transaction.js'
 //utils
 import { formatMoneyAmount } from './../../jsutils/beautifiers.js';
 
-function TransactionsSection({ title, transactions }) {
+function TransactionsSection({ title, transactions, openTransactionUpdateModal }) {
 
     //FUNCTIONS
 
@@ -41,7 +41,11 @@ function TransactionsSection({ title, transactions }) {
             </div>
             <hr className="misce-transactions-section-header-line"></hr>
         </div>
-        {transactions.map(t => <Transaction key={t.id} transaction={{ ...t, dateTime: new Date(t.dateTime).toLocaleString().replace(',', ' -') }} />)}
+        {transactions.map(t => <Transaction
+            key={t.id}
+            transaction={{ ...t, dateTime: new Date(t.dateTime).toLocaleString().replace(',', ' -') }}
+            openTransactionUpdateModal={openTransactionUpdateModal}
+        />)}
     </div>
 }
 
