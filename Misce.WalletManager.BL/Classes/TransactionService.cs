@@ -40,7 +40,11 @@ namespace Misce.WalletManager.BL.Classes
 
             if(transactionQuery.Any())
             {
-                var transaction = transactionQuery.First();
+                var transaction = transactionQuery
+                    .Include(t => t.FromAccount)
+                    .Include(t => t.ToAccount)
+                    .Include(t => t.SubCategory)
+                    .First();
                 Account? fromAccount = null;
                 Account? toAccount = null;
                 TransactionSubCategory? subCategory = null; 

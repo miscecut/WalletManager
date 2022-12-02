@@ -5,8 +5,6 @@ using Microsoft.OpenApi.Models;
 using Misce.WalletManager.BL.Classes;
 using Misce.WalletManager.BL.Interfaces;
 using Misce.WalletManager.Model.Data;
-using System.Net;
-using System.Reflection.PortableExecutable;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

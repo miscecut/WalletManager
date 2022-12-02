@@ -59,13 +59,23 @@ function TransactionCreateModal(props) {
     //load transaction's data at modal startup (or empty the form)
     useEffect(() => {
         //update
-        if (props.transactionId != null) {
+        if (props.transactionId != null && props.transactionId != '') {
             //retrieve the transaction data
             fetch(getApiBaseUrl() + 'transactions/' + props.transactionId, getGetCommonSettings(props.token))
                 .then(res => {
                     if (res.ok)
                         res.json().then(data => {
-                            
+                            setTransaction({
+                                ...transaction,
+                                transactionCategoryId: data.transactionSubCategory == null ? '' : data.transactionSubCategory.transactionCategory.id,
+                                transactionSubCategoryId: data.transactionSubCategory == null ? '' : data.transactionSubCategory.id,
+                                accountFromId: data.fromAccount == null ? '' : data.fromAccount.id,
+                                accountToId: data.toAccount == null ? '' : data.toAccount.id,
+                                amount: data.amount,
+                                title: data.title,
+                                description: data.description,
+                                transactionType: data.fromAccount != null ? (data.toAccount != null ? '2' : '0') : '1'
+                            });
                         });
                 });
         }
