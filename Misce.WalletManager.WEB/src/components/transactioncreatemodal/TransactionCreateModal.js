@@ -14,7 +14,6 @@ import { getErrorMap } from "../../jsutils/errorhandling.js";
 //the transaction createion/update form
 //inputs in the props:
 //-show: true if the modal is shown
-//-transactionId: not null and populated if a transaction was selected to be updated, null if a new transaction must be created
 function TransactionCreateModal(props) {
 
     //FUNCTIONS
@@ -197,7 +196,7 @@ function TransactionCreateModal(props) {
                         <p className="misce-input-error-message">{errorMap['amount']}</p>
                     </div>
                     <div className="misce-input-container label-margin-fix">
-                        <button className="misce-btn" type="submit">ADD</button>
+                        <button className="misce-btn" type="submit">{props.transactionId == '' || props.transactionId == null ? 'add' : 'update'}</button>
                     </div>
                 </form>
             </div>

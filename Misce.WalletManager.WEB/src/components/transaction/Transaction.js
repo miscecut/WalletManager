@@ -9,7 +9,7 @@ import TransactionCategoryIcon from '../../images/category-icon.png'
 //utils
 import { formatMoneyAmount } from './../../jsutils/beautifiers.js';
 
-function Transaction({ transaction, openTransactionUpdateModal }) {
+function Transaction({ transaction, openTransactionUpdateModal, openTransactionDeleteModal }) {
     //determine the transaction type for the correct icon to show
     let transactionType = 'transfer';
     if (transaction.fromAccount == null)
@@ -17,11 +17,13 @@ function Transaction({ transaction, openTransactionUpdateModal }) {
     else if (transaction.toAccount == null)
         transactionType = 'expense';
 
+    //FUNCTIONS
+
     function getTransactionCardSubTitle() {
         let isTransfer = transactionType == 'transfer';
         if (isTransfer)
             return <p className="misce-transaction-card-subtitle">
-                <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount.name} <img className="misce-transaction-card-subtitle-icon more-margin" src={ArrowIconWhite}></img> <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.toAccount.name}
+                    <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.fromAccount.name} <img className="misce-transaction-card-subtitle-icon more-margin" src={ArrowIconWhite}></img> <img className="misce-transaction-card-subtitle-icon" src={BankLogo}></img> {transaction.toAccount.name}
                 </p>
         else
             return <p className="misce-transaction-card-subtitle">
@@ -29,12 +31,16 @@ function Transaction({ transaction, openTransactionUpdateModal }) {
                 </p>
     }
 
+    //RENDERING
+
+    //render component
     return <div className="misce-hover-purple misce-transaction-card">
         <div className="misce-transaction-card-content">
             <p className={`misce-transaction-card-title ${transaction.title ? '' : 'untitled'}`}>
                 <div className={`misce-transaction-card-icon ${transactionType}`}></div>
                 {transaction.title ? transaction.title : 'Untitled'}
                 <button className="misce-action-button misce-edit-button" type="button" onClick={() => openTransactionUpdateModal(transaction.id)}></button>
+                <button className="misce-action-button misce-delete-button" type="button" onClick={() => openTransactionDeleteModal(transaction.id)}></button>
             </p>
             <p className="misce-transaction-card-subtitle">
                 <img className="misce-transaction-card-subtitle-icon" src={TransactionCategoryIcon}>

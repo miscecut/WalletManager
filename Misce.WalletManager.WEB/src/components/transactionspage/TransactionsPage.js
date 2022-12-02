@@ -52,17 +52,33 @@ function TransactionsPage(props) {
     //modals state
     const [modals, setModals] = useState({
         transactionCreateModalIsOpen: false,
-        editCategoriesModalIsOpen: false
+        editCategoriesModalIsOpen: false,
+        confirmModalIsOpen: false
     });
     //the errors on the creation or update of a transaction
     const [transactionCreationErrors, setTransactionCreationErrors] = useState([]);
 
     //FUNCTIONS
 
+    const openConfirmModal = () => {
+        //CONTINUA DA QUI: STABILIRE COSA SETTARE NEI PARAMETRI DI CONFIRMMODAL
+        setModals({
+            ...modals,
+            transactionCreateModalIsOpen: false,
+            editCategoriesModalIsOpen: false,
+            confirmModalIsOpen: true
+        });
+    }
+
     //this function opens the transaction crate/update modal with an empty form
     const openTransactionCreateModal = () => {
         setTransactionIdToUpdate({ ...transactionIdToUpdate, transactionId: '' });
-        setModals({ ...modals, transactionCreateModalIsOpen: true });
+        setModals({
+            ...modals,
+            transactionCreateModalIsOpen: true,
+            editCategoriesModalIsOpen: false,
+            confirmModalIsOpen: true
+        });
     }
 
     //this function closes the transaction create modal
@@ -171,6 +187,7 @@ function TransactionsPage(props) {
                 transactionSubCategoryId={filters.transactionSubCategoryId}
                 forceUpdate={forceUpdate.transactions} //when this changes, the transactions are updated every time
                 openTransactionUpdateModal={openTransactionUpdateModal} //the function that opens the edit transaction modal
+                openTransactionDeleteModal={openConfirmModal} //the function that opens the delete transaction modal
             />
         </div>
         <div className="misce-card misce-transactions-filters">

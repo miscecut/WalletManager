@@ -6,7 +6,7 @@ import Transaction from './../transaction/Transaction.js'
 //utils
 import { formatMoneyAmount } from './../../jsutils/beautifiers.js';
 
-function TransactionsSection({ title, transactions, openTransactionUpdateModal }) {
+function TransactionsSection({ title, transactions, openTransactionUpdateModal, openTransactionDeleteModal }) {
 
     //FUNCTIONS
 
@@ -45,6 +45,7 @@ function TransactionsSection({ title, transactions, openTransactionUpdateModal }
             key={t.id}
             transaction={{ ...t, dateTime: new Date(t.dateTime).toLocaleString().replace(',', ' -') }}
             openTransactionUpdateModal={openTransactionUpdateModal}
+            openTransactionDeleteModal={openTransactionDeleteModal}
         />)}
     </div>
 }
