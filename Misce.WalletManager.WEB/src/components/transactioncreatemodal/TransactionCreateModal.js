@@ -21,25 +21,20 @@ function TransactionCreateModal(props) {
     //returns an empty transaction form
     const nowUTC = new Date();
     const now = new Date(nowUTC.getTime() - nowUTC.getTimezoneOffset() * 60000); //correct time to pass to the datetime-locale input
-    const getEmptyTransactionForm = () => {
-        return {
-            id: '', //uneusefull if a transaction must be created
-            title: '',
-            accountFromId: '',
-            accountToId: '',
-            transactionType: '0', //expense
-            transactionCategoryId: '',
-            transactionSubCategoryId: '',
-            description: '',
-            dateTime: now.toJSON().slice(0, 19),
-            amount: 0.0
-        };
-    }
-
     //STATE
 
     //the transaction form to be passed to the api
-    const [transaction, setTransaction] = useState(getEmptyTransactionForm());
+    const [transaction, setTransaction] = useState({
+        title: '',
+        accountFromId: '',
+        accountToId: '',
+        transactionType: '0', //expense
+        transactionCategoryId: '',
+        transactionSubCategoryId: '',
+        description: '',
+        dateTime: now.toJSON().slice(0, 19),
+        amount: 0.0
+    });
     //the user's transaction categories
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the user's transaction subcategories
@@ -54,34 +49,6 @@ function TransactionCreateModal(props) {
     }
 
     //EFFECTS
-
-    //load transaction's data at modal startup (or empty the form)
-    useEffect(() => {
-        //update
-        if (props.transactionId != null && props.transactionId != '') {
-            //retrieve the transaction data
-            fetch(getApiBaseUrl() + 'transactions/' + props.transactionId, getGetCommonSettings(props.token))
-                .then(res => {
-                    if (res.ok)
-                        res.json().then(data => {
-                            setTransaction({
-                                ...transaction,
-                                transactionCategoryId: data.transactionSubCategory == null ? '' : data.transactionSubCategory.transactionCategory.id,
-                                transactionSubCategoryId: data.transactionSubCategory == null ? '' : data.transactionSubCategory.id,
-                                accountFromId: data.fromAccount == null ? '' : data.fromAccount.id,
-                                accountToId: data.toAccount == null ? '' : data.toAccount.id,
-                                amount: data.amount,
-                                title: data.title,
-                                description: data.description,
-                                transactionType: data.fromAccount != null ? (data.toAccount != null ? '2' : '0') : '1'
-                            });
-                        });
-                });
-        }
-        //create
-        else
-            setTransaction(getEmptyTransactionForm());
-    }, [props.transactionId]);
 
     //load the user's transaction categories depending on the transaction type
     useEffect(() => {
@@ -196,7 +163,7 @@ function TransactionCreateModal(props) {
                         <p className="misce-input-error-message">{errorMap['amount']}</p>
                     </div>
                     <div className="misce-input-container label-margin-fix">
-                        <button className="misce-btn" type="submit">{props.transactionId == '' || props.transactionId == null ? 'add' : 'update'}</button>
+                        <button className="misce-btn" type="submit">add</button>
                     </div>
                 </form>
             </div>

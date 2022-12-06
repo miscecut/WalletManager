@@ -22,7 +22,7 @@ function ConfirmModal(props) {
                 <button className="misce-close-button" type="button" onClick={props.closeButtonFunction}></button>
             </div>
             <div className="misce-confirm-modal-content">
-                <p>{props.message}</p>
+                <p className="misce-modal-confirm-message">{props.message}</p>
                 <button className="misce-btn" type="button" onClick={() => props.confirmButtonFunction(props.confirmParameter)}>CONFIRM</button>
                 <button className="misce-btn" type="button" onClick={props.closeButtonFunction}>CANCEL</button>
             </div>

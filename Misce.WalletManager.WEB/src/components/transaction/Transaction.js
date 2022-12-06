@@ -9,7 +9,7 @@ import TransactionCategoryIcon from '../../images/category-icon.png'
 //utils
 import { formatMoneyAmount } from './../../jsutils/beautifiers.js';
 
-function Transaction({ transaction, openTransactionUpdateModal, openTransactionDeleteModal }) {
+function Transaction({ transaction, openTransactionDeleteModal }) {
     //determine the transaction type for the correct icon to show
     let transactionType = 'transfer';
     if (transaction.fromAccount == null)
@@ -39,7 +39,6 @@ function Transaction({ transaction, openTransactionUpdateModal, openTransactionD
             <p className={`misce-transaction-card-title ${transaction.title ? '' : 'untitled'}`}>
                 <div className={`misce-transaction-card-icon ${transactionType}`}></div>
                 {transaction.title ? transaction.title : 'Untitled'}
-                <button className="misce-action-button misce-edit-button" type="button" onClick={() => openTransactionUpdateModal(transaction.id)}></button>
                 <button className="misce-action-button misce-delete-button" type="button" onClick={() => openTransactionDeleteModal(transaction.id)}></button>
             </p>
             <p className="misce-transaction-card-subtitle">

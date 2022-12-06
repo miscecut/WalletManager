@@ -6,6 +6,7 @@ import TransactionsContainer from './../transactionscontainer/TransactionsContai
 //modals
 import TransactionCreateModal from './../transactioncreatemodal/TransactionCreateModal.js';
 import TransactionCategoriesManagementModal from './../transactioncategories/transactioncategoriesmanagementmodal/TransactionCategoriesManagementModal.js';
+import ConfirmModal from './../commoncomponents/confirmmodal/ConfirmModal.js';
 //api
 import {
     getApiBaseUrl,
@@ -30,8 +31,6 @@ function TransactionsPage(props) {
     const [transactionCategories, setTransactionCategories] = useState([]);
     //the available transaction subcategories to chose from
     const [transactionSubCategories, setTransactionSubCategories] = useState([]);
-    //this state contains the selected transaction id of the transaction to update, at startup it's empty
-    const [transactionIdToUpdate, setTransactionIdToUpdate] = useState({ transactionId: '' });
     //groupBy: 'DAYS', 'WEEKS', 'MONTHS'
     //transactionType: '', 'PROFIT', 'EXPENSE', 'TRANSFER'
     const [filters, setFilters] = useState({
@@ -55,7 +54,7 @@ function TransactionsPage(props) {
         editCategoriesModalIsOpen: false,
         confirmModalIsOpen: false
     });
-    //the errors on the creation or update of a transaction
+    //the errors on the creation of a transaction
     const [transactionCreationErrors, setTransactionCreationErrors] = useState([]);
 
     //FUNCTIONS
@@ -72,12 +71,11 @@ function TransactionsPage(props) {
 
     //this function opens the transaction crate/update modal with an empty form
     const openTransactionCreateModal = () => {
-        setTransactionIdToUpdate({ ...transactionIdToUpdate, transactionId: '' });
         setModals({
             ...modals,
             transactionCreateModalIsOpen: true,
             editCategoriesModalIsOpen: false,
-            confirmModalIsOpen: true
+            confirmModalIsOpen: false
         });
     }
 
@@ -87,11 +85,8 @@ function TransactionsPage(props) {
     //this function closes the transaction categories management modal
     const closeEditCategoriesModal = () => setModals({ ...modals, editCategoriesModalIsOpen: false });
 
-    //select and show a transaction which can be updated
-    const openTransactionUpdateModal = transactionId => {
-        setTransactionIdToUpdate({ ...transactionIdToUpdate, transactionId: transactionId });
-        setModals({ ...modals, transactionCreateModalIsOpen: true });
-    }
+    //this function closes the confirm modal
+    const closeConfirmModal = () => setModals({ ...modals, confirmModalIsOpen: false });
 
     //create a new transaction
     const createTransaction = transaction => {
@@ -114,6 +109,10 @@ function TransactionsPage(props) {
                         setTransactionCreationErrors(data.errors);
                     });
             });
+    }
+
+    const deleteTransaction = transactionId => {
+        console.log(transactionId);
     }
 
     //EFFECTS
@@ -186,7 +185,6 @@ function TransactionsPage(props) {
                 transactionCategoryId={filters.transactionCategoryId}
                 transactionSubCategoryId={filters.transactionSubCategoryId}
                 forceUpdate={forceUpdate.transactions} //when this changes, the transactions are updated every time
-                openTransactionUpdateModal={openTransactionUpdateModal} //the function that opens the edit transaction modal
                 openTransactionDeleteModal={openConfirmModal} //the function that opens the delete transaction modal
             />
         </div>
@@ -265,12 +263,19 @@ function TransactionsPage(props) {
             errors={transactionCreationErrors}
             show={modals.transactionCreateModalIsOpen}
             closeButtonFunction={closeTransactionCreateModal}
-            transactionId={transactionIdToUpdate.transactionId}
         />
         <TransactionCategoriesManagementModal
             token={props.token}
             show={modals.editCategoriesModalIsOpen}
             closeButtonFunction={closeEditCategoriesModal}
+        />
+        <ConfirmModal
+            show={modals.confirmModalIsOpen}
+            title='Conferma eliminazione'
+            message='Eliminare la transazione?'
+            confirmParameter=''
+            closeButtonFunction={closeConfirmModal}
+            confirmButtonFunction={deleteTransaction}
         />
     </div>
 }

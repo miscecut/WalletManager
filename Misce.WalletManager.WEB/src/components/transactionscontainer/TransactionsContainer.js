@@ -68,7 +68,6 @@ function TransactionsContainer(props) {
                 key={sectionTitle}
                 transactions={dividedTransactions[sectionTitle]}
                 title={sectionTitle}
-                openTransactionUpdateModal={props.openTransactionUpdateModal} //the function that opens the transaction edit modal
                 openTransactionDeleteModal={props.openTransactionDeleteModal} //the function that opens the transaction delete modal
             />)
             return transactionSections;
