@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 //css
 import './TransactionSubCategoryCreationForm.css';
 //utils
@@ -9,6 +9,14 @@ function TransactionSubCategoryCreationForm(props) {
     //STATE
 
     const [transactionSubCategoryForm, setTransactionSubCategoryForm] = useState({ name: '' });
+
+    //EFFECTS
+
+    //reset form if there are no errors
+    //useEffect(() => {
+    //    if (props.errors.length === 0)
+    //        setTransactionSubCategoryForm({ ...transactionSubCategoryForm, name: '' });
+    //}, [props]);
 
     //FUNCTIONS
 

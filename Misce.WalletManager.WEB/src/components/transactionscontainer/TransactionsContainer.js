@@ -69,7 +69,7 @@ function TransactionsContainer(props) {
                 transactions={dividedTransactions[sectionTitle]}
                 title={sectionTitle}
                 openTransactionDeleteModal={props.openTransactionDeleteModal} //the function that opens the transaction delete modal
-            />)
+            />);
             return transactionSections;
         }
     }

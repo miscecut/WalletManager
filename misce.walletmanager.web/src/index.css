@@ -12,15 +12,6 @@ body {
     background-color: #191b1e;
 }
 
-/* width */
-
-.w-100 {
-    width: 100%;
-}
-.w-100 * {
-    width: 100%;
-}
-
 /* margin */
 
 .mt-more {
@@ -75,6 +66,7 @@ body {
     color: black;
     background-color: #c3c3c3;
     transition: all 0.3s ease 0s;
+    width: 100%;
 }
 .misce-btn:hover, .misce-btn:focus, .misce-btn.active {
     color: white;

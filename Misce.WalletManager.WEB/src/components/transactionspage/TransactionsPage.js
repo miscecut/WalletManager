@@ -189,8 +189,8 @@ function TransactionsPage(props) {
             />
         </div>
         <div className="misce-card misce-transactions-filters">
-            <button className="misce-btn w-100" type="button" onClick={openTransactionCreateModal}>add transaction</button>
-            <button className="misce-btn w-100" type="button" onClick={() => setModals({ ...modals, editCategoriesModalIsOpen: true })}>edit categories</button>
+            <button className="misce-btn" type="button" onClick={openTransactionCreateModal}>add transaction</button>
+            <button className="misce-btn" type="button" onClick={() => setModals({ ...modals, editCategoriesModalIsOpen: true })}>edit categories</button>
             <div className="misce-input-container">
                 <label className="misce-input-label">Group transactions:</label>
                 <select className="misce-select" value={filters.groupBy} onChange={e => setFilters({ ...filters, groupBy: e.target.value })}>

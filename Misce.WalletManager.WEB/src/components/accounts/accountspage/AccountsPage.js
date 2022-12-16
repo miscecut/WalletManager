@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import './AccountsPage.css';
 //components
 import Account from './../account/Account.js';
+import NoElementsCard from './../../commoncomponents/noelementscard/NoElementsCard.js';
 //api
 import {
     getApiBaseUrl,
     getGetCommonSettings
 } from './../../../jsutils/apirequests.js';
 
-function AccountsPage({ token }) {
+function AccountsPage(props) {
 
     //STATE
 
@@ -21,7 +22,7 @@ function AccountsPage({ token }) {
     //get the user's accounts, this function is called only at the page startup
     useEffect(() => {
         //retrieve accounts
-        fetch(getApiBaseUrl() + 'accounts/history', getGetCommonSettings(token))
+        fetch(getApiBaseUrl() + 'accounts/history', getGetCommonSettings(props.token))
             .then(res => {
                 if (res.ok)
                     res.json().then(data => {
@@ -34,8 +35,17 @@ function AccountsPage({ token }) {
 
     //component rendering
     return <div className="misce-accounts-page-container">
-            {accounts.map(a => <Account key={a.id} account={a}></Account>)}
+        {
+            accounts.length
+            ? 
+            accounts.map(a => <Account key={a.id} account={a}></Account>)
+            :
+            <NoElementsCard message="No accounts found" />
+        }
+        <div>
+            <button className="misce-btn" type="button" onClick={() => props.openAccountCreationModal()}>add account</button>
         </div>
+    </div>
 }
 
 export default AccountsPage;

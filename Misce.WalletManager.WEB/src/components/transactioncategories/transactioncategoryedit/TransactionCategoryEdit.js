@@ -52,7 +52,7 @@ function TransactionCategoryEdit({ token, transactionCategoryId }) {
             });
     }
 
-    //this function creates a subcategory under the category to edit
+    //this function creates a subcategory under the category to edit, it returns true if the creation was successful
     const createTransactionSubCategory = transactionSubCategory => {
         //the transaction category id is added to the form
         transactionSubCategory.transactionCategoryId = transactionCategoryId;
