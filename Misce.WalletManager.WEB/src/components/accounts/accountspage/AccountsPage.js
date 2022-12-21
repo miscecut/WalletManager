@@ -3,12 +3,13 @@ import React, { useState, useEffect } from 'react';
 import './AccountsPage.css';
 //components
 import Account from './../account/Account.js';
+import AccountCreationModal from './../accountcreationmodal/AccountCreationModal.js';
 import NoElementsCard from './../../commoncomponents/noelementscard/NoElementsCard.js';
 //api
 import {
     getApiBaseUrl,
     getGetCommonSettings
-} from './../../../jsutils/apirequests.js';
+} from '../../../jsutils/apirequests.js';
 
 function AccountsPage(props) {
 
@@ -16,6 +17,12 @@ function AccountsPage(props) {
 
     //the user's accounts
     const [accounts, setAccounts] = useState([]);
+    //account creation errors
+    const [accountCreationErrors, setAccountCreationErrors] = useState({ errors: [] });
+    //the modals state
+    const [modals, setModals] = useState({
+        accountCreateModalIsOpen: false
+    });
 
     //EFFECTS
 
@@ -31,6 +38,13 @@ function AccountsPage(props) {
             });
     }, []);
 
+    //FUNCTIONS
+
+    //open the account creation modal
+    const openAccountCreationModal = () => setModals({ ...modals, accountCreateModalIsOpen: true });
+    //closes the account creation modal
+    const closeAccountCreationModal = () => setModals({ ...modals, accountCreateModalIsOpen: false });
+
     //RENDERING
 
     //component rendering
@@ -42,9 +56,14 @@ function AccountsPage(props) {
             :
             <NoElementsCard message="No accounts found" />
         }
-        <div>
-            <button className="misce-btn" type="button" onClick={() => props.openAccountCreationModal()}>add account</button>
+        <div className="misce-account-create-button-container ">
+            <button className="misce-btn" type="button" onClick={openAccountCreationModal}>add account</button>
         </div>
+        <AccountCreationModal
+            show={modals.accountCreateModalIsOpen}
+            errors={accountCreationErrors.errors}
+            closeButtonFunction={closeAccountCreationModal}
+        />
     </div>
 }
 
