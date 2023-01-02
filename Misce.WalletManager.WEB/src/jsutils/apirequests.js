@@ -43,6 +43,16 @@ export function getRegisterPostSettings(registerForm) {
     });
 }
 
+export function getAccountCreatePostSettings(accountForm, token) {
+    return getPostSettings({
+        accountTypeId: !accountForm.accountTypeId ? null : accountForm.accountTypeId,
+        name: accountForm.name,
+        initialAmount: parseFloat(accountForm.initialAmount),
+        description: accountForm.description,
+        isActive: accountForm.status === 'ACTIVE'
+    }, token);
+}
+
 export function getTransactionCreatePostSettings(transactionForm, token) {
     return getPostSettings({
         transactionType: !transactionForm.transactionType ? null : parseInt(transactionForm.transactionType),

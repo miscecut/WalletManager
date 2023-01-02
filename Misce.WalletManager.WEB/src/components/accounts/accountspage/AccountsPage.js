@@ -8,7 +8,8 @@ import NoElementsCard from './../../commoncomponents/noelementscard/NoElementsCa
 //api
 import {
     getApiBaseUrl,
-    getGetCommonSettings
+    getGetCommonSettings,
+    getAccountCreatePostSettings
 } from '../../../jsutils/apirequests.js';
 
 function AccountsPage(props) {
@@ -18,15 +19,17 @@ function AccountsPage(props) {
     //the user's accounts
     const [accounts, setAccounts] = useState([]);
     //account creation errors
-    const [accountCreationErrors, setAccountCreationErrors] = useState({ errors: [] });
+    const [accountCreationErrors, setAccountCreationErrors] = useState([]);
     //the modals state
     const [modals, setModals] = useState({
         accountCreateModalIsOpen: false
     });
+    //this state is used to force the update of the accounts (in order to force the update, theese counters must be increased)
+    const [forceUpdate, setForceUpdate] = useState({ accounts: 0 });
 
     //EFFECTS
 
-    //get the user's accounts, this function is called only at the page startup
+    //refresh the user's accounts (or load them at page startup)
     useEffect(() => {
         //retrieve accounts
         fetch(getApiBaseUrl() + 'accounts/history', getGetCommonSettings(props.token))
@@ -36,7 +39,7 @@ function AccountsPage(props) {
                         setAccounts(data);
                     });
             });
-    }, []);
+    }, [forceUpdate.accounts]);
 
     //FUNCTIONS
 
@@ -44,6 +47,29 @@ function AccountsPage(props) {
     const openAccountCreationModal = () => setModals({ ...modals, accountCreateModalIsOpen: true });
     //closes the account creation modal
     const closeAccountCreationModal = () => setModals({ ...modals, accountCreateModalIsOpen: false });
+
+    //create a new account
+    const createAccount = account => {
+        //the transaction category gets created
+        fetch(getApiBaseUrl() + 'accounts', getAccountCreatePostSettings(account, props.token))
+            .then(res => {
+                //if the operation was succesfull...
+                if (res.status === 201)
+                    res.json().then(() => {
+                        //...close the modal
+                        closeAccountCreationModal();
+                        //and show the transactions again by force their refresh
+                        setForceUpdate({ ...forceUpdate, accounts: forceUpdate.accounts + 1 });
+                        //clean errors, if there are
+                        if (accountCreationErrors.length != 0)
+                            setAccountCreationErrors([]);
+                    });
+                else if (res.status === 422)
+                    res.json().then(data => {
+                        setAccountCreationErrors(data.errors);
+                    });
+            });
+    }
 
     //RENDERING
 
@@ -56,13 +82,15 @@ function AccountsPage(props) {
             :
             <NoElementsCard message="No accounts found" />
         }
-        <div className="misce-account-create-button-container ">
+        <div className="misce-account-create-button-container">
             <button className="misce-btn" type="button" onClick={openAccountCreationModal}>add account</button>
         </div>
         <AccountCreationModal
+            token={props.token}
             show={modals.accountCreateModalIsOpen}
-            errors={accountCreationErrors.errors}
+            errors={accountCreationErrors}
             closeButtonFunction={closeAccountCreationModal}
+            accountCreationSubmitFunction={createAccount}
         />
     </div>
 }

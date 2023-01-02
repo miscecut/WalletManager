@@ -1,0 +1,36 @@
+.misce-account-form-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 15px;
+    row-gap: 10px;
+}
+
+.misce-account-create-modal-button-container {
+    grid-column: 1 / 3;
+    display: flex;
+    justify-content: center;
+}
+.misce-account-create-modal-button-container .misce-btn {
+    width: 50%;
+}
+
+.misce-input-container.account-description {
+    grid-column: 1 / 3;
+}
+
+@media screen and (max-width: 768px) {
+    .misce-account-form-container {
+        grid-template-columns: 1fr;
+    }
+
+    .misce-account-create-modal-button-container {
+        grid-column: 1 / 2;
+    }
+    .misce-account-create-modal-button-container .misce-btn {
+        width: 100%;
+    }
+
+    .misce-input-container.account-description {
+        grid-column: 1 / 2;
+    }
+}

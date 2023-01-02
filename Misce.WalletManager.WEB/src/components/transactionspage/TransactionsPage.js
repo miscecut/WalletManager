@@ -111,10 +111,6 @@ function TransactionsPage(props) {
             });
     }
 
-    const deleteTransaction = transactionId => {
-        console.log(transactionId);
-    }
-
     //EFFECTS
 
     //get the user's account, this function is called only at the page startup
@@ -275,7 +271,6 @@ function TransactionsPage(props) {
             message='Eliminare la transazione?'
             confirmParameter=''
             closeButtonFunction={closeConfirmModal}
-            confirmButtonFunction={deleteTransaction}
         />
     </div>
 }

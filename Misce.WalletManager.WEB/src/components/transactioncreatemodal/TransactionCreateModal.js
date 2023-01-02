@@ -21,6 +21,7 @@ function TransactionCreateModal(props) {
     //returns an empty transaction form
     const nowUTC = new Date();
     const now = new Date(nowUTC.getTime() - nowUTC.getTimezoneOffset() * 60000); //correct time to pass to the datetime-locale input
+
     //STATE
 
     //the transaction form to be passed to the api
