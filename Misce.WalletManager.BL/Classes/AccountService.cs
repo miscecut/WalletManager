@@ -329,8 +329,9 @@ namespace Misce.WalletManager.BL.Classes
                 var accountAmountMap = profitLossMap[account.Id];
                 //init the accountHistoryMap
                 accountHistoryMap[account.Id] = new Dictionary<DateTime, decimal>();
-                //start from the date the account was created and finish in the period which comprehends today
-                var startingDate = DateTimeUtils.GetDateTimeForAmountHistory(account.CreatedDateTime, groupByPeriod);
+                //start from the date the account was created (OR THE DATE OF THE VERY FIRST TRANSACTION) and finish in the period which comprehends today
+                var oldestTransactionDate = DateTimeUtils.GetOldestStartingDateForAccount(transactions.Where(t => (t.FromAccount != null && t.FromAccount.Id == account.Id) || (t.ToAccount != null && t.ToAccount.Id == account.Id)), account.CreatedDateTime);
+                var startingDate = DateTimeUtils.GetDateTimeForAmountHistory(oldestTransactionDate, groupByPeriod);
                 var endingDate = DateTimeUtils.GetDateTimeForAmountHistory(DateTime.Now, groupByPeriod);
                 //sign the initial amount
                 var amount = account.InitialAmount;

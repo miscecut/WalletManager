@@ -1,4 +1,5 @@
 ﻿using Misce.WalletManager.BL.Classes.Utils;
+using Misce.WalletManager.DTO.DTO.Transaction;
 using Misce.WalletManager.DTO.Enums;
 
 namespace Misce.WalletManager.Test.ServiceTests.UtilsTests
@@ -140,6 +141,39 @@ namespace Misce.WalletManager.Test.ServiceTests.UtilsTests
             Assert.AreEqual(nextDateTime.Hour, 23);
             Assert.AreEqual(nextDateTime.Minute, 59);
             Assert.AreEqual(nextDateTime.Second, 59);
+        }
+
+        [TestMethod]
+        public void TestGetOldestStartingDateForAccount()
+        {
+            var accountCreationDate = new DateTime(2022, 12, 11);
+
+            var transactions = new List<TransactionDTOOut>
+            {
+                new TransactionDTOOut
+                {
+                    Amount = 3,
+                    DateTime = new DateTime(2022, 12, 12),
+                    Id = new Guid()
+                },
+                new TransactionDTOOut
+                {
+                    Amount = 6,
+                    DateTime = new DateTime(2023, 1, 3),
+                    Id = new Guid()
+                }
+            };
+
+            Assert.AreEqual(DateTimeUtils.GetOldestStartingDateForAccount(transactions, accountCreationDate), accountCreationDate);
+
+            transactions.Add(new TransactionDTOOut
+            {
+                Amount = 3,
+                DateTime = new DateTime(2022, 5, 2),
+                Id = new Guid()
+            });
+
+            Assert.AreEqual(DateTimeUtils.GetOldestStartingDateForAccount(transactions, accountCreationDate), new DateTime(2022, 5, 2));
         }
     }
 }

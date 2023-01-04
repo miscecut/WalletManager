@@ -1,4 +1,5 @@
-﻿using Misce.WalletManager.DTO.Enums;
+﻿using Misce.WalletManager.DTO.DTO.Transaction;
+using Misce.WalletManager.DTO.Enums;
 
 namespace Misce.WalletManager.BL.Classes.Utils
 {
@@ -50,6 +51,19 @@ namespace Misce.WalletManager.BL.Classes.Utils
                     break;
             }
             return nextDateTime;
+        }
+
+        public static DateTime GetOldestStartingDateForAccount(IEnumerable<TransactionDTOOut> transactions, DateTime accountCreatedDate)
+        {
+            var oldestDate = accountCreatedDate;
+
+            foreach(var transactionDate in transactions.Select(t => t.DateTime))
+            {
+                if (transactionDate < oldestDate)
+                    oldestDate = transactionDate;
+            }
+
+            return oldestDate;
         }
     }
 }
